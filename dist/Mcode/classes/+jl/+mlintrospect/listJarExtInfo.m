@@ -1,7 +1,7 @@
-function out = listJarExtInfo
+function [out,fullResults] = listJarExtInfo
 %LISTJAREXTINFO Get info about the external JARs included with Matlab
 %
-% out = jl.mlintrospect.listJarExtInfo
+% [out,fullResults] = jl.mlintrospect.listJarExtInfo
 %
 % Lists info about all the external (third-party) Java library JARs bundled
 % with this distribution of Matlab. This can be used to assess
@@ -15,16 +15,16 @@ function out = listJarExtInfo
 %   * Title   - the title of the library
 %   * Vendor  - the name of the vendor
 %   * Version - the version of the library
+% The values for any of the columns except File may be blank. All variables
+% will be char/cellstr. The fullResults output is a table with even more
+% columns, such as:
 %   * ImplVer - the implementation version
 %   * SpecVer - the specification version
 %   * BundleName  - the bundle name
-% The values for any of the columns except File may be blank. All variables
-% will be char/cellstr.
 % 
 % Returns a table.
 
 mavenClient = jl.mlintrospect.MavenCentralRepoClient;
-mavenClient.numResults = 3;
 
 jarextDir = [matlabroot '/java/jarext'];
 
@@ -81,10 +81,25 @@ for iFile = 1:numel(files)
         MavenGroup{iJar} = '';
         MavenArtifact{iJar} = '';
         MavenVersion{iJar} = '';
+        MavenRelDate{iJar} = '';
+        MavenLatestVer{iJar} = '';
+        MavenLatestDate{iJar} = '';
     else
         MavenGroup{iJar} = mvn.response.docs(1).g;
         MavenArtifact{iJar} = mvn.response.docs(1).a;
         MavenVersion{iJar} = mvn.response.docs(1).v;
+        timestamp = datetime(mvn.response.docs(1).timestamp/1000,...
+            'ConvertFrom', 'posixtime');
+        MavenRelDate{iJar} = datestr(timestamp, 'yyyy-mm-dd');
+        latest = mavenClient.getLatestRelease(MavenGroup{iJar}, MavenArtifact{iJar});
+        if isempty(latest)
+            MavenLatestVer{iJar} = '';
+            MavenLatestDate{iJar} = '';
+        else
+            MavenLatestVer{iJar} = latest.version;
+            MavenLatestDate{iJar} = datestr(latest.timestamp, 'yyyy-mm-dd');
+        end
+            
     end
     
     Title{iJar} = firstNonEmptyStr(BundleName{iJar}, ImplTitle{iJar}, ...
@@ -96,10 +111,12 @@ for iFile = 1:numel(files)
             
 end
 
-out = jl.util.tableutil.tableFromVectors(File, Title, Version, Vendor, ...
+fullResults = jl.util.tableutil.tableFromVectors(File, Title, Version, Vendor, ...
     BundleName, BundleVer, BundleVendor,...
     ImplTitle, ImplVer, ImplVendor, SpecTitle, SpecVer, SpecVendor, Sha1, ...
-    MavenGroup, MavenArtifact, MavenVersion);
+    MavenGroup, MavenArtifact, MavenVersion, MavenRelDate, MavenLatestVer, MavenLatestDate);
+out = fullResults(:,{'Title','Vendor','Version','File','MavenGroup','MavenArtifact', ...
+    'MavenVersion','MavenRelDate','MavenLatestVer','MavenLatestDate'});
 
 end
 
