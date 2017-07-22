@@ -1,5 +1,5 @@
-classdef tableutil
-    %TABLEUTIL Utilities for working with table objects
+classdef tables
+    %TABLES Utilities for working with table objects
     
     
     methods (Static = true)
@@ -34,8 +34,8 @@ classdef tableutil
     end
     
     methods (Access = private)
-        function this = tableutil
-            %TABLEUTIL Private constructor to suppress helptext
+        function this = tables
+            %TABLES Private constructor to suppress helptext
         end
     end
 end
