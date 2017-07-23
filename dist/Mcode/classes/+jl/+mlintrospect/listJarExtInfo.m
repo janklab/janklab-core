@@ -84,6 +84,8 @@ for iFile = 1:numel(files)
         MavenRelDate{iJar} = '';
         MavenLatestVer{iJar} = '';
         MavenLatestDate{iJar} = '';
+        MavenRecentestVer{iJar} = '';
+        MavenRecentestDate{iJar} = '';
     else
         MavenGroup{iJar} = mvn.response.docs(1).g;
         MavenArtifact{iJar} = mvn.response.docs(1).a;
@@ -91,13 +93,18 @@ for iFile = 1:numel(files)
         timestamp = datetime(mvn.response.docs(1).timestamp/1000,...
             'ConvertFrom', 'posixtime');
         MavenRelDate{iJar} = datestr(timestamp, 'yyyy-mm-dd');
-        latest = mavenClient.getLatestRelease(MavenGroup{iJar}, MavenArtifact{iJar});
+        latest = mavenClient.getReportedLatestVersion(MavenGroup{iJar}, MavenArtifact{iJar});
+        mostRecent = mavenClient.getMostRecentVersion(MavenGroup{iJar}, MavenArtifact{iJar});
         if isempty(latest)
             MavenLatestVer{iJar} = '';
             MavenLatestDate{iJar} = '';
+            MavenRecentestVer{iJar} = '';
+            MavenRecentestDate{iJar} = '';
         else
             MavenLatestVer{iJar} = latest.version;
             MavenLatestDate{iJar} = datestr(latest.timestamp, 'yyyy-mm-dd');
+            MavenRecentestVer{iJar} = mostRecent.v;
+            MavenRecentestDate{iJar} = datestr(mostRecent.timestamp, 'yyyy-mm-dd');
         end
             
     end
@@ -114,9 +121,11 @@ end
 fullResults = jl.util.tables.tableFromVectors(File, Title, Version, Vendor, ...
     BundleName, BundleVer, BundleVendor,...
     ImplTitle, ImplVer, ImplVendor, SpecTitle, SpecVer, SpecVendor, Sha1, ...
-    MavenGroup, MavenArtifact, MavenVersion, MavenRelDate, MavenLatestVer, MavenLatestDate);
+    MavenGroup, MavenArtifact, MavenVersion, MavenRelDate, MavenLatestVer, MavenLatestDate, ...
+    MavenRecentestVer, MavenRecentestDate);
 out = fullResults(:,{'Title','Vendor','Version','File','MavenGroup','MavenArtifact', ...
-    'MavenVersion','MavenRelDate','MavenLatestVer','MavenLatestDate'});
+    'MavenVersion','MavenRelDate', ...
+    'MavenRecentestVer', 'MavenRecentestDate'});
 
 end
 

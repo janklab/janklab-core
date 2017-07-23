@@ -16,8 +16,18 @@ classdef MavenCentralRepoClient
             out = rslt;
         end
         
-        function out = getLatestRelease(this, groupId, artifactId)
-            %GETLATESTRELEASE Get latest release for an artifact
+        function out = getReportedLatestVersion(this, groupId, artifactId)
+            %GETREPORTEDLATESTVERSION Get latest version for an artifact
+            %
+            % This gets the latest release reported in the search results
+            % for a group:artifact.
+            %
+            % Due to how Maven interprets versions, I have a suspicion that
+            % this returns the numerically greatest release, and not the
+            % release with the latest timestamp. This is an issue with
+            % things that use e.g. datestamp versioning instead of SemVer,
+            % or switched between version schemes at some point in their
+            % lifetime; for example, dom4j.
             %
             % Returns struct, or empty if artifact was not found.
             d = this.select(struct('g',groupId, 'a',artifactId));
@@ -28,6 +38,31 @@ classdef MavenCentralRepoClient
             end
             out = struct('version',dd.latestVersion, 'timestamp', ...
                 this.timestamp2datetime(dd.timestamp));
+        end
+        
+        function out = getMostRecentVersion(this, groupId, artifactId)
+            %GETMOSTRECENTVERSION Get the version with the latest timestamp
+            v = this.getAllVersions(groupId, artifactId);
+            [~,ix] = max(v.timestamp);
+            v1 = v(ix,:);
+            out = table2struct(v1);
+        end
+        
+        function out = getAllVersions(this, groupId, artifactId)
+            %GETALLVERSIONS Get info about all versions, as a table
+            d = this.select(struct('g',groupId, 'a',artifactId), ...
+                {'core','gav'});
+            dd = d.response.docs;
+            if iscell(dd)
+                % Drop optional and weird-shaped fields to allow concatenation
+                for i = 1:numel(dd)
+                    dd{i} = rmfield(dd{i}, intersect({'tags','ec'}, fieldnames(dd{i})));
+                end
+                dd = [dd{:}];
+            end
+            dd = rmfield(dd, intersect({'tags','ec'}, fieldnames(dd)));
+            out = jl.util.tables.tableFromStructRecArray(dd);
+            out.timestamp = this.timestamp2datetime(out.timestamp);
         end
         
         function out = timestamp2datetime(~, timestamp)
