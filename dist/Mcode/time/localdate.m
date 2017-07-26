@@ -17,7 +17,7 @@ classdef localdate
 	
 	
 	properties (Constant, GetAccess='public')
-		iso8601Format = 'uuuu-MM-dd';;
+		iso8601Format = 'yyyy-MM-dd';
 	end
 	
 	properties (Constant, Access='protected')
@@ -191,7 +191,7 @@ classdef localdate
 		end
 		
 		function out = toJavaLocalDates(this)
-		%TOJAVALOCALDATE Convert this to java.time.LocalDate[]
+		%TOJAVALOCALDATES Convert this to java.time.LocalDate[]
 		out = javaArray('java.time.LocalDate', numel(this));
 		for i = 1:numel(this)
 			out(i) = this(i).toJavaLocalDate();
@@ -220,11 +220,12 @@ classdef localdate
 		if isempty(jdate)
 			out = localdate.NaT;
 		elseif isa(jdate, 'java.time.LocalDate')
-			out = localdate(jdate.getYear(), jdate.getMonth(), jdate.getDayOfMonth());
+			out = localdate(jdate.getYear(), jdate.getMonthValue(), jdate.getDayOfMonth());
 		elseif isa(jdate, 'java.time.LocalDate[]')
 			out = repmat(localdate, size(jdate));
 			for i = 1:numel(jdate)
-				out(i) = localdate.fromJavaLocalDate(jdate(i));
+				out_i = localdate.fromJavaLocalDate(jdate(i));
+                out.date(i) = out_i.date;
 			end
 		else
 			error('Invalid input type: %s', class(jdate));
@@ -318,9 +319,34 @@ classdef localdate
 		function this = repmat(this, varargin)
 		%REPMAT Replicate and tile array
 		this.date = repmat(this.date, varargin{:});
-		end
+        end
+        
+        function out = cat(dim, varargin)
+        %CAT Concatenate array
+        for i = 1:numel(varargin)
+            if ~isa(varargin{i}, 'localdate')
+                varargin{i} = localdate(varargin{i});
+            end
+        end
+        out = localdate;
+        inFields = cell(size(varargin));
+        for i = 1:numel(varargin)
+            inFields{i} = varargin{i}.date;
+        end
+        out.date = cat(dim, inFields);
+        end
+        
+        function out = horzcat(varargin)
+        %HORZCAT Horizontal concatenation.
+        out = cat(2, varargin{:});
+        end
 		
-		function this = subsasgn(this, s, b)
+        function out = vertcat(varargin)
+        %VERTCAT Vertical concatenation.
+        out = cat(1, varargin{:});
+        end
+        
+        function this = subsasgn(this, s, b)
 		%SUBSASGN Subscripted assignment
 		
 		% Chained subscripts

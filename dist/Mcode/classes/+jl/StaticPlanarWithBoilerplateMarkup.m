@@ -6,117 +6,174 @@ classdef StaticPlanar
 	% planar-organized value classes.
 	
 	properties
+		%@@ planar_properties
 		xxx = 0
+		%@@ end
 	end
 	
+	%@@ begin_boilerplate
 	methods
 		
 		function varargout = size(this, varargin)
-		%SIZE Size of array.
+		%SIZE Size of array
+		
 		varargout = cell(1, max(1, nargout));
+		%@@ one_planar
 		[varargout{:}] = size(this.xxx, varargin{:});
+		%@@ end
 		end
 		
 		function out = numel(this)
-		%NUMEL Number of elements in array.
- 		out = numel(this.xxx);
+		%NUMEL Number of elements in array
+		
+		%@@ one_planar
+		out = numel(this.xxx);
+		%@@ end
 		end
 		
 		function out = ndims(this)
-		%NDIMS Number of dimensions.
+		%NDIMS Number of dimensions
+		
+		%@@ one_planar
 		out = ndims(this.xxx);
+		%@@ end
 		end
 		
 		function out = isempty(this)
-		%ISEMPTY True for empty array.
+		%ISEMPTY True for empty array
+		
+		%@@ one_planar
 		out = isempty(this.xxx);
+		%@@ end
 		end
 		
 		function out = isscalar(this)
-		%ISSCALAR True if input is scalar.
+		%ISSCALAR True if input is scalar
+		
+		%@@ one_planar
 		out = isscalar(this.xxx);
+		%@@ end
 		end
 		
 		function out = isvector(this)
-		%ISVECTOR True if input is a vector.
+		%ISVECTOR True if input is a vector
+		
+		%@@ one_planar
 		out = isvector(this.xxx);
+		%@@ end
 		end
 		
 		function out = iscolumn(this)
-		%ISCOLUMN True if input is a column vector.
+		%ISCOLUMN True if input is a column vector
+		
+		%@@ one_planar
 		out = iscolumn(this.xxx);
+		%@@ end
 		end
 		
 		function out = isrow(this)
-		%ISROW True if input is a row vector.
+		%ISROW True if input is a row vector
+		
+		%@@ one_planar
 		out = isrow(this.xxx);
+		%@@ end
 		end
 		
 		function out = ismatrix(this)
-		%ISMATRIX True if input is a matrix.
+		%ISMATRIX True if input is a matrix
+		
+		%@@ one_planar
 		out = ismatrix(this.xxx);
+		%@@ end
 		end
 		
 		function this = reshape(this, varargin)
-		%RESHAPE Reshape array.
+		%RESHAPE Reshape array
+		
+		%@@ parallel_planar
 		this.xxx = reshape(this.xxx, varargin{:});
+		%@@ end
 		end
 		
 		function this = squeeze(this)
-		%SQUEEZE Remove singleton dimensions.
+		%SQUEEZE Remove singleton dimensions
+		
+		%@@ parallel_planar
 		this.xxx = squeeze(this.xxx);
+		%@@ end
 		end
 		
 		function [this, nshifts] = shiftdim(this, n)
-			%SHIFTDIM Shift dimensions.
+			%SHIFTDIM Shift dimensions
+			
 			if nargin > 1
+				%@@ parallel_planar
 				this.xxx = shiftdim(this.xxx, n);
+				%@@ end
 			else
+				%@@ parallel_planar
 				[this.xxx, nshifts] = shiftdim(this.xxx);
+				%@@ end
 			end
-        end
-		
+		end
+
 		function this = circshift(this, varargin)
-		%CIRCSHIFT Shift positions of elements circularly.
+		%CIRCSHIFT Shift positions of elements circularly
+		
+		%@@ parallel_planar
 		this.xxx = circshift(this.xxx, varargin{:});
+		%@@ end
 		end
 		
 		function this = permute(this, order)
-		%PERMUTE Permute array dimensions.
+		%PERMUTE Permute array dimensions
+		
+		%@@ parallel_planar
 		this.xxx = permute(this.xxx, order);
+		%@@ end
 		end
 		
 		function this = ipermute(this, order)
-		%IPERMUTE Inverse permute array dimensions.
+		%IPERMUTE Inverse permute array dimensions
+		
+		%@@ parallel_planar
 		this.xxx = ipermute(this.xxx, order);
+		%@@ end
 		end
 		
 		function this = repmat(this, varargin)
-		%REPMAT Replicate and tile array.
+		%REPMAT Replicate and tile array
+		
+		%@@ parallel_planar
 		this.xxx = repmat(this.xxx, varargin{:});
+		%@@ end
 		end
 		
 		function this = cat(dim, this, b)
-			%CAT Concatenate arrays.
+			%CAT Concatenate arrays
+			
 			if ~isa(b, class(this))
 				error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
 					class(b), class(this));
 			end
+			
+			%@@ parallel_planar
 			this.xxx = cat(dim, this.xxx, b.xxx);
+			%@@ end
 		end
 		
 		function out = horzcat(this, b)
-			%HORZCAT Horizontal concatenation.
+			%HORZCAT Horizontal concatenation
 			out = cat(2, this, b);
 		end
 		
 		function out = vertcat(this, b)
-			%VERTCAT Vertical concatenation.
+			%VERTCAT Vertical concatenation
 			out = cat(1, this, b);
 		end
 		
 		function this = subsasgn(this, s, b)
-		%SUBSASGN Subscripted assignment.
+		%SUBSASGN Subscripted assignment
 		
 		% Chained subscripts
 		if numel(s) > 1
@@ -137,7 +194,9 @@ classdef StaticPlanar
 					error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
 						class(this), class(rhs));
 				end
+				%@@ parallel_planar
 				this.xxx(s(1).subs{:}) = rhs.xxx;
+				%@@ end
 			case '{}'
 				error('jl:bad_operation',...
 					'{}-subscripting is not supported for class %s', class(this));
@@ -147,13 +206,15 @@ classdef StaticPlanar
 		end
 		
 		function out = subsref(this, s)
-		%SUBSREF Subscripted reference.
+		%SUBSREF Subscripted reference
 		
 		% Base case
 		switch s(1).type
 			case '()'
 				out = this;
+				%@@ parallel_planar
 				out.xxx = this.xxx(s(1).subs{:});
+				%@@ end
 			case '{}'
 				error('jl:bad_operation',...
 					'{}-subscripting is not supported for class %s', class(this));
@@ -167,6 +228,9 @@ classdef StaticPlanar
 		end
 		end
 		
+		
 	end
+	
+	%@@ end_boilerplate
 	
 end

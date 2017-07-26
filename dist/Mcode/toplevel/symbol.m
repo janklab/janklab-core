@@ -1,99 +1,126 @@
-classdef StaticPlanar
-	%STATICPLANAR A statically-defined planar-organized value class
-	%
-	% This class cannot be used directly. It
-	% is used as a basis for generating boilerplate code for other
-	% planar-organized value classes.
-	
+classdef symbol
+    %SYMBOL Compact representation of low-cardinality strings
+    
 	properties
-		xxx = 0
+		sym int32 = int32(0)
 	end
 	
 	methods
+        
+        function this = symbol(in)
+        %SYMBOL Construct a symbol array.
+        if nargin == 0
+            return;
+        end
+        if isa(in, 'net.janklab.util.SymbolArrayList')
+            this = symbol(in.getSymbols());
+            return;
+        end
+        in = string(in);
+        sz = size(in);
+        this.sym = reshape(net.janklab.util.Symbol.encodeStrings(in(:)), sz);
+        end
+        
+        function out = string(this)
+        %STRING Convert to string array.
+        sz = size(this);
+        out = reshape(string(net.janklab.util.Symbol.decodeSymbols(this.sym(:))), sz);
+        end
+        
+        function out = symbolvals(this)
+        %SYMBOLVALS Numeric symbol values (for debugging).
+        out = this.sym;
+        end
+        
+        function disp(this)
+        %DISP Custom display
+        disp('@symbol:');
+        disp(string(this));
+        end
 		
 		function varargout = size(this, varargin)
 		%SIZE Size of array.
 		varargout = cell(1, max(1, nargout));
-		[varargout{:}] = size(this.xxx, varargin{:});
+		[varargout{:}] = size(this.sym, varargin{:});
 		end
 		
 		function out = numel(this)
 		%NUMEL Number of elements in array.
- 		out = numel(this.xxx);
+		out = numel(this.sym);
 		end
 		
 		function out = ndims(this)
 		%NDIMS Number of dimensions.
-		out = ndims(this.xxx);
+		out = ndims(this.sym);
 		end
 		
 		function out = isempty(this)
 		%ISEMPTY True for empty array.
-		out = isempty(this.xxx);
+		out = isempty(this.sym);
 		end
 		
 		function out = isscalar(this)
 		%ISSCALAR True if input is scalar.
-		out = isscalar(this.xxx);
+		out = isscalar(this.sym);
 		end
 		
 		function out = isvector(this)
 		%ISVECTOR True if input is a vector.
-		out = isvector(this.xxx);
+		out = isvector(this.sym);
 		end
 		
 		function out = iscolumn(this)
 		%ISCOLUMN True if input is a column vector.
-		out = iscolumn(this.xxx);
+		out = iscolumn(this.sym);
 		end
 		
 		function out = isrow(this)
 		%ISROW True if input is a row vector.
-		out = isrow(this.xxx);
+		out = isrow(this.sym);
 		end
 		
 		function out = ismatrix(this)
 		%ISMATRIX True if input is a matrix.
-		out = ismatrix(this.xxx);
+		out = ismatrix(this.sym);
 		end
 		
 		function this = reshape(this, varargin)
 		%RESHAPE Reshape array.
-		this.xxx = reshape(this.xxx, varargin{:});
+		this.sym = reshape(this.sym, varargin{:});
 		end
 		
 		function this = squeeze(this)
 		%SQUEEZE Remove singleton dimensions.
-		this.xxx = squeeze(this.xxx);
+		this.sym = squeeze(this.sym);
 		end
 		
 		function [this, nshifts] = shiftdim(this, n)
 			%SHIFTDIM Shift dimensions.
 			if nargin > 1
-				this.xxx = shiftdim(this.xxx, n);
+				this.sym = shiftdim(this.sym, n);
 			else
-				[this.xxx, nshifts] = shiftdim(this.xxx);
+				[this.sym, nshifts] = shiftdim(this.sym);
 			end
         end
 		
 		function this = circshift(this, varargin)
 		%CIRCSHIFT Shift positions of elements circularly.
-		this.xxx = circshift(this.xxx, varargin{:});
+		this.sym = circshift(this.sym, varargin{:});
 		end
 		
 		function this = permute(this, order)
 		%PERMUTE Permute array dimensions.
-		this.xxx = permute(this.xxx, order);
+		this.sym = permute(this.sym, order);
 		end
 		
 		function this = ipermute(this, order)
 		%IPERMUTE Inverse permute array dimensions.
-		this.xxx = ipermute(this.xxx, order);
+		this.sym = ipermute(this.sym, order);
 		end
 		
 		function this = repmat(this, varargin)
 		%REPMAT Replicate and tile array.
-		this.xxx = repmat(this.xxx, varargin{:});
+		this.sym = repmat(this.sym, varargin{:});
 		end
 		
 		function this = cat(dim, this, b)
@@ -102,7 +129,8 @@ classdef StaticPlanar
 				error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
 					class(b), class(this));
 			end
-			this.xxx = cat(dim, this.xxx, b.xxx);
+			
+			this.sym = cat(dim, this.sym, b.sym);
 		end
 		
 		function out = horzcat(this, b)
@@ -137,7 +165,7 @@ classdef StaticPlanar
 					error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
 						class(this), class(rhs));
 				end
-				this.xxx(s(1).subs{:}) = rhs.xxx;
+				this.sym(s(1).subs{:}) = rhs.sym;
 			case '{}'
 				error('jl:bad_operation',...
 					'{}-subscripting is not supported for class %s', class(this));
@@ -153,7 +181,7 @@ classdef StaticPlanar
 		switch s(1).type
 			case '()'
 				out = this;
-				out.xxx = this.xxx(s(1).subs{:});
+				out.sym = this.sym(s(1).subs{:});
 			case '{}'
 				error('jl:bad_operation',...
 					'{}-subscripting is not supported for class %s', class(this));
