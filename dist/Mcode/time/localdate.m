@@ -32,7 +32,7 @@ classdef localdate
     
     methods (Access = 'public')
         function this = localdate(in, varargin)
-        %LOCALDATE Create a localdate array
+        %LOCALDATE Create a localdate array.
         %
         % d = localdate
         % d = localdate(relativeDay)
@@ -85,7 +85,7 @@ classdef localdate
         end
         
         function disp(this)
-        %DISP Custom display
+        %DISP Custom display.
         if isscalar(this)
             if isnat(this)
                 out = 'NaT';
@@ -106,12 +106,12 @@ classdef localdate
         end
         
         function out = datestr(this, varargin)
-        %DATESTR Convert to datestr
+        %DATESTR Convert to datestr.
         out = datestr(this.date, varargin{:});
         end
         
         function out = datetime(this)
-        %DATETIME Convert to datetime, at midnight at the start of the day
+        %DATETIME Convert to datetime, at midnight at the start of the day.
         %
         % Converts this to a datetime whose value is that of midnight at the start
         % of this calendar day, and has no TimeZone.
@@ -119,28 +119,28 @@ classdef localdate
         end
         
         function out = datenum(this)
-        %DATENUM Convert to datenum, at midnight at the start of the day
+        %DATENUM Convert to datenum, at midnight at the start of the day.
         out = this.date;
         end
         
         function out = datevec(this)
-        %DATEVEC Convert to datevec, at midnight at the start of the day
+        %DATEVEC Convert to datevec, at midnight at the start of the day.
         out = datevec(this.date);
         end
         
         function out = cellstr(this)
-        %CELLSTR Convert to cellstr
+        %CELLSTR Convert to cellstr.
         strs = datestr(this, localdate.defaultDateFormat);
         out = reshape(cellstr(strs), size(this));
         end
         
         function out = char(this)
-        %CHAR Convert to char array
+        %CHAR Convert to char array.
         out = datestr(this);
         end
         
         function out = minus(A, B)
-        %MINUS Difference between two localdates
+        %MINUS Difference between two localdates.
         A = localdate(A);
         B = localdate(B);
         out = jl.time.duration(A.date - B.date);
@@ -161,12 +161,12 @@ classdef localdate
         % Component and conversion methods
         
         function [y,m,d] = ymd(this)
-        %YMD year, month, and day numbers
+        %YMD year, month, and day numbers.
         [y,m,d] = ymd(datetime(this));
         end
         
         function y = year(this, kind)
-        %YEAR Year numbers of localdates
+        %YEAR Year numbers of localdates.
         if nargin == 1
             y = year(datetime(this));
         else
@@ -175,12 +175,12 @@ classdef localdate
         end
         
         function out = quarter(this)
-        %QUARTER Quarter numbers of localdates
+        %QUARTER Quarter numbers of localdates.
         out = quarter(datetime(this));
         end
         
         function out = month(this, kind)
-        %MONTH Month numbers or names of localdates
+        %MONTH Month numbers or names of localdates.
         if nargin == 1
             out = month(datetime(this));
         else
@@ -189,7 +189,7 @@ classdef localdate
         end
         
         function out = week(this, kind)
-        %WEEK Week numbers of localdates
+        %WEEK Week numbers of localdates.
         if nargin == 1
             out = week(datetime(this));
         else
@@ -198,7 +198,7 @@ classdef localdate
         end
         
         function out = day(this, kind)
-        %DAY Day numbers or names of localdates
+        %DAY Day numbers or names of localdates.
         if nargin == 1
             out = day(datetime(this));
         else
@@ -207,22 +207,22 @@ classdef localdate
         end
         
         function tf = isweekend(this)
-        %ISWEEKEND True for localdates occurring on a weekend
+        %ISWEEKEND True for localdates occurring on a weekend.
         tf = isweekend(datetime(this));
         end
         
         function tf = isnat(this)
-        %ISNAT True for localdates that are Not-a-Time
+        %ISNAT True for localdates that are Not-a-Time.
         tf = isnan(this.date);
         end
         
         function tf = isnan(this)
-        %ISNAN True for localdates that are Not-a-Time
+        %ISNAN True for localdates that are Not-a-Time.
         tf = isnan(this.date);
         end
         
         function out = toJavaLocalDates(this)
-        %TOJAVALOCALDATES Convert this to java.time.LocalDate[]
+        %TOJAVALOCALDATES Convert this to java.time.LocalDate[].
         out = javaArray('java.time.LocalDate', numel(this));
         for i = 1:numel(this)
             out(i) = this(i).toJavaLocalDate();
@@ -230,12 +230,24 @@ classdef localdate
         end
         
         function out = toJavaLocalDate(this)
-        %TOJAVALOCALDATE Convert this to java.time.LocalDate
+        %TOJAVALOCALDATE Convert this to java.time.LocalDate.
         mustBeScalar(this);
         dv = datevec(this.date);
         out = java.time.LocalDate.of(dv(1), dv(2), dv(3));
         end
         
+        function out = withTimeOfDay(this, timeOfDay)
+        %WITHTIMEOFDAY Combine with a localtime to create a datetime
+        %
+        % out = withTimeOfDay(this, timeOfDay)
+        %
+        % TimeOfDay (jl.time.localtime) is the local wall time
+        %
+        % Returns a zoneless datetime.
+        
+        timeOfDay = jl.time.localtime(timeOfDay);
+        out = datetime(this.date + timeOfDay.time, 'ConvertFrom', 'datenum');
+        end
     end
     
     methods (Static = true)
