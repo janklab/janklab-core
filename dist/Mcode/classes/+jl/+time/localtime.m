@@ -405,7 +405,8 @@ classdef localtime
 			if isa(x, 'jl.time.localtime')
 				varargout{i} = x.time;
 			else
-				error('jl:InvalidLocalDateEqType', 'Cannot compare a %s to a jl.time.localtime',...
+				error('jl:InvalidLocalDateEqType', ...
+                    'Cannot compare a %s to a jl.time.localtime',...
 					class(x));
 			end
 		end

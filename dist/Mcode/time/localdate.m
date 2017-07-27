@@ -67,7 +67,8 @@ classdef localdate
             elseif isnumeric(in)
                 date = in;
             else
-                error('jl:InvalidLocalDateInput', 'localdate(in) is not defined for %s',...
+                error('jl:InvalidLocalDateInput', ...
+                    'localdate(in) is not defined for %s',...
                     class(in));
             end
         elseif nargin == 3
@@ -77,7 +78,8 @@ classdef localdate
         end
         tfHasTime = ~isnan(date) & ~isinf(date) & mod(date, 1) ~= 0;
         if any(tfHasTime(:))
-            error('jl:InvalidLocalDateInput', 'localdate(in) input may not have time of day');
+            error('jl:InvalidLocalDateInput', ...
+                'localdate(in) input may not have time of day');
         end
         this.date = date;
         end
@@ -249,7 +251,8 @@ classdef localdate
         if isempty(jdate)
             out = localdate.NaT;
         elseif isa(jdate, 'java.time.LocalDate')
-            out = localdate(jdate.getYear(), jdate.getMonthValue(), jdate.getDayOfMonth());
+            out = localdate(jdate.getYear(), jdate.getMonthValue(), ...
+                jdate.getDayOfMonth());
         elseif isa(jdate, 'java.time.LocalDate[]')
             out = repmat(localdate, size(jdate));
             for i = 1:numel(jdate)
@@ -394,7 +397,8 @@ classdef localdate
                         class(rhs), class(this));
                 end
                 if ~isequal(class(rhs), class(this))
-                    error('jl:TypeMisMatch', 'Cannot assign a subclass in to a %s (got a %s)',...
+                    error('jl:TypeMisMatch', ...
+                        'Cannot assign a subclass in to a %s (got a %s)',...
                         class(this), class(rhs));
                 end
                 this.date(s(1).subs{:}) = rhs.date;
@@ -510,7 +514,8 @@ classdef localdate
             if isa(x, 'localdate')
                 varargout{i} = x.date;
             else
-                error('jl:InvalidLocalDateEqType', 'Cannot compare a %s to a localdate',...
+                error('jl:InvalidLocalDateEqType', ...
+                    'Cannot compare a %s to a localdate',...
                     class(x));
             end
         end
