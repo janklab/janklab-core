@@ -16,4 +16,10 @@ classdef System
         end
         
     end
+    
+    methods (Access = private)
+        function this = System()
+        %SYSTEM Private constructor to suppress helptext display
+        end
+    end
 end
