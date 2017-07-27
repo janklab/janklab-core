@@ -27,7 +27,7 @@ classdef localdate
 	properties (Access='protected')
 		% Count of days from the Matlab epoch date, as double (i.e. datenum).
 		% Constrained to never have fractional value.
-		date;
+		date {mustBeValidDateValue};
 	end
 	
 	methods (Access = 'public')
@@ -84,6 +84,8 @@ classdef localdate
 		if isscalar(this)
 			if isnat(this)
 				out = 'NaT';
+            elseif isinf(this.date)
+                out = num2str(this.date);
 			else
 				out = datestr(this, localdate.defaultDateFormat);
 			end
@@ -93,7 +95,12 @@ classdef localdate
 		disp(out);
 		end
 		
-		function out = datestr(this, varargin)
+        function out = eps(this)
+        %EPS Precision of time representation at this value.
+        out = jl.time.duration(eps(this.date));
+        end
+        
+        function out = datestr(this, varargin)
 		%DATESTR Convert to datestr
 		out = datestr(this.date, varargin{:});
 		end
@@ -489,4 +496,12 @@ classdef localdate
 		
 	end
 	
+end
+
+function mustBeValidDateValue(x)
+tfValid = isnan(x) | isinf(x) | jl.types.tests.isWhole(x);
+if ~all(tfValid)
+    error('Invalid date values: %s', ...
+        strjoin(jl.util.num2cellstr(x(~tfValid)), ', '));
+end
 end
