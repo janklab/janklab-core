@@ -14,7 +14,7 @@ The Janklab code itself is licensed under the Apache 2.0 license. Janklab includ
 
 ##  Contributing
 
-Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See (CONTRIBUTING)[.github/CONTRIBUTING.md] for details.
+Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
 ##  Installation and use
 
