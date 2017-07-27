@@ -6,6 +6,9 @@ classdef localtime
     % the time part of a datenum or datetime. This representation is chosen to fit
     % nicely with Matlab's datenum and datetime, and because it has precision finer
     % than a nanosecond.
+    %
+    % See also:
+    % localdate, jl.time.duration, datetime
     
     properties (Constant)
         % localtime representing midnight (the start of the day)
@@ -36,6 +39,8 @@ classdef localtime
         elseif nargin == 1
             if isa(varargin{1}, 'double')
                 this.time = varargin{1};
+            elseif isa(varargin{1}, 'jl.time.localtime')
+                this = varargin{1};
             else
                 error('jl:InvalidInput', 'Invalid argument type');
             end
@@ -80,6 +85,32 @@ classdef localtime
         %EPS Precision of time representation at this value.
         out = jl.time.duration(eps(this.time));
         end
+        
+        function out = minus(A, B)
+        %MINUS Difference between two localtimes.
+        %
+        % A - B
+        %
+        % Takes the difference between two localtimes.
+        %
+        % Returns a jl.time.duration.
+        A = jl.time.localtime(A);
+        B = jl.time.localtime(B);
+        out = jl.time.duration(A.time - B.time);
+        end
+        
+        function out = plus(A, B)
+        %PLUS Add a duration to a localtime.
+        %
+        % A + B
+        %
+        % A is converted to a localtime, and B is converted to a duration. If the
+        % result is greater than 1 day, it is an error.
+        A = jl.time.localtime(A);
+        B = jl.time.duration(B);
+        out = jl.time.localtime(A.time + B.time);
+        end
+        
     end
     
     methods (Static = true)

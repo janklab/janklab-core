@@ -1,5 +1,12 @@
 classdef duration
     %DURATION A length of wall clock time
+    %
+    % A duration is a length of time, represented as fractional days. This is a lot
+    % like a datenum, except it represents a magnitude along the timeline, instead of
+    % an offset from the epoch.
+    %
+    % See also:
+    % jl.time.localtime, localdate, datetime
     
     properties
         % Duration length, as fractional days
@@ -37,6 +44,10 @@ classdef duration
             disp(str);
             return
         end
+        if (x == 0)
+            disp('0 s');
+            return
+        end
         mySign = sign(x);
         if x < 0
             x = x * -1;
@@ -56,8 +67,13 @@ classdef duration
         nanos = round(x);
         
         str = num2str(seconds);
-        if nanos ~= 0
-            str = sprintf('%s.%09d', str, nanos);
+        str = '';
+        if nanos ~= 0 || seconds ~= 0
+            if nanos == 0
+                str = sprintf('%d', seconds);
+            else
+                str = sprintf('%d.%09d', seconds, nanos);
+            end
         end
         str = [str ' s'];
         if minutes ~= 0
