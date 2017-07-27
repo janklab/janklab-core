@@ -1,0 +1,142 @@
+classdef logger
+    %LOGGER Main entry point through which logging happens
+    %
+    % The logger class provides method calls for performing logging, and the ability
+    % to look up loggers by name. This is the main entry point through which all
+    % Janklab logging happens.
+    %
+    % Usually you don't need to interact with this class directly, but can just call
+    % one of the error(), warn(), info(), debug(), or trace() functions in the jl.log
+    % namespace. Those will log messages using the calling class's name as the name
+    % of the logger. Also, don't call the constructor for this class. Use the static
+    % getLogger() method instead.
+    %
+    % See also:
+    % jl.log.error
+    % jl.log.warn
+    % jl.log.info
+    % jl.log.debug
+    % jl.log.trace
+    
+    properties
+        % The underlying SLF4J Logger object
+        jLogger
+    end
+    
+    properties (Dependent = true)
+        % The name of this logger
+        name
+        % A list of the levels enabled on this logger
+        enabledLevels
+    end
+    
+    
+    methods (Static)
+        function out = getLogger(identifier)
+        jLogger = org.slf4j.LoggerFactory.getLogger(identifier);
+        out = jl.log.logger(jLogger);
+        end
+    end
+    
+    methods
+        function this = logger(jLogger)
+        %LOGGER Build a new logger object
+        mustBeType(jLogger, 'org.slf4j.Logger');
+        this.jLogger = jLogger;
+        end
+        
+        function error(this, msg, varargin)
+        %ERROR Log a message at the ERROR level.
+        if ~this.jLogger.isErrorEnabled()
+            return
+        end
+        this.jLogger.error(msg, varargin{:});
+        end
+        
+        function warn(this, msg, varargin)
+        %WARN Log a message at the WARN level.
+        if ~this.jLogger.isWarnEnabled()
+            return
+        end
+        this.jLogger.warn(msg, varargin{:});
+        end
+        
+        function info(this, msg, varargin)
+        %INFO Log a message at the INFO level.
+        if ~this.jLogger.isInfoEnabled()
+            return
+        end
+        this.jLogger.info(msg, varargin{:});
+        end
+        
+        function debug(this, msg, varargin)
+        %DEBUG Log a message at the DEBUG level.
+        if ~this.jLogger.isDebugEnabled()
+            return
+        end
+        this.jLogger.debug(msg, varargin{:});
+        end
+        
+        function trace(this, msg, varargin)
+        %TRACE Log a message at the TRACE level.
+        if ~this.jLogger.isTraceEnabled()
+            return
+        end
+        this.jLogger.trace(msg, varargin{:});
+        end
+        
+        function out = isErrorEnabled(this)
+        %ISERRORENABLED True if ERROR level logging is enabled for this logger.
+        out = this.jLogger.isErrorEnabled;
+        end
+        
+        function out = isWarnEnabled(this)
+        %ISWARNENABLED True if WARN level logging is enabled for this logger.
+        out = this.jLogger.isWarnEnabled;
+        end
+        
+        function out = isInfoEnabled(this)
+        %ISINFOENABLED True if INFO level logging is enabled for this logger.
+        out = this.jLogger.isInfoEnabled;
+        end
+        
+        function out = isDebugEnabled(this)
+        %ISDEBUGENABLED True if DEBUG level logging is enabled for this logger.
+        out = this.jLogger.isDebugEnabled;
+        end
+        
+        function out = isTraceEnabled(this)
+        %ISTRACEENABLED True if TRACE level logging is enabled for this logger.
+        out = this.jLogger.isTraceEnabled;
+        end
+        
+        function out = listEnabledLevels(this)
+        %LISTENABLEDLEVELS List the levels that are enabled for this logger.
+        out = {};
+        if this.isErrorEnabled
+            out{end+1} = 'error';
+        end
+        if this.isWarnEnabled
+            out{end+1} = 'warn';
+        end
+        if this.isInfoEnabled
+            out{end+1} = 'info';
+        end
+        if this.isDebugEnabled
+            out{end+1} = 'debug';
+        end
+        if this.isTraceEnabled
+            out{end+1} = 'trace';
+        end
+        end
+        
+        function out = get.enabledLevels(this)
+        out = this.listEnabledLevels;
+        end
+        
+        function out = get.name(this)
+        out = char(this.jLogger.getName());
+        end
+    end
+    
+end
