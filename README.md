@@ -4,6 +4,8 @@ Janklab is a general-purpose library of functions, classes, and extensions for M
 
 Janklab is not a standalone system. It requires Matlab or the Matlab Compiler Runtime.
 
+See [Feature Areas]("doc/Feature Areas.md") to learn what Janklab provides.
+
 ##  License
 
 Janklab is licensed under the liberal, business-friendly Apache 2.0 License. You should be able to use it in most any application or environment, as long as you include the information from `NOTICE.txt` in your source distribution and/or user interface.
