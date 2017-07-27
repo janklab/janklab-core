@@ -1,7 +1,10 @@
 classdef struct2
     %STRUCT2 A struct that can have any strings as field names
+    %
+    % STRUCT2 behaves like a normal struct, except that it can have any arbitrary
+    % string as a field name, not just valid Matlab identifiers.
     
-    properties
+    properties (Access = private)
         s           struct = struct
         otherNames  {mustBeCellstr} = {}
         otherValues cell
@@ -111,7 +114,7 @@ classdef struct2
         
         function this = setfield(this, name, value)
             if isvarname(name)
-                needToAdd = ~isfield(obj.s, name);
+                needToAdd = ~isfield(this.s, name);
                 this.s.(name) = value;
                 if needToAdd
                     this.allFields{end+1} = name;
