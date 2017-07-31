@@ -23,7 +23,7 @@ classdef localtime
     
     properties
         % Fractional amount of day that has passed
-        time double {mustBeValidTimeValue} = NaN;
+        time double = NaN;
     end
     
     methods
@@ -60,7 +60,12 @@ classdef localtime
             error('jl:InvalidInput', 'Invalid number of arguments');
         end
         end
-        
+
+        function obj = set.time(obj, newValue)
+            mustBeValidTimeValue(obj, newValue);
+            obj.time = newValue;
+        end
+
         function disp(this)
         %DISP Custom display.
         if ~isscalar(this)
