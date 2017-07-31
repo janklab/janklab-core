@@ -42,18 +42,18 @@ classdef QueryBuilder
     % produce the SQL fragments that are added to clauses.
     
     properties
-        select   {mustBeCellstr} = {}
+        select    = {}
         distinct logical = false
         into     char
         topN     double {mustBeScalar} = NaN
-        from     {mustBeCellstr} = {}
-        where    {mustBeCellstr} = {}
-        groupBy  {mustBeCellstr} = {}
-        having   {mustBeCellstr} = {}
-        orderBy  {mustBeCellstr} = {}
+        from      = {}
+        where     = {}
+        groupBy   = {}
+        having    = {}
+        orderBy   = {}
         
         % Query output format. May be 'short', 'long', or 'reallyshort'
-        format   {mustBeValidFormat} = 'short'
+        format    = 'short'
     end
     
     properties (Constant = true)
@@ -77,6 +77,11 @@ classdef QueryBuilder
                 sql = '(empty)';
             end
             fprintf('QueryBuilder:\n%s\n', sql);
+        end
+
+        function set.format(obj, newValue)
+        mustBeValidFormat(newValue);
+        obj.format = newValue;
         end
         
         function out = char(obj)

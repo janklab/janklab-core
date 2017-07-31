@@ -6,10 +6,10 @@ classdef struct2
     
     properties (Access = private)
         s           struct = struct
-        otherNames  {mustBeCellstr} = {}
+        otherNames  cell = {}
         otherValues cell
         % List of all field names, for maintaining ordering
-        allFields   {mustBeCellstr} = {}
+        allFields   cell = {}
     end
     
     methods
