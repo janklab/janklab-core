@@ -27,10 +27,10 @@ classdef localdate
     properties (Access='protected')
         % Count of days from the Matlab epoch date, as double (i.e. datenum).
         % Constrained to never have fractional value.
-        date {mustBeValidDateValue};
+        date double = NaN;
     end
     
-    methods (Access = 'public')
+    methods
         function this = localdate(in, varargin)
         %LOCALDATE Create a localdate array.
         %
@@ -42,7 +42,6 @@ classdef localdate
         % d = localdate(Y, M, D)
         
         if nargin == 0
-            this.date = floor(now);
             return;
         elseif nargin == 1
             if isa(in, 'localdate')
@@ -98,6 +97,11 @@ classdef localdate
             out = sprintf('%s %s', size2str(size(this)), class(this));
         end
         disp(out);
+        end
+        
+        function this = set.date(this, newValue)
+            mustBeValidDateValue(newValue);
+            this.date = newValue;
         end
         
         function out = eps(this)
@@ -251,6 +255,15 @@ classdef localdate
     end
     
     methods (Static = true)
+        
+        function out = today()
+        
+        out = localdate(floor(now));
+        end
+        
+        function out = now()
+        out = localdate.today();
+        end
         
         function out = NaT(sz)
         %NAT Create Not-a-Time localdates

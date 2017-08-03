@@ -21,7 +21,7 @@ classdef mapmatrix
 		% which lack labels are indicated by nil.
 		axes      cell = {1, 1};
 		% Names for each axis. Axes which lack names are indicated by nil.
-		axisNames {mustBeCellstr} = {'X', 'Y'};
+		axisNames cell = {'X', 'Y'};
 		% The main value array
 		v = [];
 	end

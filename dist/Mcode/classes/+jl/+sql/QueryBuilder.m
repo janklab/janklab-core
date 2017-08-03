@@ -42,15 +42,15 @@ classdef QueryBuilder
     % produce the SQL fragments that are added to clauses.
     
     properties
-        select    = {}
-        distinct logical = false
-        into     char
-        topN     double {mustBeScalar} = NaN
-        from      = {}
-        where     = {}
-        groupBy   = {}
-        having    = {}
-        orderBy   = {}
+        select    cell = {}
+        distinct  logical = false
+        into      char
+        topN      double = NaN
+        from      cell = {}
+        where     cell = {}
+        groupBy   cell = {}
+        having    cell = {}
+        orderBy   cell = {}
         
         % Query output format. May be 'short', 'long', or 'reallyshort'
         format    = 'short'

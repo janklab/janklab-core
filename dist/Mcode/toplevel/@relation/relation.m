@@ -20,7 +20,7 @@ classdef relation
 	
 	properties
 		% Column names
-		colNames {mustBeCellstr}
+		colNames cell
 		% Column data, stored as a cell vector of row vectors
 		colData cell
 	end
