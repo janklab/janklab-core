@@ -23,6 +23,10 @@ function [out,fullResults] = listJarExtInfo
 %   * BundleName  - the bundle name
 % 
 % Returns a table.
+%
+% Examples:
+% 
+% jarInfo = jl.mlintrospect.listJarExtInfo
 
 mavenClient = jl.mlintrospect.MavenCentralRepoClient;
 
