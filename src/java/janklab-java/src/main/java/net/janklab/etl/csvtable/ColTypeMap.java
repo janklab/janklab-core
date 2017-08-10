@@ -27,17 +27,17 @@ public class ColTypeMap {
         if (typesByName.size() > 0) {
             sb.append("by name: ");
             List<String> strs = new ArrayList<>();
-            typesByName.keySet().forEach((key) -> {
+            for (String key : typesByName.keySet()) {
                 strs.add(key + ": " + typesByName.get(key));
-            });
+            }
             sb.append(strs).append(" ");
         }
         if (typesByIndex.size() > 0) {
             sb.append("by index: ");
             List<String> strs = new ArrayList<>();
-            typesByIndex.keySet().forEach((key) -> {
+            for (Integer key : typesByIndex.keySet()) {
                 strs.add(key + ": " + typesByIndex.get(key));
-            });
+            }
             sb.append(strs).append(" ");
         }
         sb.append("default: ").append(defaultType);
