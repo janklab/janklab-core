@@ -121,9 +121,9 @@ classdef tables
             if nargout == 1
                 tmp = S;
                 S = struct;
-                s.S = tmp;
-                s.P = P;
-                s.SP = SP;
+                S.S = tmp;
+                S.P = P;
+                S.SP = SP;
             end
         end
         
