@@ -11,7 +11,7 @@ else
     callerClass = regexprep(caller, '/.*', '');
 end
 
-logger = jl.log.logger.getLogger(callerClass);
+logger = jl.log.Logger.getLogger(callerClass);
 
 switch logLevel
     case 'error'

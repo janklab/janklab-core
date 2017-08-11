@@ -1,4 +1,4 @@
-classdef logger
+classdef Logger
     %LOGGER Main entry point through which logging happens
     %
     % The logger class provides method calls for performing logging, and the ability
@@ -18,7 +18,7 @@ classdef logger
     % jl.log.debug
     % jl.log.trace
     
-    properties
+    properties (SetAccess = private)
         % The underlying SLF4J Logger object
         jLogger
     end
@@ -33,20 +33,24 @@ classdef logger
     
     methods (Static)
         function out = getLogger(identifier)
+        % Gets the named Logger
         jLogger = org.slf4j.LoggerFactory.getLogger(identifier);
-        out = jl.log.logger(jLogger);
+        out = jl.log.Logger(jLogger);
         end
+        
     end
     
     methods
-        function this = logger(jLogger)
-        %LOGGER Build a new logger object
+        function this = Logger(jLogger)
+        %LOGGER Build a new logger object around an SLF4J Logger object
+        %
+        % Generally, you shouldn't call this. Use jl.log.Logger.getLogger() instead.
         mustBeType(jLogger, 'org.slf4j.Logger');
         this.jLogger = jLogger;
         end
         
         function error(this, msg, varargin)
-        %ERROR Log a message at the ERROR level.
+        % Log a message at the ERROR level.
         if ~this.jLogger.isErrorEnabled()
             return
         end
@@ -54,7 +58,7 @@ classdef logger
         end
         
         function warn(this, msg, varargin)
-        %WARN Log a message at the WARN level.
+        % Log a message at the WARN level.
         if ~this.jLogger.isWarnEnabled()
             return
         end
@@ -62,7 +66,7 @@ classdef logger
         end
         
         function info(this, msg, varargin)
-        %INFO Log a message at the INFO level.
+        % Log a message at the INFO level.
         if ~this.jLogger.isInfoEnabled()
             return
         end
@@ -70,7 +74,7 @@ classdef logger
         end
         
         function debug(this, msg, varargin)
-        %DEBUG Log a message at the DEBUG level.
+        % Log a message at the DEBUG level.
         if ~this.jLogger.isDebugEnabled()
             return
         end
@@ -78,7 +82,7 @@ classdef logger
         end
         
         function trace(this, msg, varargin)
-        %TRACE Log a message at the TRACE level.
+        % Log a message at the TRACE level.
         if ~this.jLogger.isTraceEnabled()
             return
         end
@@ -86,32 +90,32 @@ classdef logger
         end
         
         function out = isErrorEnabled(this)
-        %ISERRORENABLED True if ERROR level logging is enabled for this logger.
+        % True if ERROR level logging is enabled for this logger.
         out = this.jLogger.isErrorEnabled;
         end
         
         function out = isWarnEnabled(this)
-        %ISWARNENABLED True if WARN level logging is enabled for this logger.
+        % True if WARN level logging is enabled for this logger.
         out = this.jLogger.isWarnEnabled;
         end
         
         function out = isInfoEnabled(this)
-        %ISINFOENABLED True if INFO level logging is enabled for this logger.
+        % True if INFO level logging is enabled for this logger.
         out = this.jLogger.isInfoEnabled;
         end
         
         function out = isDebugEnabled(this)
-        %ISDEBUGENABLED True if DEBUG level logging is enabled for this logger.
+        % True if DEBUG level logging is enabled for this logger.
         out = this.jLogger.isDebugEnabled;
         end
         
         function out = isTraceEnabled(this)
-        %ISTRACEENABLED True if TRACE level logging is enabled for this logger.
+        % True if TRACE level logging is enabled for this logger.
         out = this.jLogger.isTraceEnabled;
         end
         
         function out = listEnabledLevels(this)
-        %LISTENABLEDLEVELS List the levels that are enabled for this logger.
+        % List the levels that are enabled for this logger.
         out = {};
         if this.isErrorEnabled
             out{end+1} = 'error';

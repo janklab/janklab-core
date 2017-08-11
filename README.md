@@ -20,4 +20,17 @@ Janklab is a personal project, not a community one. Bug reports and feature requ
 
 To use Janklab, install it to your local system by cloning the Git repo. In your Matlab session, run the `init_janklab` function found under `dist/Mcode/` in the repo. You can also use the initialization functions found in `bootstrap/`.
 
+You should also configure logging by calling one of the `configureXxx()` methods in `jl.log.Configurator`.
+
+```
+% Example initialization script
+
+cd /path/to/janklab/installation/janklab/bootstrap
+init_janklab
+
+jl.log.Configurator.configureBasicConsoleLogging()
+
+format compact
+```
+
 Janklab requires and is developed on Matlab R2016b, though parts of it may well work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features. If something in Janklab actually requires a later version of Matlab, that is a bug, and feel free to report it.
