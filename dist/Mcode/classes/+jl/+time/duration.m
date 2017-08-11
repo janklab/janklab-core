@@ -1,12 +1,25 @@
 classdef duration
     %DURATION A length of wall clock time
     %
-    % A duration is a length of time, represented as fractional days. This is a lot
-    % like a datenum, except it represents a magnitude along the timeline, instead of
-    % an offset from the epoch.
+    % A duration is a length of time, represented as fractional days as double. This
+    % is a lot like a datenum, except it represents a magnitude along the timeline,
+    % instead of an offset from the epoch.
+    %
+    % Here, a "day" is exactly 24 hours.
+    %
+    % This is very similar to Matlab's @duration type. The main reasons this exists
+    % as a different type is because I prefer my display format (which is based on
+    % the value in the object, instead of storing an explicit Format property) and
+    % because I want to keep the precision equal to that of the datetime and
+    % localdate types.
+    %
+    % The display format for jl.time.duration is adaptive: days and fractional
+    % seconds are displayed if they are nonzero. The automatic, conditional display
+    % of fractional seconds lets you easily notice when values have subseconds,
+    % instead of having to manually tweak the format to display them.
     %
     % See also:
-    % jl.time.localtime, localdate, datetime
+    % jl.time.localtime, localdate, datetime, duration
     
     properties
         % Duration length, as fractional days
@@ -17,15 +30,48 @@ classdef duration
         NanosPerDay = 24 * 60 * 60 * 1000000000;
     end
     
+    methods (Static)
+        function out = fromHMS(hours, minutes, seconds)
+        % Build a new duration from hours, minutes, and seconds values.
+        %
+        % out = jl.time.duration.fromHMS(hours, minutes, seconds)
+        %
+        % Each of hours, minutes, and seconds may contain fractional values, and they
+        % will be included in the resulting value.
+        time = (hours * 24) + (minutes * 24 * 60) + (seconds * 24 * 60 * 60);
+        out = jl.time.duration(time);
+        end
+    end
+    
     methods
         function this = duration(varargin)
         %DURATION Create a new duration.
+        %
+        % d = jl.time.duration
+        % d = jl.time.duration(days)
+        % d = jl.time.duration(mlDuration)
+        %
+        % d = jl.time.duration() creates a scalar jl.time.duration of zero elapsed
+        % time.
+        %
+        % d = jl.time.duration(days) creates a jl.time.duration array from a numeric value of
+        % 24-hour days. The input days is the number of days, which may be
+        % fractional. This representation is similar to datenum's semantics, except
+        % days is relative to an arbitrary start point, instead of the epoch.
+        %
+        % d = jl.tim.duration(mlDuration) converts a Matlab @duration object to a
+        % jl.time.duration object representing the same duration, within the limits
+        % of precision due to conversion. (Matlab durations represent time as
+        % nanoseconds stored as double; jl.time.durations represent it as fractional
+        % days stored as double.)
         if nargin == 0
             return
         elseif nargin == 1
             arg = varargin{1};
             if isa(arg, 'double')
                 this.time = arg;
+            elseif isa(arg, 'duration')
+                this.time = days(arg);
             else
                 error('jl:InvalidInput', 'Invalid argument type');
             end
@@ -66,29 +112,32 @@ classdef duration
         x = x * 1000000000;
         nanos = round(x);
         
-        str = num2str(seconds);
-        str = '';
-        if nanos ~= 0 || seconds ~= 0
-            if nanos == 0
-                str = sprintf('%d', seconds);
-            else
-                str = sprintf('%d.%09d', seconds, nanos);
-            end
-        end
-        str = [str ' s'];
-        if minutes ~= 0
-            str = sprintf('%d minutes %s', minutes, str);
-        end
-        if hours ~= 0
-            str = sprintf('%d hours %s', hours, str);
+        if nanos == 0
+            str = sprintf('%02d:%02d:%02d', hours, minutes, seconds);
+        else
+            str = sprintf('%02d:%02d:%02d.%09d', hours, minutes, seconds, nanos);
         end
         if days ~= 0
-            str = sprintf('%d days %s', days, str);
+            str = sprintf('%d d %s', days, str);
         end
         if mySign < 0
             str = ['- ' str];
         end
         disp(str);
+        end
+        
+        function out = mlduration(this)
+        % Convert this to a Matlab duration object.
+        %
+        % mduration = mlduration(obj)
+        %
+        % This method converts this object to Matlab's own @duration object type.
+        % Because Matlab's @duration stores time in nanoseconds, this should not
+        % involve a loss of precision.
+        %
+        % Returns a Matlab @duration object of the same time as this, representing
+        % the same durations, with the limits of precision due to the type conversion.
+        out = duration(0, 0, this.time * (24 * 60 * 60));
         end
         
         function varargout = size(this, varargin)
