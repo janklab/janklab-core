@@ -25,7 +25,9 @@ classdef Configurator
         rootLogger = org.apache.log4j.Logger.getRootLogger();
         rootLogger.setLevel(org.apache.log4j.Level.INFO);
         rootAppender = rootLogger.getAllAppenders().nextElement();
-        pattern = '%d{HH:mm:ss.SSS} %-5p %c %x - %m%n';
+        % Use \n instead of %n because the Matlab console wants Unix-style line
+        % endings, even on Windows.
+        pattern = ['%d{HH:mm:ss.SSS} %-5p %c %x - %m' sprintf('\n')];
         myLayout = org.apache.log4j.PatternLayout(pattern);
         rootAppender.setLayout(myLayout);
         end
