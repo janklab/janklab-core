@@ -30,6 +30,34 @@ classdef Configurator
         rootAppender.setLayout(myLayout);
         end
         
+        function out = getLog4jLevel(levelName)
+        % Gets the log4j Level enum for a named level
+        validLevels = {'OFF' 'FATAL' 'ERROR' 'WARN' 'INFO' 'DEBUG' 'TRACE' 'ALL'};
+        levelName = upper(levelName);
+        if ~ismember(levelName, validLevels)
+            error('Invalid levelName: ''%s''', levelName);
+        end
+        out = eval(['org.apache.log4j.Level.' levelName]);
+        end
+        
+        function setLevels(levels)
+        % Set the logging levels for multiple loggers
+        %
+        % jl.log.Configurator.setLevels(levels)
+        %
+        % This is a convenience method for setting the logging levels for multiple
+        % loggers.
+        %
+        % The levels input is an n-by-2 cellstr with logger names in column 1 and
+        % level names in column 2.
+        for i = 1:size(levels, 1)
+            [logName,levelName] = levels{i,:};
+            logger = org.apache.log4j.LogManager.getLogger(logName);
+            level = jl.log.Configurator.getLog4jLevel(levelName);
+            logger.setLevel(level);
+        end
+        end
+        
         function prettyPrintLogConfiguration(verbose)
         % Displays the current log configuration to the console
         
