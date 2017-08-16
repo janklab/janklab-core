@@ -91,10 +91,24 @@ for iFile = 1:numel(files)
         MavenRecentestVer{iJar} = '';
         MavenRecentestDate{iJar} = '';
     else
-        MavenGroup{iJar} = mvn.response.docs(1).g;
-        MavenArtifact{iJar} = mvn.response.docs(1).a;
-        MavenVersion{iJar} = mvn.response.docs(1).v;
-        timestamp = datetime(mvn.response.docs(1).timestamp/1000,...
+        % Use the more official-looking posting of multiple results
+        mvnResult = [];
+        preferredGroups = { 'commons-codec', 'jdom' };
+        for iDoc = 1:mvn.response.numFound
+            doc = mvn.response.docs(iDoc);
+            if ismember(doc.g, preferredGroups)
+                mvnResult = doc;
+                break;
+            end
+        end
+        if isempty(mvnResult)
+            % Oh well, just use the first
+            mvnResult = mvn.response.docs(1);
+        end
+        MavenGroup{iJar} = mvnResult.g;
+        MavenArtifact{iJar} = mvnResult.a;
+        MavenVersion{iJar} = mvnResult.v;
+        timestamp = datetime(mvnResult.timestamp/1000,...
             'ConvertFrom', 'posixtime');
         MavenRelDate{iJar} = datestr(timestamp, 'yyyy-mm-dd');
         latest = mavenClient.getReportedLatestVersion(MavenGroup{iJar}, MavenArtifact{iJar});
