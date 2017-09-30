@@ -226,18 +226,18 @@ classdef localdate
         end
         
         function out = toJavaLocalDates(this)
-        %TOJAVALOCALDATES Convert this to java.time.LocalDate[].
-        out = javaArray('java.time.LocalDate', numel(this));
+        %TOJAVALOCALDATES Convert this to org.threeten.bp.LocalDate[].
+        out = javaArray('org.threeten.bp.LocalDate', numel(this));
         for i = 1:numel(this)
             out(i) = this(i).toJavaLocalDate();
         end
         end
         
         function out = toJavaLocalDate(this)
-        %TOJAVALOCALDATE Convert this to java.time.LocalDate.
+        %TOJAVALOCALDATE Convert this to org.threeten.bp.LocalDate.
         mustBeScalar(this);
         dv = datevec(this.date);
-        out = java.time.LocalDate.of(dv(1), dv(2), dv(3));
+        out = org.threeten.bp.LocalDate.of(dv(1), dv(2), dv(3));
         end
         
         function out = withTimeOfDay(this, timeOfDay)
@@ -275,10 +275,10 @@ classdef localdate
         %FROMJAVALOCALDATE Convert from Java Time LocalDate
         if isempty(jdate)
             out = localdate.NaT;
-        elseif isa(jdate, 'java.time.LocalDate')
+        elseif isa(jdate, 'org.threeten.bp.LocalDate')
             out = localdate(jdate.getYear(), jdate.getMonthValue(), ...
                 jdate.getDayOfMonth());
-        elseif isa(jdate, 'java.time.LocalDate[]')
+        elseif isa(jdate, 'org.threeten.bp.LocalDate[]')
             out = repmat(localdate, size(jdate));
             for i = 1:numel(jdate)
                 out_i = localdate.fromJavaLocalDate(jdate(i));

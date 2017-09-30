@@ -1,7 +1,7 @@
 package net.janklab.time;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.ZoneOffset;
 import java.util.List;
 
 /**
@@ -16,7 +16,7 @@ public class TimeUtil {
     public static final long unixToDatenumEpochOffsetSeconds = unixToDatenumEpochOffsetDays * secondsPerDay;
     
     /**
-     * Convert a java.time.LocalDateTime to a Matlab datenum. This is done without
+     * Convert a org.threeten.bp.LocalDateTime to a Matlab datenum. This is done without
      * reference to any time zones.
      * @param dt LocalDateTime to convert
      * @return The closest equivalent Matlab datenum value, as a double.
@@ -32,7 +32,7 @@ public class TimeUtil {
     }
     
     /**
-     * Convert java.time.LocalDateTimes to Matlab datenums. This is done without
+     * Convert org.threeten.bp.LocalDateTimes to Matlab datenums. This is done without
      * reference to any time zones.
      * @param dates LocalDateTimes to convert
      * @return The closest equivalent Matlab datenum values, as doubles.

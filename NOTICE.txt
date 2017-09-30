@@ -3,4 +3,3 @@
 =============================================================================
 This product includes software developed by:
 Andrew Janke (http://apjanke.net)
-Joda.org (http://www.joda.org/)

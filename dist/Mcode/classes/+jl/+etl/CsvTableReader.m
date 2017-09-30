@@ -46,11 +46,11 @@ classdef CsvTableReader < handle
             if isa(x, 'java.lang.String[]')
                 %TODO: Switch to a more efficient conversion
                 mx = cellstr(string(x));
-            elseif isa(x, 'java.time.LocalDate[]')
+            elseif isa(x, 'org.threeten.bp.LocalDate[]')
                 mx = localdate.fromJavaLocalDate(x);
-            elseif isa(x, 'java.time.LocalTime[]')
+            elseif isa(x, 'org.threeten.bp.LocalTime[]')
                 mx = localtime.fromJavaLocalTime(x);
-            elseif isa(x, 'java.time.LocalDateTime[]')
+            elseif isa(x, 'org.threeten.bp.LocalDateTime[]')
                 mx = jl.time.util.javaLocalDateTime2datetime(x);
             elseif isa(x, 'net.janklab.util.SymbolArrayList')
                 mx = symbol(x);
@@ -89,7 +89,7 @@ classdef CsvTableReader < handle
             this.javaReader.localDateTimeFormat = [];
         else
             this.javaReader.localDateTimeFormat ...
-                = java.time.format.DateTimeFormatter.ofPattern(fmt);
+                = org.threeten.bp.format.DateTimeFormatter.ofPattern(fmt);
         end
         end
         
@@ -110,7 +110,7 @@ classdef CsvTableReader < handle
             this.javaReader.localDateFormat = [];
         else
             this.javaReader.localDateFormat ...
-                = java.time.format.DateTimeFormatter.ofPattern(fmt);
+                = org.threeten.bp.format.DateTimeFormatter.ofPattern(fmt);
         end
         end
         
@@ -131,7 +131,7 @@ classdef CsvTableReader < handle
             this.javaReader.localTimeFormat = [];
         else
             this.javaReader.localTimeFormat ...
-                = java.time.format.DateTimeFormatter.ofPattern(fmt);
+                = org.threeten.bp.format.DateTimeFormatter.ofPattern(fmt);
         end
         end
         

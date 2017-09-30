@@ -83,7 +83,7 @@ classdef localtime
         % nanosecond.
         mustBeScalar(this);
         nanos = round(this.time * jl.time.localtime.NanosPerDay);
-        out = java.time.LocalTime.ofNanoOfDay(uint64(nanos));
+        out = org.threeten.bp.LocalTime.ofNanoOfDay(uint64(nanos));
         end
         
         function out = eps(this)
@@ -146,10 +146,10 @@ classdef localtime
         %FROMJAVALOCALTIME Convert from Java-Time LocalTime to Janklab localtime
         if isempty(jtime)
             out = jl.time.localtime.NaT;
-        elseif isa(jtime, 'java.time.LocalTime')
+        elseif isa(jtime, 'org.threeten.bp.LocalTime')
             out = jl.time.localtime.NaT;
             out.time = jtime.toNanoOfDay() / jl.time.localtime.NanosPerDay;
-        elseif isa(jtime, 'java.time.LocalTime[]')
+        elseif isa(jtime, 'org.threeten.bp.LocalTime[]')
             out = repmat(localtime, size(jtime));
             for i = 1:numel(jtime)
                 out_i = jl.time.localtime.fromJavaLocalTime(jtime(i));
