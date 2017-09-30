@@ -6,17 +6,8 @@ function out = strlen(str)
 % Char arrays are considered to be column vectors of strings, and trailing blanks are
 % not counted.
 %
+% This is a convenience wrapper around jl.util.strings.strlen().
+%
 % Returns an array the same size as the string input array.
 
-if isa(str, 'string')
-	out = strlength(str);
-else
-	if ischar(str)
-		str = cellstr(str);
-	end
-	if ~iscellstr(str)
-		error('str must be char, cellstr, or string; got %s', class(str));
-	end
-	out = cellfun('prodofsize', str);
-end
-	
+out = jl.util.strings.strlen(str);
