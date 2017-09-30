@@ -128,7 +128,7 @@ classdef tables
         end
         
         function out = tableFromStructRecArray(s)
-            %TABLEFROMSTRUCTRECARRAY
+            %TABLEFROMSTRUCTRECARRAY Convert array of record structs to table
             %
             % Takes an array of structs that each represent a single record
             % and turns it in to a table.
