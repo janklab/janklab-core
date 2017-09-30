@@ -22,6 +22,13 @@ classdef MlIdeIntrospector
       mlMainFrame = this.mlMainFrame();
       out = childComponentOfType(mlMainFrame, 'com.mathworks.widgets.desk.DTRootPane');
     end
+    
+    function out = desktop(this)
+      %DESKTOP Get the Desktop object
+      out = com.mathworks.mde.desk.MLDesktop.getInstance();
+      % Used to do it with this, but I think that's backwards:
+      % out = this.mlMainFrame.getDesktop();
+    end
   end
   
 end
