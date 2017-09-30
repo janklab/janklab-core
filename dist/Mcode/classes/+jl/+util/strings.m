@@ -1,6 +1,6 @@
-classdef strutil
-	%STRUTIL A collection of string utility functions
-	
+classdef strings
+    %STRINGS A collection of string utility functions
+    
 	methods (Static = true)
 		
 		function out = strlen(str)
@@ -29,9 +29,10 @@ classdef strutil
     end
     
     methods (Access = private)
-        function obj = strutil
-            %STRUTIL Private constructor to suppress helptext
+        function obj = strings
+            %STRINGS Private constructor to suppress helptext
         end
     end
 	
-end
+ end
+
