@@ -1,7 +1,7 @@
 classdef QueryBuilder
     %QUERYBUILDER Incrementally construct SQL queries
     %
-    % This thisect is like a sentence diagram for a simple SQL query. It
+    % This is like a sentence diagram for a simple SQL query. It
     % lets you construct queries programmatically by conditionally adding
     % items to each of the clauses in the query.
     %
