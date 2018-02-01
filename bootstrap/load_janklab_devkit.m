@@ -20,4 +20,10 @@ devkit_dir = [repo_dir '/dev-kit'];
 devkit_mcode_dir = [devkit_dir '/Mcode'];
 addpath(devkit_mcode_dir);
 
+% Load the unit tests
+
+testsuite_dir = [repo_dir '/tests'];
+testsuite_mcode_dir = [testsuite_dir '/Mcode'];
+addpath(testsuite_mcode_dir);
+
 disp('Janklab Dev Kit loaded');
