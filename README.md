@@ -1,8 +1,8 @@
 # Janklab
 
-Janklab is a general-purpose library of functions, classes, and extensions for Matlab. It is informed by my background in quantitive analysis for finance, but should be useful in other application areas as well. It is designed for both interactive Matlab use and for building applications.
+Janklab is a general-purpose library of functions, classes, and extensions for Matlab. It is informed by my background in quantitive analysis for finance, but should be useful in other application areas as well. It is designed for both interactive Matlab use and for building applications and production Matlab code.
 
-Janklab is not a standalone system. It requires Matlab or the Matlab Compiler Runtime.
+Janklab is not a standalone application. It requires Matlab or the Matlab Compiler Runtime.
 
 See [Feature Areas](doc/Feature_Areas.md) to learn what Janklab provides.
 
@@ -35,4 +35,8 @@ jl.log.Configurator.configureBasicConsoleLogging()
 format compact
 ```
 
-Janklab requires and is developed on Matlab R2016b, though parts of it may well work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features. If something in Janklab actually requires a later version of Matlab, that is a bug, and feel free to report it.
+##  Compatibility
+
+Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features. If something in Janklab actually requires a later version of Matlab, that is a bug, and feel free to report it.
+
+Extended support of older Matlab versions is not a goal of Janklab.
