@@ -6,7 +6,7 @@ import org.apache.commons.collections.primitives.ArrayIntList;
  * An ArrayList of Symbols, encoded as primitive integers.
  */
 public class SymbolArrayList {
-    private ArrayIntList syms;
+    private final ArrayIntList syms;
 
     public SymbolArrayList() {
         syms = new ArrayIntList();

@@ -10,9 +10,9 @@ public class TimeUtil {
 
     /** The offset in days between the Matlab datenum epoch and the Unix epoch.
      * Determined by doing `datenum('1/1/1970')` in Matlab. */
-    public static final long unixToDatenumEpochOffsetDays = 719529;
-    public static final int secondsPerDay = 24 * 60 * 60;
-    public static final long unixToDatenumEpochOffsetSeconds = unixToDatenumEpochOffsetDays * secondsPerDay;
+    public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS = 719529;
+    public static final int SECONDS_PER_DAY = 24 * 60 * 60;
+    public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS = UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS * SECONDS_PER_DAY;
     
     /**
      * Convert a java.time.LocalDateTime to a Matlab datenum. This is done without
@@ -25,8 +25,8 @@ public class TimeUtil {
         // is a zoneless local date.
         double unixEpochSeconds = (double) dt.toEpochSecond(ZoneOffset.UTC);
         unixEpochSeconds += dt.getNano() / 1_000_000_000;
-        double datenum = (((double) unixEpochSeconds) + unixToDatenumEpochOffsetSeconds)
-                / ((double) secondsPerDay);
+        double datenum = (((double) unixEpochSeconds) + UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS)
+                / ((double) SECONDS_PER_DAY);
         return datenum;
     }
     

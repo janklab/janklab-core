@@ -18,7 +18,7 @@ public class LocalDateColBuffer extends ColBuffer {
     /** Date format being used for this column. */
     DateTimeFormatter dateFormat;
     /** All date formats supported by this buffer type. */
-    private static final DateTimeFormatter[] validFormats = {
+    private static final DateTimeFormatter[] VALID_FORMATS = {
         DateTimeFormatter.ISO_LOCAL_DATE,
         DateTimeFormatter.BASIC_ISO_DATE,
         DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL),
@@ -48,16 +48,15 @@ public class LocalDateColBuffer extends ColBuffer {
             }
             // Otherwise, autodetect format from cell contents
             if (dateFormat == null) {
-                for (int iFormat = 0; iFormat < validFormats.length; iFormat++) {
-                    DateTimeFormatter fmt = validFormats[iFormat];
-                    try {
-                        fmt.parse(cellValue);
-                        dateFormat = fmt;
-                        break;
-                    } catch (DateTimeParseException dtpe) {
-                        // quash and try next formatter
-                    }
+              for (DateTimeFormatter fmt : VALID_FORMATS) {
+                try {
+                  fmt.parse(cellValue);
+                  dateFormat = fmt;
+                  break;
+                } catch (DateTimeParseException dtpe) {
+                  // quash and try next formatter
                 }
+              }
             }
             if (dateFormat == null) {
                 // All formats failed

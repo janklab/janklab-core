@@ -17,7 +17,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
-import org.apache.commons.lang.NotImplementedException;
 
 /**
  * Knows how to read tabular data with different column types from a CSV file.

@@ -9,8 +9,8 @@ import java.util.Map;
  * numeric symbol ids into their corresponding strings.
  */
 public class Symbol {
-    static final Map<String,Integer> symbolMap = new HashMap<>();
-    static final Map<Integer,String> reverseMap = new HashMap<>();
+    static Map<String,Integer> symbolMap = new HashMap<>();
+    static Map<Integer,String> reverseMap = new HashMap<>();
     private static int nextSymbol = 0;
     
     static {

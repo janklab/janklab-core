@@ -18,7 +18,7 @@ public class AutoColBuffer extends ColBuffer {
     /** Whether this is the first cell or not. */
     private boolean isFirstCell = true;
     /** (DateTimeFormatter, ColType) pairs for datetime column detection. */
-    private Object[] dateCandidates;
+    private final Object[] dateCandidates;
     
     AutoColBuffer(CsvTableReader reader) {
         Objects.requireNonNull(reader);
