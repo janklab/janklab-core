@@ -35,9 +35,21 @@ classdef localtime
         % jl.time.localtime(H, M, S)
         % jl.time.localtime(H, M, S, timeOfSecond)
         %
-        % The 
+        % The zero-arg constructor produces the current local time, not
+        % NaT. This is inconsistent with jl.time.localdate, and may be
+        % changed.
+        %
+        % TimeOfDay (double) is the fractional time of day. It is a value
+        % between 0.0 (inclusive) and 1.0 (exclusive).
+        %
+        % Time of second, if provided, is a fractional number of seconds.
+        % For example, timeOfSecond = 0.5 indicates 500 milliseconds.
+        %
+        % If timeOfSecond is greater than or equal to 1.0, it carries over into
+        % the seconds value. This may be a design flaw, and changed in the
+        % future to require timeOfSecond to be <= 1.0.
         if nargin == 0
-            this.time = jl.time.localtime.currenttimeOfDay;
+            this.time = jl.time.localtime.currentTimeOfDay;
         elseif nargin == 1
             if isa(varargin{1}, 'double')
                 this.time = varargin{1};
@@ -52,11 +64,13 @@ classdef localtime
             s = varargin{3};
             if nargin < 4
                 timeOfSec = 0;
+            else
+                timeOfSec = varargin{4};
             end
             mustBeInteger(h);
             mustBeInteger(m);
             mustBeInteger(s);
-            time = jl.time.localtime.hmsmTotimeOfDay(h, m, s, timeOfSec);
+            time = jl.time.localtime.hmsmToTimeOfDay(h, m, s, timeOfSec);
             this.time = time;
         else
             error('jl:InvalidInput', 'Invalid number of arguments');
@@ -64,7 +78,7 @@ classdef localtime
         end
 
         function obj = set.time(obj, newValue)
-            mustBeValidTimeValue(obj, newValue);
+            mustBeValidTimeOfDayValue(newValue);
             obj.time = newValue;
         end
 
@@ -121,26 +135,30 @@ classdef localtime
     end
     
     methods (Static = true)
-        function out = oftimeOfDay(time)
-        %OFtimeOFDAY Create localtime from timeecond-of-day value
-        if any(time < 0 | time > localtime.timePerDay)
+        function out = ofTimeOfDay(time)
+        %OFTIMEOFDAY Create localtime from time-of-day value
+        if any(time < 0 | time > jl.time.localtime.timePerDay)
             error('Value for time is out of range');
         end
         out = jl.time.localtime;
         out.time = time;
         end
         
-        function out = currenttimeOfDay()
-        %CURRENTtimeOFDAY Current time, as timeeconds of the day
-        c = clock;
-        out = jl.time.localtime.hmsmTotimeOfDay(c(4), c(5), c(6));
+        function out = currentTimeOfDay()
+        %CURRENTTIMEOFDAY Current time, as fractional time of the day
+        out = rem(now, 1);
         end
         
-        function out = hmsmTotimeOfDay(h, m, s, timeOfSec)
-        %HMSMTOtimeOFDAY Convert hour/minute/second/timeOfSec to time of day
+        function out = hmsmToTimeOfDay(h, m, s, timeOfSec)
+        %HMSMTOTIMEOFDAY Convert hour/minute/second/timeOfSec to time of day
+        %
+        % Rounds to nanoseconds.
+        %
+        % s may contain fractional values.
         if nargin < 4; timeOfSec = 0; end
-        nanos = (h * 60 * 60 * 1000000000) + (m * 60 * 1000000000) ...
-            + round((s + timeOfSec) * 1000000000);
+        nanos = (h * 60 * 60 * 10^9) ...
+            + (m * 60 * 10^9) ...
+            + round((s + timeOfSec) * 10^9);
         out = nanos ./ jl.time.localtime.NanosPerDay;
         end
         
@@ -175,7 +193,7 @@ classdef localtime
         
         function out = now()
         %NOW Current time of day in the local time zone
-        out = jl.time.localtime(rem(now, 1));
+        out = jl.time.localtime(jl.time.localtime.currentTimeOfDay());
         end
         		
     end
@@ -319,7 +337,7 @@ classdef localtime
                 out = this;
                 out.date = this.time(s(1).subs{:});
             case '{}'
-                error('jl:bad_operation',...
+                error('jl:BadOperation',...
                     '{}-subscripting is not supported for class %s', class(this));
             case '.'
                 out = this.(s(1).subs);
@@ -423,10 +441,10 @@ classdef localtime
     
 end
 
-function mustBeValidTimeValue(x)
+function mustBeValidTimeOfDayValue(x)
 tfValid = isnan(x) | (x >= 0 & x < 1.0);
 if ~all(tfValid)
-    error('Invalid time values: %s', ...
+    error('jl:InvalidInput', 'Invalid time values: %s', ...
         strjoin(jl.util.num2cellstr(x(~tfValid)), ', '));
 end
 end
