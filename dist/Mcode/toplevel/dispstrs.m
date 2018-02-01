@@ -27,6 +27,8 @@ elseif isnumeric(x)
 	out = dispstrsNumeric(x);
 elseif iscellstr(x)
 	out = x;
+elseif isstring(x)
+    out = cellstr(x);
 elseif iscell(x)
 	out = dispstrsGenericDisp(x);
 elseif ischar(x)

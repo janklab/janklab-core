@@ -39,6 +39,9 @@ elseif iscell(x)
         strs = cellfun(@dispstr, x, 'UniformOutput',false);
     end
     out = formatArrayOfStrings(strs, {'{','}'});
+elseif isstring(x)
+    strs = strcat('"', cellstr(x), '"');
+    out = formatArrayOfStrings(strs, {'[',']'});
 else
     out = sprintf('%s %s', size2str(size(x)), class(x));
 end
