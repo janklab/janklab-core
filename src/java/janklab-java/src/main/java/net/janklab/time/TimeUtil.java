@@ -1,5 +1,6 @@
 package net.janklab.time;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
@@ -13,6 +14,18 @@ public class TimeUtil {
     public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS = 719529;
     public static final int SECONDS_PER_DAY = 24 * 60 * 60;
     public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS = UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS * SECONDS_PER_DAY;
+    
+    
+    /**
+     * Convert a LocalDate to a Matlab datenum.
+     * @param d LocalDate to convert
+     * @return The equivalent Matlab datenum value, as double
+     */
+    public static double javaLocalDate2datenum(LocalDate d) {
+      long epochDay = d.toEpochDay();
+      double datenum = epochDay + UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS;
+      return datenum;
+    }
     
     /**
      * Convert a java.time.LocalDateTime to a Matlab datenum. This is done without

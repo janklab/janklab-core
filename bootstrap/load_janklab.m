@@ -9,3 +9,4 @@ dist_dir = [repo_dir '/dist'];
 mcode_dir = [dist_dir '/Mcode'];
 cd([mcode_dir '/toplevel']);
 init_janklab();
+cd(mcode_dir);

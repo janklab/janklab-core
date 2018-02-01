@@ -11,12 +11,17 @@ function [outA, outB] = identityProxy(a, b)
 %
 % The identity proxy values may contain NaNs, for inputs which were NaN.
 
+if nargin < 2
+    outA = identityProxySingle(a);
+    return;
+end
+
 if ~isequal(class(a), class(b))
-	error('jl:bad_argument', 'Cannot compute identity proxy values for mixed types (%s and %s)',...
+	error('jl:InvalidInput', 'Cannot compute identity proxy values for mixed types (%s and %s)',...
 		class(a), class(b));
 end
 
-if isdouble(a)
+if isa(a, 'double')
 	outA = a;
 	outB = b;
 	return;
@@ -29,13 +34,31 @@ elseif isnumeric(a)
 		checkB = cast(outB, class(a));
 		if ~isequal(checkA, a) || ~isequal(checkB, b)
 			% Underflow occurred. Fall back to using the UNIQUE trick
-			[outA, outB] = jl.identityProxyUsingUnique(a, b);
+			[outA, outB] = jl.algo.identityProxyUsingUnique(a, b);
 		end
 	end
 	return;
 else
 	% General fallback case: rely on UNIQUE to identify an ordered set of values
-	[outA, outB] = jl.identityProxyUsingUnique(a, b);
+	[outA, outB] = jl.algo.identityProxyUsingUnique(a, b);
 end
 
+end
+
+function out = identityProxySingle(x)
+if isa(x, 'double')
+    out = x;
+elseif isnumeric(x)
+    out = double(x);
+	% Handle possible underflow for 64-bit ints
+    if isa(x, 'int64') || isa(x, 'uint64')
+        checkX = cast(out, class(x));
+        if ~isequal(checkX, x)
+			% Underflow occurred. Fall back to using the UNIQUE trick
+            out = jl.algo.identityProxyUsingUnique(x);
+        end
+    end
+else
+    out = jl.algo.identityProxyUsingUnique(x);
+end
 end

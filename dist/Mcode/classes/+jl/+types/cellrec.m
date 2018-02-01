@@ -11,7 +11,9 @@ if isstruct(x)
     end
     out = [fieldnames(x) struct2cell(x)];
 elseif iscell(x)
-    if ~jl.types.tests.isCellrec(x)
+    if jl.types.tests.isCellrec(x)
+        out = x;
+    else
         % Name-value lists can be converted
         if isrow(x) && mod(numel(x), 2) == 0 && iscellstr(x(1:2:end))
             out = reshape(x, [2 numel(x)/2])';

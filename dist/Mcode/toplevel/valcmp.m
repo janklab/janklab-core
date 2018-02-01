@@ -31,7 +31,7 @@ out(eqnan(a, b)) = 0;
 out(a > b) = 1;
 
 if any(isnan(out))
-	error('jl:invalid_type', 'None of LT, EQNAN, or GT returned true for some input elements (class %s and %s)',...
+	error('jl:InvalidInput', 'None of LT, EQNAN, or GT returned true for some input elements (class %s and %s)',...
 		class(a), class(b));
 end
 

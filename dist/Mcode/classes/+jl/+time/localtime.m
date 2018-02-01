@@ -1,28 +1,38 @@
 classdef localtime
     %LOCALTIME A time of day, without a time zone.
     %
-    % A localtime is a local (wall) time of day, zoneless. It is represented as
-    % a double indicating the fractional amount of a day that has passed, like
-    % the time part of a datenum or datetime. This representation is chosen to fit
-    % nicely with Matlab's datenum and datetime, and because it has precision finer
-    % than a nanosecond.
+    % A localtime is a local (wall) time of day, without a time zone. It is precise to
+    % the nanosecond.
+    %
+    % The range is from 00:00:00 to 24:00:00. 24:00:00 is not necessarily
+    % well-defined, but it is included for compatibility with other systems
+    % which have that value.
+    %
+    % The localtime is internally represented as a double indicating the the
+    % number of nanoseconds within the day. This representation is chosen
+    % because it has greater than nanosecond precision, which compares well with LocalTimes
+    % in other languages (like Java and SQL), and because it can represent NaNs
+    % (unlike int64).
     %
     % See also:
     % jl.time.localdate, jl.time.duration, datetime
     
     properties (Constant)
-        % localtime representing midnight (the start of the day)
+        % A localtime representing midnight (the start of the day)
         Midnight = jl.time.localtime(0, 0, 0);
+        % A localtime representing noon (12:00:00)
+        Noon = jl.time.localtime(12, 0, 0);
     end
-
+    
     properties (Constant, Access = private)
         % Number of milliseconds per day
-        MillisPerDay = 24 * 60 * 60 * 1000;
-        NanosPerDay = 24 * 60 * 60 * 1000000000;
+        MillisPerDay = 24 * 60 * 60 * 10^3;
+        % Number of nanoseconds per day
+        NanosPerDay = 24 * 60 * 60 * 10^9;
     end
     
     properties
-        % Fractional amount of day that has passed
+        % Time of day, as nanoseconds since midnight
         time double = NaN;
     end
     
@@ -35,9 +45,8 @@ classdef localtime
         % jl.time.localtime(H, M, S)
         % jl.time.localtime(H, M, S, timeOfSecond)
         %
-        % The zero-arg constructor produces the current local time, not
-        % NaT. This is inconsistent with jl.time.localdate, and may be
-        % changed.
+        % The zero-arg constructor produces NaT. Use jl.time.localtime.now() to
+        % get the current time of day.
         %
         % TimeOfDay (double) is the fractional time of day. It is a value
         % between 0.0 (inclusive) and 1.0 (exclusive).
@@ -49,7 +58,7 @@ classdef localtime
         % the seconds value. This may be a design flaw, and changed in the
         % future to require timeOfSecond to be <= 1.0.
         if nargin == 0
-            this.time = jl.time.localtime.currentTimeOfDay;
+            return;
         elseif nargin == 1
             if isa(varargin{1}, 'double')
                 this.time = varargin{1};
@@ -70,26 +79,69 @@ classdef localtime
             mustBeInteger(h);
             mustBeInteger(m);
             mustBeInteger(s);
-            time = jl.time.localtime.hmsmToTimeOfDay(h, m, s, timeOfSec);
+            time = jl.time.localtime.hmsmToNanosOfDay(h, m, s, timeOfSec);
             this.time = time;
         else
             error('jl:InvalidInput', 'Invalid number of arguments');
         end
         end
-
-        function obj = set.time(obj, newValue)
-            mustBeValidTimeOfDayValue(newValue);
-            obj.time = newValue;
+        
+        function this = set.time(this, newValue)
+        mustBeValidNanosOfDayValue(newValue);
+        this.time = newValue;
         end
-
+        
+        function out = getNanosOfDay(this)
+        out = this.time;
+        end
+        
         function disp(this)
         %DISP Custom display.
+        disp(dispstr(this));
+        end
+        
+        function out = dispstr(this)
+        %DISPSTR Custom display string
         if ~isscalar(this)
             dispf('%s %s', size2str(size(this)), class(this));
             return
         end
-        javaLocalTime = this.toJavaLocalTime();
-        disp(javaLocalTime.toString());
+        strs = dispstrs(this);
+        out = strs{1};
+        end
+        
+        function out = dispstrs(this)
+        %DISPSTRS Custom display strings.
+        out = cell(size(this));
+        for i = 1:numel(this)
+            t = this.time(i);
+            if isnan(t)
+                out{i} = 'NaT';
+                continue;
+            end
+            nanosPerSecond = 10^9;
+            nanosPerMinute = 60 * nanosPerSecond;
+            nanosPerHour = 60 * nanosPerMinute;
+            hours = floor(t / nanosPerHour);
+            t = t - hours * nanosPerHour;
+            minutes = floor(t / nanosPerMinute);
+            t = t - minutes * nanosPerMinute;
+            seconds = floor(t / nanosPerSecond);
+            t = t - seconds * nanosPerSecond;
+            str = sprintf('%02d:%02d:%02d', hours, minutes, seconds);
+            if t > 0
+                if rem(t, 1000) > 0
+                    % Has nanos-of-microsecond
+                    str = sprintf('%s.%09d', str, t);
+                elseif rem(t, 1000000) > 0
+                    % Has microseconds-of-millisecond
+                    str = sprintf('%s.%06d', str, t / 10^3);
+                else
+                    str = sprintf('%s.%03d', str, t / 10^6);
+                end
+            end
+            out{i} = str;
+        end
         end
         
         function out = toJavaLocalTime(this)
@@ -98,8 +150,15 @@ classdef localtime
         % Converts this to a Java-Time LocalTime object, rounding to the nearest
         % nanosecond.
         mustBeScalar(this);
-        nanos = round(this.time * jl.time.localtime.NanosPerDay);
-        out = java.time.LocalTime.ofNanoOfDay(uint64(nanos));
+        out = java.time.LocalTime.ofNanoOfDay(uint64(this.time));
+        end
+        
+        function out = datenum(this)
+        %DATENUM Convert to a datenum
+        %
+        % Converts this to a datenum, whose year, month, and day are zero, and
+        % whose time of day is equal to this.
+        out = this.time / jl.time.localtime.NanosPerDay;
         end
         
         function out = eps(this)
@@ -129,17 +188,24 @@ classdef localtime
         % result is greater than 1 day, it is an error.
         A = jl.time.localtime(A);
         B = jl.time.duration(B);
-        out = jl.time.localtime(A.time + B.time);
+        out = jl.time.localtime(A.time + (B.time * jl.time.localtime.NanosPerDay));
         end
         
     end
     
     methods (Static = true)
         function out = ofTimeOfDay(time)
-        %OFTIMEOFDAY Create localtime from time-of-day value
-        if any(time < 0 | time > jl.time.localtime.timePerDay)
-            error('Value for time is out of range');
+        %OFTIMEOFDAY Create localtime from fractional time-of-day value
+        if any(time < 0 | time > 1)
+            error('jl:InvalidInput', 'Value for time is out of range');
         end
+        out = jl.time.localtime;
+        out.time = time * jl.time.localtime.NanosPerDay;
+        end
+        
+        function out = ofHMS(h, m, s)
+        time = (h * 60 * 60 * 10^9) + (m * 60 * 10^9) + (s * 10^9);
+        time = floor(time);
         out = jl.time.localtime;
         out.time = time;
         end
@@ -149,17 +215,27 @@ classdef localtime
         out = rem(now, 1);
         end
         
-        function out = hmsmToTimeOfDay(h, m, s, timeOfSec)
+        function out = currentNanosOfDay()
+        %CURRENTNANOSOFDAY Current time, as nanoseconds of the day
+        %
+        % The time value is drawn from Matlab's CLOCK function, and has the same
+        % accuracy and precision.
+        c = clock;
+        out = c(4) * 60 * 60 * 10^9 ...
+            + c(5) * 60 * 10^9 ...
+            + round(c(6) * 10^9);
+        end
+        
+        function out = hmsmToNanosOfDay(h, m, s, timeOfSec)
         %HMSMTOTIMEOFDAY Convert hour/minute/second/timeOfSec to time of day
         %
         % Rounds to nanoseconds.
         %
         % s may contain fractional values.
         if nargin < 4; timeOfSec = 0; end
-        nanos = (h * 60 * 60 * 10^9) ...
+        out = (h * 60 * 60 * 10^9) ...
             + (m * 60 * 10^9) ...
             + round((s + timeOfSec) * 10^9);
-        out = nanos ./ jl.time.localtime.NanosPerDay;
         end
         
         function out = fromJavaLocalTime(jtime)
@@ -167,23 +243,28 @@ classdef localtime
         if isempty(jtime)
             out = jl.time.localtime.NaT;
         elseif isa(jtime, 'java.time.LocalTime')
-            out = jl.time.localtime.NaT;
-            out.time = jtime.toNanoOfDay() / jl.time.localtime.NanosPerDay;
+            out = jl.time.localtime;
+            out.time = double(jtime.toNanoOfDay());
         elseif isa(jtime, 'java.time.LocalTime[]')
-            out = repmat(localtime, size(jtime));
+            out = repmat(jl.time.localtime, size(jtime));
             for i = 1:numel(jtime)
-                out_i = jl.time.localtime.fromJavaLocalTime(jtime(i));
-                out.time(i) = out_i.time;
+                out.time(i) = double(jtime(i).toNanoOfDay());
             end
         else
             error('jl:InvalidInput', 'Invalid input type: %s', class(jtime));
         end
         end
         
-		function out = NaT(sz)
-		%NAT Create Not-a-Time localtimes
-		if nargin < 1; sz = [1 1]; end
-		out = localtime(NaN(sz));
+        function out = ofNanosOfDay(nanosOfDay)
+        %OFNANOSOFDAY Convert a nanoseconds-of-day value to localtime
+        out = jl.time.localtime;
+        out.time = nanosOfDay;
+        end
+        
+        function out = NaT(sz)
+        %NAT Create Not-a-Time localtimes
+        if nargin < 1; sz = [1 1]; end
+        out = localtime(NaN(sz));
         end
         
         function out = NaN(sz)
@@ -193,9 +274,22 @@ classdef localtime
         
         function out = now()
         %NOW Current time of day in the local time zone
-        out = jl.time.localtime(jl.time.localtime.currentTimeOfDay());
+        %
+        % The precision of NOW is that of Matlab's CLOCK() function.
+        %
+        % See also: CLOCK, NOW
+        out = jl.time.localtime;
+        out.time = jl.time.localtime.currentNanosOfDay();
         end
-        		
+        
+        function out = nowHMS()
+        %NOWHMS Current time of day in local time zone, rounded to seconds
+        nanos = jl.time.localtime.currentNanosOfDay();
+        nanosToSecond = round(nanos / 10^9) * 10^9;
+        out = jl.time.localtime;
+        out.time = nanosToSecond;
+        end
+        
     end
     
     methods
@@ -262,6 +356,11 @@ classdef localtime
         this.time = reshape(this.time, varargin{:});
         end
         
+        function this = ctranspose(this)
+        %CTRANSPOSE Complex conjugate transpose
+        this.time = this.time';
+        end
+        
         function this = squeeze(this)
         %SQUEEZE Remove singleton dimensions.
         this.time = squeeze(this.time);
@@ -294,6 +393,31 @@ classdef localtime
         function this = repmat(this, varargin)
         %REPMAT Replicate and tile array.
         this.time = repmat(this.time, varargin{:});
+        end
+        
+        function out = cat(dim, varargin)
+        %CAT Concatenate array
+        for i = 1:numel(varargin)
+            if ~isa(varargin{i}, 'jl.time.localtime')
+                varargin{i} = jl.time.localtime(varargin{i});
+            end
+        end
+        out = jl.time.localtime;
+        inFields = cell(size(varargin));
+        for i = 1:numel(varargin)
+            inFields{i} = varargin{i}.time;
+        end
+        out.time = cat(dim, inFields{:});
+        end
+        
+        function out = horzcat(varargin)
+        %HORZCAT Horizontal concatenation.
+        out = cat(2, varargin{:});
+        end
+        
+        function out = vertcat(varargin)
+        %VERTCAT Vertical concatenation.
+        out = cat(1, varargin{:});
         end
         
         function this = subsasgn(this, s, b)
@@ -335,7 +459,7 @@ classdef localtime
         switch s(1).type
             case '()'
                 out = this;
-                out.date = this.time(s(1).subs{:});
+                out.time = this.time(s(1).subs{:});
             case '{}'
                 error('jl:BadOperation',...
                     '{}-subscripting is not supported for class %s', class(this));
@@ -404,39 +528,39 @@ classdef localtime
         end
     end
     
-	methods (Static = true, Access = 'private')
-		function varargout = getCmpProxies(varargin)
-		%GETCMPPROXIES Get proxy values for use in relational comparisons
-		varargout = cell(size(varargin));
-		for i = 1:numel(varargin)
-			x = varargin{i};
-			if isa(x, 'jl.time.localtime')
-				y = x.time;
-			elseif isnumeric(x)
-				y = x;
-			else
-				error('jl:InvalidInput', 'Cannot compare a %s to a jl.time.localtime',...
-					class(x));
-			end
-			varargout{i} = y;
-		end
-		end
-		
-		function varargout = getEqProxies(varargin)
-		%GETEQPROXIES Get proxy values for use in ISEQUAL
-		varargout = cell(size(varargin));
-		for i = 1:numel(varargin)
-			x = varargin{i};
-			if isa(x, 'jl.time.localtime')
-				varargout{i} = x.time;
-			else
-				error('jl:InvalidInput', ...
+    methods (Static = true, Access = 'private')
+        function varargout = getCmpProxies(varargin)
+        %GETCMPPROXIES Get proxy values for use in relational comparisons
+        varargout = cell(size(varargin));
+        for i = 1:numel(varargin)
+            x = varargin{i};
+            if isa(x, 'jl.time.localtime')
+                y = x.time;
+            elseif isnumeric(x)
+                y = x;
+            else
+                error('jl:InvalidInput', 'Cannot compare a %s to a jl.time.localtime',...
+                    class(x));
+            end
+            varargout{i} = y;
+        end
+        end
+        
+        function varargout = getEqProxies(varargin)
+        %GETEQPROXIES Get proxy values for use in ISEQUAL
+        varargout = cell(size(varargin));
+        for i = 1:numel(varargin)
+            x = varargin{i};
+            if isa(x, 'jl.time.localtime')
+                varargout{i} = x.time;
+            else
+                error('jl:InvalidInput', ...
                     'Cannot compare a %s to a jl.time.localtime',...
-					class(x));
-			end
-		end
-		end
-		
+                    class(x));
+            end
+        end
+        end
+        
     end
     
 end
@@ -448,3 +572,13 @@ if ~all(tfValid)
         strjoin(jl.util.num2cellstr(x(~tfValid)), ', '));
 end
 end
+
+function mustBeValidNanosOfDayValue(x)
+tfValid = isnan(x) | (x >= 0 & x < jl.time.localtime.NanosPerDay);
+if ~all(tfValid)
+    error('jl:InvalidInput', 'Invalid time values: %s', ...
+        strjoin(jl.util.num2cellstr(x(~tfValid)), ', '));
+end
+end
+
+

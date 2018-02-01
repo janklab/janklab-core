@@ -22,6 +22,15 @@ classdef TestCase < matlab.unittest.TestCase
             this.verifyTrue(condition, diagnosticMessage);
         end
         end
+        
+        function verifyEqualN(this, actual, expected, diagnosticMessage)
+        narginchk(3, 4);
+        if nargin == 3
+            this.verifyTrue(isequaln(actual, expected));
+        else
+            this.verifyTrue(isequaln(actual, expected), diagnosticMessage);
+        end
+        end
     end
     
 end

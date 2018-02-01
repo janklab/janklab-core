@@ -45,23 +45,23 @@ methods
 	end
 	
 	function out = subsasgn(varargin) %#ok
-		error('jl:unsupported', '@nil may not have its elements assigned to');
+		error('jl:BadOperation', '@nil may not have its elements assigned to');
 	end
 	
 	function out = repmat(this, varargin) %#ok
-	  error('jl:unsupported', 'repmat() is not supported for @nil inputs');
+	  error('jl:BadOperation', 'repmat() is not supported for @nil inputs');
 	end
 	
 	function out = cat(this, varargin) %#ok
-	  error('jl:unsupported', 'cat() is not supported for @nil inputs');
+	  error('jl:BadOperation', 'cat() is not supported for @nil inputs');
 	end
 	
 	function out = horzcat(this, varargin) %#ok
-	  error('jl:unsupported', 'horzcat() is not supported for @nil inputs');
+	  error('jl:BadOperation', 'horzcat() is not supported for @nil inputs');
 	end
 	
 	function out = vertcat(this, varargin) %#ok
-	  error('jl:unsupported', 'vertcat() is not supported for @nil inputs');
+	  error('jl:BadOperation', 'vertcat() is not supported for @nil inputs');
 	end
 	
 	function disp(~)

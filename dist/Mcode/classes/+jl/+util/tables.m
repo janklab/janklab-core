@@ -51,7 +51,8 @@ classdef tables
             %  AggregateFcn - a function handle to the function to do the aggregation
             %  InCols - list of column names whose data will be passed to the inputs of
             %     AggregateFcn
-            
+            %
+            % See also: RELATION.GROUPBY
             [groupid,groupvals] = findgroups(tbl(:,groupCols));
             nGroups = max(groupid);
             
@@ -88,7 +89,7 @@ classdef tables
         end
         
         function [S,P,SP] = supplierPartsExample()
-            %supplierPartsExample The classic "Supplier Parts" example database
+            %SUPPLIERPARTSEXAMPLE The classic "Supplier Parts" example database
             S = cell2table({
                 'S1'    'Smith'     20  'London'
                 'S2'    'Jones'     10  'Paris'

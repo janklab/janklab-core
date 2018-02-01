@@ -7,24 +7,27 @@
     <packaging>jar</packaging>
     <dependencies>
         <!-- Dependencies added by Janklab itself -->
-        <!-- (none, currently) -->
-
-        <!-- Dependencies imposed by Matlab, as of R2018a -->
-        <!-- This is not a complete set of Matlab's dependencies; just interesting ones. -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.1.1</version>
         </dependency>
         <dependency>
             <groupId>commons-primitives</groupId>
             <artifactId>commons-primitives</artifactId>
             <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <!-- Dependencies imposed by Matlab, as of R2018a -->
+        <!-- This is not a complete set of Matlab's dependencies; just interesting ones. -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
         </dependency>
         <dependency>
             <groupId>commons-cli</groupId>

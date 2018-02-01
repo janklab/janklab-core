@@ -17,7 +17,8 @@ function mustBeType(value, type)
 %   * A Janklab pseudotype, such as 'cellstr' or 'numeric'
 %
 % Note: The cellstr pseudotype is nontrivial to check for, as it
-% must call iscellstr() and check all cell contents.
+% must call iscellstr() and check all cell contents. Avoid calling it in
+% perforamce-critical code.
 
 % Avoid infinite recursion
 assert(ischar(type), 'jl:InvalidInput',...
@@ -25,9 +26,10 @@ assert(ischar(type), 'jl:InvalidInput',...
 
 
 % Special pseudotype cases
+% TODO: These can probably go away now that we're using isa2()
 switch type
     case 'cellstr'
-        if iscellstr(value)
+        if iscellstr(value) %#ok<ISCLSTR>
             return
         else
             if iscell(value)
@@ -64,7 +66,7 @@ switch type
 end
 
 % General case
-if ~isa(value, type)
+if ~isa2(value, type)
     reportBadValue(inputname(1), type, class(value));
 end
 

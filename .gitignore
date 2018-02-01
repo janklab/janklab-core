@@ -6,3 +6,4 @@
 /dist/lib/java-ext-static/*
 !/dist/lib/java-ext-static/.dummy
 !/dist/lib/java-ext-static/README.md
+src/java/janklab-java/.idea/workspace.xml

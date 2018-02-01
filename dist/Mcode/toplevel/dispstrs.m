@@ -35,13 +35,23 @@ elseif ischar(x)
 	% An unfortunate consequence of the typical use of char and dispstrs' contract
 	out = num2cell(x);
 elseif isa(x, 'datetime')
-	out = reshape(cellstr(datestr(x)), size(x));
+    out = dispstrsDatetime(x);
 elseif isa(x, 'struct')
 	out = repmat({'1-by-1 struct'}, size(x));
 else
 	out = dispstrsGenericDisp(x);
 end
 
+end
+
+function out = dispstrsDatetime(x)
+out = cell(size(x));
+tfFinite = isfinite(x);
+out(tfFinite) = cellstr(datestr(x(tfFinite)));
+out(isnat(x)) = {'NaT'};
+dnum = datenum(x);
+out(isinf(dnum) & dnum > 0) = {'Inf'};
+out(isinf(dnum) & dnum < 0) = {'-Inf'};
 end
 
 function out = dispstrsNumeric(x)
@@ -52,9 +62,9 @@ function out = dispstrsGenericDisp(x)
 out = cell(size(x));
 for i = 1:numel(x)
 	if iscell(x)
-		xi = x{i};
+		xi = x{i}; %#ok<NASGU>
 	else
-		xi = x(i);
+		xi = x(i); %#ok<NASGU>
 	end
 	str = evalc('disp(xi)');
 	str(end) = []; % chomp newline

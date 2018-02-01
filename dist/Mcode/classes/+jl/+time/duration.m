@@ -19,7 +19,7 @@ classdef duration
     % instead of having to manually tweak the format to display them.
     %
     % See also:
-    % jl.time.localtime, jl.time.localdate, jl.time.duration, datetime
+    % jl.time.localtime, jl.time.localdate, duration, datetime
     
     properties
         % Duration length, as fractional days
@@ -191,6 +191,11 @@ classdef duration
         this.time = reshape(this.time, varargin{:});
         end
         
+        function this = ctranspose(this)
+        %CTRANSPOSE Complex conjugate transpose
+        this.time = this.time';
+        end
+        
         function this = squeeze(this)
         %SQUEEZE Remove singleton dimensions.
         this.time = squeeze(this.time);
@@ -228,7 +233,7 @@ classdef duration
         function this = cat(dim, this, b)
         %CAT Concatenate arrays.
         if ~isa(b, class(this))
-            error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
+            error('jl:TypeMismatch', 'Cannot concatenate %s with a %s',...
                 class(b), class(this));
         end
         this.time = cat(dim, this.time, b.time);
@@ -259,16 +264,16 @@ classdef duration
         switch s(1).type
             case '()'
                 if ~isa(rhs, class(this))
-                    error('jl:type_mismatch', 'Cannot assign %s in to a %s',...
+                    error('jl:TypeMismatch', 'Cannot assign %s in to a %s',...
                         class(rhs), class(this));
                 end
                 if ~isequal(class(rhs), class(this))
-                    error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
+                    error('jl:TypeMismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
                         class(this), class(rhs));
                 end
                 this.time(s(1).subs{:}) = rhs.time;
             case '{}'
-                error('jl:bad_operation',...
+                error('jl:BadOperation',...
                     '{}-subscripting is not supported for class %s', class(this));
             case '.'
                 this.(s(1).subs) = rhs;
@@ -284,7 +289,7 @@ classdef duration
                 out = this;
                 out.time = this.time(s(1).subs{:});
             case '{}'
-                error('jl:bad_operation',...
+                error('jl:BadOperation',...
                     '{}-subscripting is not supported for class %s', class(this));
             case '.'
                 out = this.(s(1).subs);

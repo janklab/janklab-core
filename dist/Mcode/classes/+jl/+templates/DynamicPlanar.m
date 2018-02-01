@@ -166,7 +166,7 @@ classdef DynamicPlanar
 		function this = cat(dim, this, b)
 			%CAT Concatenate arrays
 			if ~isa(b, class(this))
-				error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
+				error('jl:TypeMismatch', 'Cannot concatenate %s with a %s',...
 					class(b), class(this));
 			end
 			
@@ -201,11 +201,11 @@ classdef DynamicPlanar
 			switch s(1).type
 				case '()'
 					if ~isa(rhs, class(this))
-						error('jl:type_mismatch', 'Cannot assign %s in to a %s',...
+						error('jl:TypeMismatch', 'Cannot assign %s in to a %s',...
 							class(rhs), class(this));
 					end
 					if ~isequal(class(rhs), class(this))
-						error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
+						error('jl:TypeMismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
 							class(this), class(rhs));
 					end
 					flds = this.planarfields;
@@ -213,7 +213,7 @@ classdef DynamicPlanar
 						this.(flds{i})(s(1).subs{:}) = rhs.(flds{i});
 					end
 				case '{}'
-					error('jl:bad_operation',...
+					error('jl:BadOperation',...
 						'{}-subscripting is not supported for class %s', class(this));
 				case '.'
 					this.(s(1).subs) = rhs;
@@ -232,7 +232,7 @@ classdef DynamicPlanar
 						out.(flds{i}) = this.(flds{i})(s(1).subs{:});
 					end
 				case '{}'
-					error('jl:bad_operation',...
+					error('jl:BadOperation',...
 						'{}-subscripting is not supported for class %s', class(this));
 				case '.'
 					out = this.(s(1).subs);
@@ -359,7 +359,7 @@ classdef DynamicPlanar
 				return;
 			end
 			if ndims(this) > 2 || dim > 2  %#ok
-				error('jl:bad_argument', 'dimensions higher than 2 are not supported');
+				error('jl:BadArgument', 'dimensions higher than 2 are not supported');
 			end
 			out = this;
 			if dim == 2

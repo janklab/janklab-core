@@ -9,8 +9,18 @@ classdef janklab
 			% INIT_JANKLAB.
 			% Do not call it yourself.
 			
-			% No initialization code is defined yet
-			
+            % Initialize state data
+            setappdata(0, 'JanklabState', struct);
+            % Initialize logging
+            jl.log.Configurator.configureBasicConsoleLogging();
+            
+            % Initialize MDBC
+            jl.mdbc.Mdbc.initMdbc();
+            
+            % Add common synchronized folders, as a developer convenience
+            addSynchronizedFoldersToPath();
+            
+            % Announce initialization and version
 			dispf('Janklab %s initalized', jl.janklab.version);
 		end
 		
@@ -19,4 +29,38 @@ classdef janklab
 		out = 'v0.1-SNAPSHOT';
 		end
 	end
+end
+
+function addSynchronizedFoldersToPath()
+% Add synchronized-service folders to path
+%
+% This is a hack to support a common user-specific "MATLAB" folder that lives in
+% Dropbox or elsewhere.
+
+% The paths within these synchronized folders are entirely a Janklab convention;
+% I just made it up based on where Matlab likes to store its "user documents" by
+% default.
+
+% Add Dropbox
+dropboxDir = dropboxPath();
+dropboxMatlabPath = fullfile(dropboxDir, 'Documents', 'MATLAB');
+if isfolder(dropboxMatlabPath)
+    addpath(dropboxMatlabPath);
+end
+
+% Nothing else is supported yet. Sorry, Microsoft OneDrive users!
+
+end
+
+function out = dropboxPath()
+userHomeDir = char(java.lang.System.getProperty('user.home'));
+if ismac()
+    out = fullfile(userHomeDir, 'Dropbox');
+elseif ispc()
+    out = fullfile(userHomeDir, 'Dropbox');
+else
+    % I don't know where Dropbox lives on Linux. Let's just guess it's at
+    % ~/Dropbox
+    out = fullfile(userHomeDir, 'Dropbox');
+end
 end

@@ -99,7 +99,7 @@ classdef StaticPlanar
 		function this = cat(dim, this, b)
 			%CAT Concatenate arrays.
 			if ~isa(b, class(this))
-				error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
+				error('jl:TypeMismatch', 'Cannot concatenate %s with a %s',...
 					class(b), class(this));
 			end
 			this.xxx = cat(dim, this.xxx, b.xxx);
@@ -130,16 +130,16 @@ classdef StaticPlanar
 		switch s(1).type
 			case '()'
 				if ~isa(rhs, class(this))
-					error('jl:type_mismatch', 'Cannot assign %s in to a %s',...
+					error('jl:TypeMismatch', 'Cannot assign %s in to a %s',...
 						class(rhs), class(this));
 				end
 				if ~isequal(class(rhs), class(this))
-					error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
+					error('jl:TypeMismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
 						class(this), class(rhs));
 				end
 				this.xxx(s(1).subs{:}) = rhs.xxx;
 			case '{}'
-				error('jl:bad_operation',...
+				error('jl:BadOperation',...
 					'{}-subscripting is not supported for class %s', class(this));
 			case '.'
 				this.(s(1).subs) = rhs;
@@ -155,7 +155,7 @@ classdef StaticPlanar
 				out = this;
 				out.xxx = this.xxx(s(1).subs{:});
 			case '{}'
-				error('jl:bad_operation',...
+				error('jl:BadOperation',...
 					'{}-subscripting is not supported for class %s', class(this));
 			case '.'
 				out = this.(s(1).subs);

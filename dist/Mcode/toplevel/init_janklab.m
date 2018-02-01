@@ -1,5 +1,10 @@
 function init_janklab
 
+if verLessThan('matlab', '9.3.0')
+    error('Janklab requires Matlab version 9.3.0 (R2017b) or later. This is version %s.', ...
+        version);
+end
+
 % Get source files on path
 this_file = mfilename('fullpath');
 mcode_dir = fileparts(fileparts(this_file));
@@ -28,6 +33,14 @@ java_lib_ext_dir = [janklab_dist_root '/lib/java-ext'];
 add_jars_under_directory(java_lib_ext_dir);
 java_lib_ext_static_dir = [janklab_dist_root '/lib/java-ext-static'];
 add_jars_under_directory_static(java_lib_ext_static_dir);
+% As a total hack, Java files in the user's Dropbox directory
+userHomeDir = char(java.lang.System.getProperty('user.home'));
+userDropboxDir = fullfile(userHomeDir, 'Dropbox');
+dropboxJavaLibExtStaticDir = fullfile(userDropboxDir, 'Documents', 'Matlab', ...
+    'Janklab', 'java', 'lib-ext-static');
+if isFolder(dropboxJavaLibExtStaticDir)
+    add_jars_under_directory_static(dropboxJavaLibExtStaticDir);
+end
 
 % Pull in external Matlab libaries
 mat_lib_dir = [janklab_dist_root '/lib/matlab'];

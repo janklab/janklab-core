@@ -17,7 +17,7 @@ if ~exist(jarInBuild, 'file')
 end
 
 distLibDir = [srcroot '/dist/lib/java'];
-[ok,message] = movefile(jarInBuild, distLibDir, 'f');
+[ok,message] = copyfile(jarInBuild, distLibDir, 'f');
 if ~ok
     error('Failed installing JAR file to dist/lib/java: %s', message);
 end

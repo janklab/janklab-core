@@ -11,6 +11,6 @@ function debugf(format, varargin)
 % jl.log.debugf('Some message. value1=%s value2=%d', 'foo', 42);
 
 msg = sprintf(format, varargin{:});
-loggerCallImpl('debug', msg);
+loggerCallImpl('debug', msg, {});
 
 end

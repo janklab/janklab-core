@@ -2,6 +2,8 @@ classdef symbol
     %SYMBOL Compact representation of low-cardinality strings
     
 	properties
+        % The underlying symbol codes. The code 0 is special-cased to always
+        % represent the empty string "".
 		sym int32 = int32(0)
 	end
 	
@@ -27,17 +29,32 @@ classdef symbol
         out = reshape(string(net.janklab.util.Symbol.decodeSymbols(this.sym(:))), sz);
         end
         
-        function out = symbolvals(this)
-        %SYMBOLVALS Numeric symbol values (for debugging).
-        out = this.sym;
-        end
-        
         function disp(this)
         %DISP Custom display
         disp('@symbol:');
         disp(string(this));
         end
 		
+        function out = dispstrs(this)
+        %DISPSTRS Custom display string.
+        out = cellstr(string(this));
+        end
+        
+        function out = symbolvals(this)
+        %SYMBOLVALS Numeric symbol values (for debugging).
+        out = this.sym;
+        end
+        
+        function out = cellstr(this)
+        %CELLSTR Convert to cellstr.
+        out = cellstr(string(this));
+        end
+        
+        function out = symbolCode(this)
+        %SYMBOLCODE Get the numeric code representation of this symbol array.
+        out = this.sym;
+        end
+        
 		function varargout = size(this, varargin)
 		%SIZE Size of array.
 		varargout = cell(1, max(1, nargout));
@@ -125,8 +142,11 @@ classdef symbol
 		
 		function this = cat(dim, this, b)
 			%CAT Concatenate arrays.
+            if nargin < 3
+                return;
+            end
 			if ~isa(b, class(this))
-				error('jl:type_mismatch', 'Cannot concatenate %s with a %s',...
+				error('jl:TypeMismatch', 'Cannot concatenate %s with a %s',...
 					class(b), class(this));
 			end
 			
@@ -158,24 +178,30 @@ classdef symbol
 		switch s(1).type
 			case '()'
 				if ~isa(rhs, class(this))
-					error('jl:type_mismatch', 'Cannot assign %s in to a %s',...
+					error('jl:TypeMismatch', 'Cannot assign %s in to a %s',...
 						class(rhs), class(this));
 				end
 				if ~isequal(class(rhs), class(this))
-					error('jl:type_mismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
+					error('jl:TypeMismatch', 'Cannot assign a subclass in to a %s (got a %s)',...
 						class(this), class(rhs));
 				end
 				this.sym(s(1).subs{:}) = rhs.sym;
 			case '{}'
-				error('jl:bad_operation',...
+				error('jl:BadOperation',...
 					'{}-subscripting is not supported for class %s', class(this));
 			case '.'
 				this.(s(1).subs) = rhs;
 		end
 		end
 		
-		function out = subsref(this, s)
+		function [out,out2] = subsref(this, s)
 		%SUBSREF Subscripted reference.
+        
+        % Developers note: the out2 is just there to make this show up
+        % in the debugger easier; something weird is going on. It's probably
+        % some other method I haven't overridden properly.
+        % Let's just smack it up with some bogus values and see if things work.
+        out2 = [];
 		
 		% Base case
 		switch s(1).type
@@ -183,7 +209,7 @@ classdef symbol
 				out = this;
 				out.sym = this.sym(s(1).subs{:});
 			case '{}'
-				error('jl:bad_operation',...
+				error('jl:BadOperation',...
 					'{}-subscripting is not supported for class %s', class(this));
 			case '.'
 				out = this.(s(1).subs);
@@ -195,6 +221,13 @@ classdef symbol
 		end
 		end
 		
-	end
-	
+    end
+    
+    methods (Static)
+        function out = ofSymbolCode(codes)
+        %OFSYMBOLCODES Directly convert symbol codes to symbol object
+        out = symbol;
+        out.sym = codes;
+        end
+    end
 end

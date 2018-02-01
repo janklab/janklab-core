@@ -7,6 +7,7 @@ function mustBeScalar(x, name)
 % See also: mustBeVector, mustBeNonEmpty
 
 if nargin < 2; name = []; end
+
 if isscalar(x)
     return
 end

@@ -2,17 +2,33 @@ classdef Configurator
     % A configurator for log4j
     %
     % This class configures the logging setup for Janklab/Matlab logging. It
-    % configures the log4j library that Janklab logging sits on top of. (We use log4j
-    % because it ships with Matlab.)
+    % configures the log4j library that Janklab logging sits on top of. (We use
+    % log4j because it ships with Matlab.)
     %
-    % This class is provided as a convenience. You can also configure Janklab logging
-    % by directly configuring log4j using its normal Java interface.
+    % This class is provided as a convenience. You can also configure Janklab
+    % logging by directly configuring log4j using its normal Java interface.
     %
-    % Janklab does not automatically configure log4j. You must either call a
-    % configureXxx method on this class or configure log4j directly yourself to get
-    % logging to work.
+    % Janklab automatically configures log4j to do basic logging to the console.
+    % If you want other logging configurations, you need to set them up
+    % yourself.
     
     methods (Static)
+        function configureDefaultLogging
+        % Configures log4j with Janklab's default logging setup
+        %
+        % This method is safe to run multiple times per session; it checks to
+        % avoid doing redundant work.
+        
+        % If there's an appender already present on the root logger, assume that
+        % logging has already been configured, and punt
+        rootLogger = org.apache.log4j.Logger.getRootLogger();
+        apps = rootLogger.getAllAppenders();
+        if apps.hasMoreElements()
+            return
+        end
+        jl.log.Configurator.configureBasicConsoleLogging();
+        end
+        
         function configureBasicConsoleLogging
         % Configures log4j to do basic logging to the console
         %
@@ -27,7 +43,7 @@ classdef Configurator
         rootAppender = rootLogger.getAllAppenders().nextElement();
         % Use \n instead of %n because the Matlab console wants Unix-style line
         % endings, even on Windows.
-        pattern = ['%d{HH:mm:ss.SSS} %-5p %c %x - %m' sprintf('\n')];
+        pattern = ['%d{HH:mm:ss.SSS} %-5p %c %x - %m' sprintf('\n')]; %#ok<SPRINTFN>
         myLayout = org.apache.log4j.PatternLayout(pattern);
         rootAppender.setLayout(myLayout);
         end
@@ -54,10 +70,20 @@ classdef Configurator
         % level names in column 2.
         for i = 1:size(levels, 1)
             [logName,levelName] = levels{i,:};
-            logger = org.apache.log4j.LogManager.getLogger(logName);
+            if isequal(logName, 'root')
+                logger = org.apache.log4j.LogManager.getRootLogger();
+            else
+                logger = org.apache.log4j.LogManager.getLogger(logName);
+            end
             level = jl.log.Configurator.getLog4jLevel(levelName);
             logger.setLevel(level);
         end
+        end
+        
+        function out = getEffectiveLevel(loggerName)
+        % Get the current logging level for a named logger
+        logger = org.apache.log4j.LogManager.getLogger(loggerName);
+        out = char(logger.getEffectiveLevel().toString());
         end
         
         function prettyPrintLogConfiguration(verbose)
@@ -82,12 +108,19 @@ classdef Configurator
             loggerNames{end+1} = char(logger.getName()); %#ok<AGROW>
         end
         loggerNames = sort(loggerNames);
+        % Now get the loggers back, adding the rootLogger, which is not included
+        % in getCurrentLoggers()
+        loggers = cell(numel(loggerNames)+1, 1);
+        loggers{1} = org.apache.log4j.LogManager.getRootLogger();
+        for i = 1:numel(loggerNames)
+            loggers{i+1} = org.apache.log4j.LogManager.getLogger(loggerNames{i});
+        end
+        loggerNames = [{'root'} loggerNames];
         
         % Display the hierarchy
-        rootLogger = org.apache.log4j.LogManager.getRootLogger();
-        fprintf('Root (%s): %s\n', char(rootLogger.getName()), getLevelName(rootLogger));
-        for i = 1:numel(loggerNames)
-            logger = org.apache.log4j.LogManager.getLogger(loggerNames{i});
+        c = {};
+        for i = 1:numel(loggers)
+            logger = loggers{i};
             appenders = logger.getAllAppenders();
             appenderStrs = {};
             while appenders.hasMoreElements
@@ -101,26 +134,23 @@ classdef Configurator
                 appenderStrs{end+1} = ['appender: ' appenderStr]; %#ok<AGROW>
             end
             appenderList = strjoin(appenderStrs, ' ');
+            
             if ~verbose
                 if isempty(logger.getLevel()) && isempty(appenderList) ...
                         && logger.getAdditivity()
                     continue
                 end
             end
-            items = {};
-            if ~isempty(getLevelName(logger))
-                items{end+1} = getLevelName(logger); %#ok<AGROW>
-            end
-            if ~isempty(appenderStr)
-                items{end+1} = appenderList; %#ok<AGROW>
-            end
+            additivityStr = '';
             if ~logger.getAdditivity()
-                items{end+1} = sprintf('additivity=%d', logger.getAdditivity()); %#ok<AGROW>
+                additivityStr = sprintf('additivity=%d', logger.getAdditivity());
             end
-            str = strjoin(items, ' ');
-            fprintf('%s: %s\n',...
-                loggerNames{i}, str);
+            c = [c; { loggerNames{i} getLevelName(logger) appenderList ...
+                additivityStr }]; %#ok<AGROW>
         end
+        tbl = cell2table(c, 'VariableNames',{'Name','Level','Appenders',...
+            'Additivity'});
+        prettyprint(relation(tbl));
         end
     end
     

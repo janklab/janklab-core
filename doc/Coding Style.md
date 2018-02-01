@@ -4,6 +4,8 @@
  * Except for tasks inside UIs that need to be reported back to the user, in which case the status and result are both wrapped in a single return object.
 * Do not change output types or structure based on whether inputs are scalar.
 * Prefer OOP approaches instead of sets of related functions, in general.
+* M-Lint-warning-clean
+ * All M-Lint warnings should be suppressed or worked around.
 
 ##  Formatting
 
@@ -19,6 +21,7 @@
 
 * Wrap comments at 80 characters.
 * Display line guide at 80 characters.
+* Suppresss "input argument 'this' is unused" in all files
 
 ##  Naming conventions
 

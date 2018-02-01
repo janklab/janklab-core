@@ -1,8 +1,11 @@
 classdef localdate
     %LOCALDATE A calendar date
     %
+    % A calendar date without a time zone in the ISO-8601 calendar system.
+    %
     % A LOCALDATE represents an entire calendar day, as opposed to a specific instant
-    % in time. A LOCALDATE has no time zone or time of day components.
+    % in time. A LOCALDATE has no time zone or time of day components. It is
+    % useful for storing things such as birthdays, holidays, or business days.
     %
     % TODO: Add support for datenums and strings in relational operations. I think
     % this can be done by just promoting/converting all relop inputs to localdate,
@@ -13,8 +16,9 @@ classdef localdate
     
     % Open questions:
     % How should < > <= >= comparisons between localdate and datetime work?
-    % E.g. does localdate('3/1/2015') come before datetime('3/1/2015 01:00')?
+    % E.g. does jl.time.localdate('3/1/2015') come before datetime('3/1/2015 01:00')?
     
+    % @planarprecedence(date)
     
     properties (Constant, GetAccess='public')
         iso8601Format = 'yyyy-MM-dd';
@@ -27,7 +31,7 @@ classdef localdate
     properties (Access='protected')
         % Count of days from the Matlab epoch date, as double (i.e. datenum).
         % Constrained to never have fractional value.
-        date double = NaN;
+        date double = NaN; % @planar
     end
     
     methods
@@ -303,213 +307,6 @@ classdef localdate
     end
     
     methods
-        % Structural planar-organization methods
-        
-        function varargout = size(this, varargin)
-        %SIZE Size of array
-        varargout = cell(1, max(1, nargout));
-        [varargout{:}] = size(this.date, varargin{:});
-        end
-        
-        function out = numel(this)
-        %NUMEL Number of elements in array
-        out = numel(this.date);
-        end
-        
-        function out = ndims(this)
-        %NDIMS Number of dimensions
-        out = ndims(this.date);
-        end
-        
-        function out = isempty(this)
-        %ISEMPTY True for empty array
-        out = isempty(this.date);
-        end
-        
-        function out = isscalar(this)
-        %ISSCALAR True if input is scalar
-        out = isscalar(this.date);
-        end
-        
-        function out = isvector(this)
-        %ISVECTOR True if input is a vector
-        out = isvector(this.date);
-        end
-        
-        function out = iscolumn(this)
-        %ISCOLUMN True if input is a column vector
-        out = iscolumn(this.date);
-        end
-        
-        function out = isrow(this)
-        %ISROW True if input is a row vector
-        out = isrow(this.date);
-        end
-        
-        function out = ismatrix(this)
-        %ISMATRIX True if input is a matrix
-        out = ismatrix(this.date);
-        end
-        
-        function this = reshape(this, varargin)
-        %RESHAPE Reshape array
-        this.date = reshape(this.date, varargin{:});
-        end
-        
-        function this = squeeze(this)
-        %SQUEEZE Remove singleton dimensions
-        this.date = squeeze(this.date);
-        end
-        
-        function [this, nshifts] = shiftdim(this, n)
-        %SHIFTDIM Shift dimensions
-        if nargin > 1
-            [this.date, nshifts] = shiftdim(this.date, n);
-        else
-            this.date = shiftdim(this.date);
-        end
-        end
-        
-        function this = circshift(this, varargin)
-        %CIRCSHIFT Shift positions of elements circularly
-        this.date = circshift(this.date, varargin{:});
-        end
-        
-        function this = permute(this, order)
-        %PERMUTE Permute array dimensions
-        this.date = permute(this.date, order);
-        end
-        
-        function this = ipermute(this, order)
-        %IPERMUTE Inverse permute array dimensions
-        this.date = ipermute(this.date, order);
-        end
-        
-        function this = repmat(this, varargin)
-        %REPMAT Replicate and tile array
-        this.date = repmat(this.date, varargin{:});
-        end
-        
-        function out = cat(dim, varargin)
-        %CAT Concatenate array
-        for i = 1:numel(varargin)
-            if ~isa(varargin{i}, 'jl.time.localdate')
-                varargin{i} = jl.time.localdate(varargin{i});
-            end
-        end
-        out = jl.time.localdate;
-        inFields = cell(size(varargin));
-        for i = 1:numel(varargin)
-            inFields{i} = varargin{i}.date;
-        end
-        out.date = cat(dim, inFields);
-        end
-        
-        function out = horzcat(varargin)
-        %HORZCAT Horizontal concatenation.
-        out = cat(2, varargin{:});
-        end
-        
-        function out = vertcat(varargin)
-        %VERTCAT Vertical concatenation.
-        out = cat(1, varargin{:});
-        end
-        
-        function this = subsasgn(this, s, b)
-        %SUBSASGN Subscripted assignment
-        
-        % Chained subscripts
-        if numel(s) > 1
-            rhs_in = subsref(this, s(1));
-            rhs = subsasgn(rhs_in, s(2:end), b);
-        else
-            rhs = b;
-        end
-        
-        % Base case
-        switch s(1).type
-            case '()'
-                if ~isa(rhs, class(this))
-                    error('jl:TypeMismatch', 'Cannot assign %s in to a %s',...
-                        class(rhs), class(this));
-                end
-                if ~isequal(class(rhs), class(this))
-                    error('jl:TypeMisMatch', ...
-                        'Cannot assign a subclass in to a %s (got a %s)',...
-                        class(this), class(rhs));
-                end
-                this.date(s(1).subs{:}) = rhs.date;
-            case '{}'
-                error('jl:BadOperation',...
-                    '{}-subscripting is not supported for class %s', class(this));
-            case '.'
-                this.(s(1).subs) = rhs;
-        end
-        end
-        
-        function out = subsref(this, s)
-        %SUBSREF Subscripted reference
-        
-        % Base case
-        switch s(1).type
-            case '()'
-                out = this;
-                out.date = this.date(s(1).subs{:});
-            case '{}'
-                error('jl:BadOperation',...
-                    '{}-subscripting is not supported for class %s', class(this));
-            case '.'
-                out = this.(s(1).subs);
-        end
-        
-        % Chained reference
-        if numel(s) > 1
-            out = subsref(out, s(2:end));
-        end
-        end
-        
-        function out = eq(a, b)
-        %EQ Equality comparison
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = eq(ap, bp);
-        end
-        
-        function out = ne(a, b)
-        %NE Not equal
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = ne(ap, bp);
-        end
-        
-        function out = lt(a, b)
-        %LT Less than
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = lt(ap, bp);
-        end
-        
-        function out = le(a, b)
-        %LE Less than or equal
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = le(ap, bp);
-        end
-        
-        function out = gt(a, b)
-        %GT Greater than
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = gt(ap, bp);
-        end
-        
-        function out = ge(a, b)
-        %GE Greater than or equal
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = ge(ap, bp);
-        end
-        
-        function out = cmp(a, b)
-        %CMP Compare for ordering
-        [ap, bp] = jl.time.localdate.getCmpProxies(a, b);
-        out = sign(ap - bp);
-        end
-        
         function out = isequal(varargin)
         %ISEQUAL True if localdate arrays are equal
         proxies = jl.time.localdate.getEqProxies(varargin{:});
@@ -521,6 +318,7 @@ classdef localdate
         proxies = jl.time.localdate.getEqProxies(varargin{:});
         out = isequaln(proxies{:});
         end
+        
     end
     
     methods (Static = true, Access = 'private')
@@ -559,7 +357,290 @@ classdef localdate
         end
         
     end
+        
+    %%%%% START PLANAR-CLASS BOILERPLATE CODE %%%%%
     
+    % This section contains code auto-generated by Janklab's genPlanarClass.
+    % Do not edit code in this section manually.
+    % Do not remove the "%%%%% START/END .... %%%%%" header or footer either;
+    % that will cause the code regeneration to break.
+    % To update this code, re-run jl.code.genPlanarClass() on this file.
+    
+    methods
+    
+        function out = size(this)
+        %SIZE Size of array.
+        out = size(this.date);
+        end
+        
+        function out = numel(this)
+        %NUMEL Number of elements in array.
+        out = numel(this.date);
+        end
+        
+        function out = ndims(this)
+        %NDIMS Number of dimensions.
+        out = ndims(this.date);
+        end
+        
+        function out = isempty(this)
+        %ISEMPTY True for empty array.
+        out = isempty(this.date);
+        end
+        
+        function out = isscalar(this)
+        %ISSCALAR True if input is scalar.
+        out = isscalar(this.date);
+        end
+        
+        function out = isvector(this)
+        %ISVECTOR True if input is a vector.
+        out = isvector(this.date);
+        end
+        
+        function out = iscolumn(this)
+        %ISCOLUMN True if input is a column vector.
+        out = iscolumn(this.date);
+        end
+        
+        function out = isrow(this)
+        %ISROW True if input is a row vector.
+        out = isrow(this.date);
+        end
+        
+        function out = ismatrix(this)
+        %ISMATRIX True if input is a matrix.
+        out = ismatrix(this.date);
+        end
+        
+        function this = reshape(this)
+        %RESHAPE Reshape array.
+        this.date = reshape(this.date);
+        end
+        
+        function this = squeeze(this)
+        %SQUEEZE Remove singleton dimensions.
+        this.date = squeeze(this.date);
+        end
+        
+        function this = circshift(this)
+        %CIRCSHIFT Shift positions of elements circularly.
+        this.date = circshift(this.date);
+        end
+        
+        function this = permute(this)
+        %PERMUTE Permute array dimensions.
+        this.date = permute(this.date);
+        end
+        
+        function this = ipermute(this)
+        %IPERMUTE Inverse permute array dimensions.
+        this.date = ipermute(this.date);
+        end
+        
+        function this = repmat(this)
+        %REPMAT Replicate and tile array.
+        this.date = repmat(this.date);
+        end
+        
+        function this = ctranspose(this)
+        %CTRANSPOSE Complex conjugate transpose.
+        this.date = ctranspose(this.date);
+        end
+        
+        function this = transpose(this)
+        %TRANSPOSE Transpose vector or matrix.
+        this.date = transpose(this.date);
+        end
+        
+        function [this, nshifts] = shiftdim(this, n)
+        %SHIFTDIM Shift dimensions.
+        if nargin > 1
+            this.date = shiftdim(this.date, n);
+        else
+            [this.date,nshifts] = shiftdim(this.date);
+        end
+        end
+        
+        function out = cat(dim, varargin)
+        %CAT Concatenate arrays.
+        args = varargin;
+        for i = 1:numel(args)
+            if ~isa(args{i}, 'jl.time.localdate')
+                args{i} = jl.time.localdate(args{i});
+            end
+        end
+        out = args{1};
+        fieldArgs = cellfun(@(obj) obj.date, args, 'UniformOutput', false);
+        out.date = cat(dim, fieldArgs{:});
+        end
+        
+        function out = horzcat(varargin)
+        %HORZCAT Horizontal concatenation.
+        out = cat(2, varargin{:});
+        end
+        
+        function out = vertcat(varargin)
+        %VERTCAT Vertical concatenation.
+        out = cat(1, varargin{:});
+        end
+        
+        function this = subsasgn(this, s, b)
+        %SUBSASGN Subscripted assignment.
+        
+        % Chained subscripts
+        if numel(s) > 1
+            rhs_in = subsref(this, s(1));
+            rhs = subsasgn(rhs_in, s(2:end), b);
+        else
+            rhs = b;
+        end
+        
+        % Base case
+        switch s(1).type
+            case '()'
+                this = subsasgnParensPlanar(this, s(1), rhs);
+            case '{}'
+                error('jl:BadOperation',...
+                    '{}-subscripting is not supported for class %s', class(this));
+            case '.'
+                this.(s(1).subs) = rhs;
+        end
+        end
+        
+        function out = subsref(this, s)
+        %SUBSREF Subscripted reference.
+        
+        % Base case
+        switch s(1).type
+            case '()'
+                out = subsrefParensPlanar(this, s(1));
+            case '{}'
+                error('jl:BadOperation',...
+                    '{}-subscripting is not supported for class %s', class(this));
+            case '.'
+                out = this.(s(1).subs);
+        end
+        
+        % Chained reference
+        if numel(s) > 1
+            out = subsref(out, s(2:end));
+        end
+        end
+        
+        function out = eq(a, b)
+        %EQ == Equal.
+        if ~isa(a, 'jl.time.localdate')
+            a = jl.time.localdate(a);
+        end
+        if ~isa(b, 'jl.time.localdate')
+            b = jl.time.localdate(b);
+        end
+        tf = a.date == b.date;
+        out = tf;
+        end
+        
+        function out = lt(a, b)
+        %LT < Less than.
+        if ~isa(a, 'jl.time.localdate')
+            a = jl.time.localdate(a);
+        end
+        if ~isa(b, 'jl.time.localdate')
+            b = jl.time.localdate(b);
+        end
+        out = false(size(a));
+        tfUndecided = true(size(out));
+        tfThisStep = a.date(tfUndecided) < b.date(tfUndecided);
+        out(tfUndecided) = tfThisStep;
+        end
+        
+        function out = gt(a, b)
+        %GT > Greater than.
+        if ~isa(a, 'jl.time.localdate')
+            a = jl.time.localdate(a);
+        end
+        if ~isa(b, 'jl.time.localdate')
+            b = jl.time.localdate(b);
+        end
+        out = false(size(a));
+        tfUndecided = true(size(out));
+        tfThisStep = a.date(tfUndecided) > b.date(tfUndecided);
+        out(tfUndecided) = tfThisStep;
+        end
+        
+        function out = ne(a, b)
+        %NE ~= Not equal.
+        out = ~(a == b);
+        end
+        
+        function out = le(a, b)
+        %LE <= Less than or equal.
+        out = a < b | a == b;
+        end
+        
+        function out = ge(a, b)
+        %GE <= Greater than or equal.
+        out = a > b | a == b;
+        end
+        
+        function out = cmp(a, b)
+        %CMP Compare values for ordering.
+        %
+        % CMP compares values elementwise, returning for each element:
+        %   -1 if a(i) < b(i)
+        %   0  if a(i) == b(i)
+        %   1  if a(i) > b(i)
+        %   NaN if either a(i) or b(i) were NaN, or no relop methods returned
+        %       true
+        %
+        % Returns an array the same size as a and b (after scalar expansion).
+        
+        if ~isa(a, 'jl.time.localdate')
+            a = jl.time.localdate(a);
+        end
+        if ~isa(b, 'jl.time.localdate')
+            b = jl.time.localdate(b);
+        end
+        out = NaN(size(a));
+        tfUndecided = true(size(out));
+        tf = a < b;
+        out(tf) = -1;
+        tfUndecided(tf) = false;
+        tf = a(tfUndecided) == b(tfUndecided);
+        nextTest = NaN(size(tf));
+        nextTest(tf) = 0;
+        out(tfUndecided) = nextTest;
+        tfUndecided(tfUndecided) = ~tf;
+        tf = a(tfUndecided) > b(tfUndecided);
+        nextTest = NaN(size(tf));
+        nextTest(tf) = 1;
+        out(tfUndecided) = nextTest;
+        tfUndecided(tfUndecided) = ~tf; %#ok<NASGU>
+        end
+    
+    end
+    
+    methods (Access=private)
+    
+        function this = subsasgnParensPlanar(this, s, rhs)
+        %SUBSASGNPARENSPLANAR ()-assignment for planar object
+        if ~isa(rhs, 'jl.time.localdate')
+            rhs = jl.time.localdate(rhs);
+        end
+        
+        this.date(s.subs{:}) = rhs.date;
+        end
+        
+        function out = subsrefParensPlanar(this, s)
+        %SUBSREFPARENSPLANAR ()-indexing for planar object
+        out = this;
+        out.date = this.date(s.subs{:});
+        end
+    
+    end
+    
+    %%%%% END PLANAR-CLASS BOILERPLATE CODE %%%%%
+
 end
 
 function mustBeValidDateValue(x)

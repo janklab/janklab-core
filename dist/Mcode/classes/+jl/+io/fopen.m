@@ -11,7 +11,7 @@ if nargin == 1
 elseif nargin == 2
 	out = jl.io.FileHandle.fopen(filename, permission);
 else
-	out = jl.io.FileHandle.fopen(filename, permission, machinefmt, encodingIn);
+	out = jl.io.FileHandle.fopen(filename, permission, machinefmt, encoding);
 end
 
 end

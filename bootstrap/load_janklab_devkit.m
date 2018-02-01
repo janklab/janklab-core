@@ -14,6 +14,8 @@ cd([mcode_dir '/toplevel']);
 
 init_janklab();
 
+cd(mcode_dir);
+
 % Load the dev kit
 
 devkit_dir = [repo_dir '/dev-kit'];

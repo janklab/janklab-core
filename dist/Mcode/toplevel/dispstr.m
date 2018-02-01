@@ -1,12 +1,20 @@
-function out = dispstr(x)
+function out = dispstr(x, options)
 %DISPSTR Display string for arrays
+%
+% out = dispstr(x, options)
 %
 % This returns a one-line string representing the input value, in a format
 % suitable for inclusion into multi-element output.
 %
 % The intention is for classes to override this method.
 %
+% Options:
+%   QuoteStrings  - Put scalar strings in quotes.
+%
 % See also: DISPSTRS
+
+if nargin < 2;  options = [];  end
+options = jl.util.parseOpts(options, {'QuoteStrings',false});
 
 if ~ismatrix(x)
     out = sprintf('%s %s', size2str(size(x)), class(x));
@@ -27,7 +35,11 @@ elseif isnumeric(x)
     end
 elseif ischar(x)
     if isrow(x)
-        out = ['''' x ''''];
+        if options.QuoteStrings
+            out = ['''' x ''''];
+        else
+            out = x;
+        end
     else
         strs = strcat({''''}, num2cell(x,2), {''''});
         out = formatArrayOfStrings(strs);
@@ -40,7 +52,11 @@ elseif iscell(x)
     end
     out = formatArrayOfStrings(strs, {'{','}'});
 elseif isstring(x)
-    strs = strcat('"', cellstr(x), '"');
+    if options.QuoteStrings
+        strs = strcat('"', cellstr(x), '"');
+    else
+        strs = cellstr(x);
+    end
     out = formatArrayOfStrings(strs, {'[',']'});
 else
     out = sprintf('%s %s', size2str(size(x)), class(x));
