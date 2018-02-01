@@ -24,3 +24,25 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
 * Small distribution file size
 * Minimizing number of classes and functions
 * Running without Java
+
+## MDBC
+
+### Goals for MDBC
+
+* Support major open database vendors
+ * PostgreSQL, MySQL, Microsoft SQL Server, Oracle, Derby
+ * Major criteria: a free downloadable version of the DB server for development and testing
+* Placeholder parameters
+* Efficient large INSERTs
+* Bonus: extensibility for DB extensions
+ * Like PostGIS and user-defined types
+* Smooth edge cases and uniform types
+ * E.g. empty result sets returned as empty table types, not '[]'
+* Support "INSERT ... RETURNING"
+
+### Non-goals for MDBC
+
+* Harder-to-work-with or non-free databases
+ * IBM DB2, Sybase
+* Non-JDBC/non-Java drivers
+* ODBC support
