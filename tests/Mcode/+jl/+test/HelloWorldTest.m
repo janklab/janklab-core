@@ -1,4 +1,4 @@
-classdef HelloWorldTest < matlab.unittest.TestCase
+classdef HelloWorldTest < jl.unittest.TestCase
     %HELLOWORLDTEST A trivial test case to see if the unit tests are running
     %
     % If this test suite fails, something is seriously wrong.
@@ -9,6 +9,12 @@ classdef HelloWorldTest < matlab.unittest.TestCase
         %TESTHELLOWORLD A trivial example test
         str = 'Hello, world!';
         t.verifyEqual(str, str, ...
+            '''Hello, world!'' is equal to itself');
+        end
+        
+        function testHelloWorldWithJanklabUnitTest(t)
+        str = 'Hello, world!';
+        t.v(isequal(str, str), ...
             '''Hello, world!'' is equal to itself');
         end
         

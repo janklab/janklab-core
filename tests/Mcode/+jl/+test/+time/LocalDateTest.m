@@ -1,4 +1,4 @@
-classdef LocalDateTest < matlab.unittest.TestCase
+classdef LocalDateTest < jl.unittest.TestCase
     % Tests the jl.time.localdate class
     %
     % See also: jl.time.localdate
@@ -11,8 +11,8 @@ classdef LocalDateTest < matlab.unittest.TestCase
         dt = jl.time.localdate;
         t.verifyNotEmpty(dt);
         t.verifySize(dt, [1 1]);
-        t.verifyTrue(isnat(dt), 'Default constructor returns a NaT');
-        t.verifyTrue(isnan(dt), 'Default constructor isnan() is true');
+        t.v(isnat(dt), 'Default constructor returns a NaT');
+        t.v(isnan(dt), 'Default constructor isnan() is true');
         end
         
         function testStringConstructor(t)

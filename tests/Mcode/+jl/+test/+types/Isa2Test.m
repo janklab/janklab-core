@@ -1,4 +1,4 @@
-classdef Isa2Test < matlab.unittest.TestCase
+classdef Isa2Test < jl.unittest.TestCase
    
      methods (Test)
          function testSomeIsa2Cases(t)
