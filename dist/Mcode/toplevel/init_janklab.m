@@ -8,7 +8,7 @@ children = dir(mcode_dir);
 children = setdiff({ children.name }, {'.', '..'});
 for i = 1:numel(children)
     p = [mcode_dir '/' children{i}];
-    if isdir(p)
+    if isfolder(p)
         addpath(p);
     end
 end

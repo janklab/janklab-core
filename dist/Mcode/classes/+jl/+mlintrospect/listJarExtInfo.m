@@ -164,7 +164,7 @@ end
 
 function out = findFiles(file)
 
-if ~isdir(file)
+if ~isfolder(file)
     error('File %s is not a directory or does not exist', file);
 end
 out = findFilesStep(file, '');
@@ -184,7 +184,7 @@ for i = 1:numel(children)
     childPath = [ p '/' child ];
     if ismember(child, {'.' '..'})
         continue
-    elseif isdir(childPath)
+    elseif isfolder(childPath)
         childFiles = findFilesStep(root, childRel);
         files = [files childFiles]; 
     else
