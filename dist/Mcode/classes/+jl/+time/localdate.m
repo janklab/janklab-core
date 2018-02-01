@@ -237,18 +237,18 @@ classdef localdate
         end
         
         function out = toJavaLocalDates(this)
-        %TOJAVALOCALDATES Convert this to org.threeten.bp.LocalDate[].
-        out = javaArray('org.threeten.bp.LocalDate', numel(this));
+        %TOJAVALOCALDATES Convert this to java.time.LocalDate[].
+        out = javaArray('java.time.LocalDate', numel(this));
         for i = 1:numel(this)
             out(i) = this(i).toJavaLocalDate();
         end
         end
         
         function out = toJavaLocalDate(this)
-        %TOJAVALOCALDATE Convert this to org.threeten.bp.LocalDate.
+        %TOJAVALOCALDATE Convert this to java.time.LocalDate.
         mustBeScalar(this);
         dv = datevec(this.date);
-        out = org.threeten.bp.LocalDate.of(dv(1), dv(2), dv(3));
+        out = java.time.LocalDate.of(dv(1), dv(2), dv(3));
         end
         
         function out = withTimeOfDay(this, timeOfDay)
@@ -287,17 +287,17 @@ classdef localdate
         %FROMJAVALOCALDATE Convert from Java Time LocalDate
         if isempty(jdate)
             out = jl.time.localdate.NaT;
-        elseif isa(jdate, 'org.threeten.bp.LocalDate')
+        elseif isa(jdate, 'java.time.LocalDate')
             out = jl.time.localdate(jdate.getYear(), jdate.getMonthValue(), ...
                 jdate.getDayOfMonth());
-        elseif isa(jdate, 'org.threeten.bp.LocalDate[]')
+        elseif isa(jdate, 'java.time.LocalDate[]')
             out = repmat(jl.time.localdate, size(jdate));
             for i = 1:numel(jdate)
                 out_i = jl.time.localdate.fromJavaLocalDate(jdate(i));
                 out.date(i) = out_i.date;
             end
         else
-            error('Invalid input type: %s', class(jdate));
+            error('jl:InvalidInput', 'Invalid input type: %s', class(jdate));
         end
         end
     end
@@ -456,7 +456,7 @@ classdef localdate
                 out = this;
                 out.date = this.date(s(1).subs{:});
             case '{}'
-                error('jl:bad_operation',...
+                error('jl:BadOperation',...
                     '{}-subscripting is not supported for class %s', class(this));
             case '.'
                 out = this.(s(1).subs);

@@ -12,8 +12,6 @@ Janklab is licensed under the liberal, business-friendly Apache 2.0 License. You
 
 The Janklab code itself is licensed under the Apache 2.0 license. Janklab includes and is redistributed with third-party software, also covered by the Apache license.
 
-Janklab also includes a redistribution of the ThreeTenBackport project's binary distribution, which is Copyright (c) 2007-present, Stephen Colebourne & Michael Nascimento Santos. ThreeTenBackport is licensed under the BSD 3-clause license, the terms for which can be found in the `LICENSE-ThreeTenBackport.txt` file.
-
 ##  Contributing
 
 Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
