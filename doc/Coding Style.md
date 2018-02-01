@@ -13,11 +13,17 @@
 * snake_case local variable and helper function names
 * Indent with tabs, not spaces.
  * Assume a two-space tab display width, if it matters
+* 80-character lines.
+
+###  Matlab Editor Configuration for Formatting
+
+* Wrap comments at 80 characters.
+* Display line guide at 80 characters.
 
 ##  Naming conventions
 
 * `this` - the method dispatch object in an instance method
- * `obj` - an older name used in place of `this`
+ * `obj` - an older name used in place of `this` (DEPRECATED)
 * `tf` - a logical array, indicating whether a test was met
 * `loc` - an array of indexes indicating the location of something
 * `i`, `j` - loop indexes
