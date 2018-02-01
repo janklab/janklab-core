@@ -5,10 +5,10 @@ classdef HelloWorldTest < matlab.unittest.TestCase
     
     methods (Test)
         
-        function testHelloWorld(this)
+        function testHelloWorld(t)
         %TESTHELLOWORLD A trivial example test
         str = 'Hello, world!';
-        this.verifyEqual(str, str, ...
+        t.verifyEqual(str, str, ...
             '''Hello, world!'' is equal to itself');
         end
         

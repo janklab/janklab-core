@@ -6,7 +6,7 @@ classdef Num2cellstrTest < matlab.unittest.TestCase
     
     methods (Test)
         
-        function testSomeNumbers(this)
+        function testSomeNumbers(t)
         
         cases = {
             42              {'42'}
@@ -23,7 +23,7 @@ classdef Num2cellstrTest < matlab.unittest.TestCase
         for i = 1:size(cases, 1)
             [input,expected] = cases{i,:};
             output = num2cellstr(input);
-            this.verifyEqual(output, expected);
+            t.verifyEqual(output, expected);
         end
         
         end
