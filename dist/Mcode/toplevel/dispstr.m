@@ -5,6 +5,8 @@ function out = dispstr(x)
 % suitable for inclusion into multi-element output.
 %
 % The intention is for classes to override this method.
+%
+% See also: DISPSTRS
 
 if ~ismatrix(x)
     out = sprintf('%s %s', size2str(size(x)), class(x));
