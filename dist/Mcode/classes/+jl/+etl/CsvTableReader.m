@@ -47,9 +47,9 @@ classdef CsvTableReader < handle
                 %TODO: Switch to a more efficient conversion
                 mx = cellstr(string(x));
             elseif isa(x, 'org.threeten.bp.LocalDate[]')
-                mx = localdate.fromJavaLocalDate(x);
+                mx = jl.time.localdate.fromJavaLocalDate(x);
             elseif isa(x, 'org.threeten.bp.LocalTime[]')
-                mx = localtime.fromJavaLocalTime(x);
+                mx = jl.time.localtime.fromJavaLocalTime(x);
             elseif isa(x, 'org.threeten.bp.LocalDateTime[]')
                 mx = jl.time.util.javaLocalDateTime2datetime(x);
             elseif isa(x, 'net.janklab.util.SymbolArrayList')

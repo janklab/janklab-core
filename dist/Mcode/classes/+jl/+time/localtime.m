@@ -8,7 +8,7 @@ classdef localtime
     % than a nanosecond.
     %
     % See also:
-    % localdate, jl.time.duration, datetime
+    % jl.time.localdate, jl.time.duration, datetime
     
     properties (Constant)
         % localtime representing midnight (the start of the day)
@@ -34,6 +34,8 @@ classdef localtime
         % jl.time.localtime(timeOfDay)
         % jl.time.localtime(H, M, S)
         % jl.time.localtime(H, M, S, timeOfSecond)
+        %
+        % The 
         if nargin == 0
             this.time = jl.time.localtime.currenttimeOfDay;
         elseif nargin == 1

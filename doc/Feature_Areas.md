@@ -17,7 +17,7 @@ Janklab provides additional date/time types to supplement Matlab's new `datetime
 * `localtime` - a local (wall clock) time
 * `duration` - a length of time
 
-The `localdate` class is a top level class; the rest are in the `jl.time` namespace.
+These are found in the `jl.time` namespace.
 
 ## Validators
 
@@ -34,7 +34,7 @@ The `relation` class is a container data type much like Matlab's `table`, but su
 
 ### Symbol
 
-The `symbol` type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It's similar to Matlab's `categorical` type, but uses a global symbol space, and is integrated with Janklab I/O features.
+The `symbol` type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It is similar to Matlab's `categorical` type, but uses a global symbol space, and is integrated with Janklab I/O features.
 
 ## Monkeypatches
 
@@ -58,7 +58,7 @@ Binary search, implemented in M-code and MEX. Useful mostly as a benchmarking re
 
 ## SQL Stuff
 
-Located in the `jl.sql` namespace.
+Located in the `jl.sql` namespace. These are utilities for manipulating SQL query text.
 
 ### SQL QueryBuilder
 

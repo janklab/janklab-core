@@ -19,7 +19,7 @@ classdef duration
     % instead of having to manually tweak the format to display them.
     %
     % See also:
-    % jl.time.localtime, localdate, datetime, duration
+    % jl.time.localtime, jl.time.localdate, jl.time.duration, datetime
     
     properties
         % Duration length, as fractional days
