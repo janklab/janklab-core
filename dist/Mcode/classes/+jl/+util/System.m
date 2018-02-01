@@ -20,8 +20,17 @@ classdef System
         %
         % jl.util.System.sleep(seconds, millis, nanos)
         %
-        % Seconds, millis, and nanos are all optional, and all accept fractional
-        % values. The resulting sleep time is rounded off to nanos.
+        % Causes the Matlab execution thread to sleep (temporarily cease
+        % execution) for a specified amount of time.
+        %
+        % Seconds, Millis, and Nanos are all scalar doubles, are all optional,
+        % and all accept fractional values. The resulting requested sleep time
+        % is rounded off to nanos.
+        %
+        % This is an alternative to calling Matlab's pause() function, which
+        % depends on the global pause-enabled state.
+        %
+        % The sleep time always happens on the main Matlab execution thread.
         %
         % The actual sleep time is dependent on the precision and accuracy of
         % system timers and schedulers. It's unlikely your precision is actually
@@ -31,7 +40,7 @@ classdef System
         if nargin < 3 || isempty(nanos);    nanos = 0;    end
         totalNanos = (seconds * 10^9) + (millis * 10^6) + nanos;
         totalMillis = floor(totalNanos / 10^6);
-        additionalNanos = rem(totalMillis, 10^6);
+        additionalNanos = round(rem(totalMillis, 10^6));
         java.lang.Thread.sleep(totalMillis, additionalNanos);
         end
         
