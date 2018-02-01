@@ -17,8 +17,8 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
 ## Non-goals
 
 * Modularity
-* A clean top-level namespace
-* All features being fully portable
+* Clean top-level namespace
+* All features being fully portable across OSes
 * Back-compatibility of new Janklab releases with older Matlab releases
 * Minimizing third-party library dependencies
 * Small distribution file size
@@ -31,14 +31,20 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
 
 * Support major open database vendors
  * PostgreSQL, MySQL, Microsoft SQL Server, Oracle, Derby
- * Major criteria: a free downloadable version of the DB server for development and testing
-* Placeholder parameters
+ * Major criteria: a free-as-in-beer downloadable version of the DB server for development and testing
+* Placeholder parameters and prepared statements
 * Efficient large INSERTs
-* Bonus: extensibility for DB extensions
- * Like PostGIS and user-defined types
+* Date/times as real date/time types
+ * Definitely not strings, and not raw numerics/datenums
 * Smooth edge cases and uniform types
  * E.g. empty result sets returned as empty table types, not '[]'
 * Support "INSERT ... RETURNING"
+* Support JDBC driver tuning parameters
+ * Preferably with reasonable Matlab-tuned per-flavor defaults
+* Symbol/categorical support with Java-side conversion
+* Bonus: extensibility for DB extensions
+ * Like PostGIS and user-defined types
+* Bonus: NoSQL databases that present PostgreSQL or other JDBC APIs
 
 ### Non-goals for MDBC
 
@@ -46,3 +52,4 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
  * IBM DB2, Sybase
 * Non-JDBC/non-Java drivers
 * ODBC support
+* Drop-in compatibility with base Database Toolbox
