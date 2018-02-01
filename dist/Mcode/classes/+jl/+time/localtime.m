@@ -176,7 +176,7 @@ classdef localtime
                 out.time(i) = out_i.time;
             end
         else
-            error('Invalid input type: %s', class(jtime));
+            error('jl:InvalidInput', 'Invalid input type: %s', class(jtime));
         end
         end
         
@@ -430,7 +430,7 @@ classdef localtime
 			if isa(x, 'jl.time.localtime')
 				varargout{i} = x.time;
 			else
-				error('jl:InvalidLocalDateEqType', ...
+				error('jl:InvalidInput', ...
                     'Cannot compare a %s to a jl.time.localtime',...
 					class(x));
 			end

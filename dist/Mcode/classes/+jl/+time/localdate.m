@@ -76,18 +76,18 @@ classdef localdate
             elseif isnumeric(in)
                 date = in;
             else
-                error('jl:InvalidLocalDateInput', ...
+                error('jl:InvalidInput', ...
                     'jl.time.localdate(in) is not defined for type %s',...
                     class(in));
             end
         elseif nargin == 3
             date = datenum(datetime(in, varargin{1}, varargin{2}));
         else
-            error('jl:InvalidLocalDateInput', 'invalid number of arguments');
+            error('jl:InvalidInput', 'invalid number of arguments');
         end
         tfHasTime = ~isnan(date) & ~isinf(date) & mod(date, 1) ~= 0;
         if any(tfHasTime(:))
-            error('jl:InvalidLocalDateInput', ...
+            error('jl:InvalidInput', ...
                 'jl.time.localdate(in) input may not have time of day');
         end
         this.date = date;
@@ -551,7 +551,7 @@ classdef localdate
             if isa(x, 'jl.time.localdate')
                 varargout{i} = x.date;
             else
-                error('jl:InvalidLocalDateEqType', ...
+                error('jl:InvalidInput', ...
                     'Cannot compare a %s to a jl.time.localdate',...
                     class(x));
             end
