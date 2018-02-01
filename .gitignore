@@ -1,2 +1,8 @@
 !/dist
 /src/java/janklab-java/target/
+/dist/lib/java-ext/*
+!/dist/lib/java-ext/.dummy
+!/dist/lib/java-ext/README.md
+/dist/lib/java-ext-static/*
+!/dist/lib/java-ext-static/.dummy
+!/dist/lib/java-ext-static/README.md

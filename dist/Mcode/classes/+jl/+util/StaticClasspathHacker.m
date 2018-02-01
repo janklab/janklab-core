@@ -1,9 +1,9 @@
 classdef StaticClasspathHacker
-    %STATICCLASSPATHHACKER Tool for manipulating the Matlab static classpath
+    %STATICCLASSPATHHACKER Tool for manipulating the Matlab static Java classpath
     
     methods
         function addToStaticClasspath(~, file, classname)
-        %addToStaticClasspath Add an entry to the static classpath at run time.
+        %addToStaticClasspath Add an entry to the static Java classpath at run time.
         %
         % obj.addToStaticClasspath(file, classname)
         %
