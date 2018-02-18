@@ -1,5 +1,5 @@
 function [out,fullResults] = listJarExtInfo
-%LISTJAREXTINFO Get info about the external JARs included with Matlab
+%LISTJAREXTINFO Get info about the "external" JARs included with Matlab
 %
 % [out,fullResults] = jl.mlintrospect.listJarExtInfo
 %
@@ -26,9 +26,12 @@ function [out,fullResults] = listJarExtInfo
 %
 % Examples:
 % 
-% jarInfo = jl.mlintrospect.listJarExtInfo
+% jarInfo = listJarExtInfo;
+% fprintf('Found %d JAR libs\n', size(jarInfo,1));
+% % Then open your Workspace view and double-click the jarInfo variable to view
+% % it as a table
 
-mavenClient = jl.mlintrospect.MavenCentralRepoClient;
+mavenClient = jarext_inspector.MavenCentralRepoClient;
 
 jarextDir = [matlabroot '/java/jarext'];
 
@@ -136,7 +139,7 @@ for iFile = 1:numel(files)
             
 end
 
-fullResults = jl.util.tables.tableFromVectors(File, Title, Version, Vendor, ...
+fullResults = tableFromVectors(File, Title, Version, Vendor, ...
     BundleName, BundleVer, BundleVendor,...
     ImplTitle, ImplVer, ImplVendor, SpecTitle, SpecVer, SpecVendor, Sha1, ...
     MavenGroup, MavenArtifact, MavenVersion, MavenRelDate, MavenLatestVer, MavenLatestDate, ...
@@ -147,11 +150,32 @@ out = fullResults(:,{'Title','Vendor','Version','File','MavenGroup','MavenArtifa
 
 end
 
+function out = tableFromVectors(varargin)
+for i = 1:nargin
+    inNames{i} = inputname(i);
+end
+args = varargin;
+for i = 1:numel(args)
+    args{i} = args{i}(:);
+end
+out = table(args{:}, 'VariableNames', inNames);
+end
+
 function out = firstNonEmptyStr(varargin)
 out = firstNonEmpty(varargin{:});
 if isempty(out)
     out = '';
 end
+end
+
+function out = firstNonEmpty(varargin)
+for i = 1:numel(varargin)
+    if ~isempty(varargin{i})
+        out = varargin{i};
+        return;
+    end
+end
+out = [];
 end
 
 function out = getAttrib(attr, key)
@@ -164,12 +188,21 @@ end
 
 function out = findFiles(file)
 
-if ~isfolder(file)
+if ~isFolder(file)
     error('File %s is not a directory or does not exist', file);
 end
 out = findFilesStep(file, '');
 out = out(:);
 
+end
+
+function out = isFolder(file)
+% True if file exists and is a folder
+%
+% I wrote my own version for compatibility with older Matlabs. Newer Matlabs
+% provide isfolder().
+jFile = java.io.File(file);
+out = jFile.isDirectory;
 end
 
 function out = findFilesStep(root, rel)
@@ -184,7 +217,7 @@ for i = 1:numel(children)
     childPath = [ p '/' child ];
     if ismember(child, {'.' '..'})
         continue
-    elseif isfolder(childPath)
+    elseif isFolder(childPath)
         childFiles = findFilesStep(root, childRel);
         files = [files childFiles]; 
     else
@@ -194,4 +227,12 @@ end
 
 out = files;
 
+end
+
+function out = ifthen(condition, ifValue, elseValue)
+if condition
+    out = ifValue;
+else
+    out = elseValue;
+end
 end

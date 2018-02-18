@@ -8,7 +8,7 @@ children = dir(mcode_dir);
 children = setdiff({ children.name }, {'.', '..'});
 for i = 1:numel(children)
     p = [mcode_dir '/' children{i}];
-    if isfolder(p)
+    if isFolder(p)
         addpath(p);
     end
 end
@@ -28,6 +28,14 @@ java_lib_ext_dir = [janklab_dist_root '/lib/java-ext'];
 add_jars_under_directory(java_lib_ext_dir);
 java_lib_ext_static_dir = [janklab_dist_root '/lib/java-ext-static'];
 add_jars_under_directory_static(java_lib_ext_static_dir);
+
+% Pull in external Matlab libaries
+mat_lib_dir = [janklab_dist_root '/lib/matlab'];
+my_mat_libs = {
+    'matlab-jarext-inspector/matlab-jarext-inspector-1.0.1'
+    };
+mcode_dirs = strcat(mat_lib_dir, '/', my_mat_libs, '/Mcode');
+addpath(mcode_dirs{:});
 
 % Run initialization code
 jl.janklab.init_janklab;
@@ -55,4 +63,9 @@ for i = 1:numel(d)
         hacker.addToStaticClasspath(jar_file_path);
     end
 end
+end
+
+function out = isFolder(file)
+jFile = java.io.File(file);
+out = jFile.isDirectory;
 end

@@ -8,9 +8,11 @@ See [Feature Areas](doc/Feature Areas.md) to learn what Janklab provides.
 
 ##  License
 
+Apache 2.0 and BSD 2-clause.
+
 Janklab is licensed under the liberal, business-friendly Apache 2.0 License. You should be able to use it in most any application or environment, as long as you include the information from `NOTICE.txt` in your source distribution and/or user interface.
 
-The Janklab code itself is licensed under the Apache 2.0 license. Janklab includes and is redistributed with third-party software, also covered by the Apache license.
+The Janklab code itself is licensed under the Apache 2.0 license. Janklab includes and is redistributed with third-party software, also covered by the Apache license or the similarly liberal BSD 2-clause license.
 
 ##  Contributing
 

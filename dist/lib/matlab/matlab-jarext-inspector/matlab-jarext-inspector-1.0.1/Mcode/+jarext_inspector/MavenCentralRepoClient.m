@@ -61,7 +61,7 @@ classdef MavenCentralRepoClient
                 dd = [dd{:}];
             end
             dd = rmfield(dd, intersect({'tags','ec'}, fieldnames(dd)));
-            out = jl.util.tables.tableFromStructRecArray(dd);
+            out = struct2table(dd);
             out.timestamp = this.timestamp2datetime(out.timestamp);
         end
         

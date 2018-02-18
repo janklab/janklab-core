@@ -1,0 +1,11 @@
+matlab-jarext-inspector CHANGELOG
+==================================
+
+## Version 1.0.1  (2018-02-18)
+
+* Compatibility with MathWorks File Exchange
+ * Switch to BSD 2-clause license
+
+## Version 1.0.0  (2018-02-18)
+
+* Initial release
