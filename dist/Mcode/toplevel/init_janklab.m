@@ -33,7 +33,7 @@ java_lib_ext_dir = [janklab_dist_root '/lib/java-ext'];
 add_jars_under_directory(java_lib_ext_dir);
 java_lib_ext_static_dir = [janklab_dist_root '/lib/java-ext-static'];
 add_jars_under_directory_static(java_lib_ext_static_dir);
-% As a total hack, Java files in the user's Dropbox directory
+% As a total hack, load Java files in the user's Dropbox directory
 userHomeDir = char(java.lang.System.getProperty('user.home'));
 userDropboxDir = fullfile(userHomeDir, 'Dropbox');
 dropboxJavaLibExtStaticDir = fullfile(userDropboxDir, 'Documents', 'Matlab', ...
@@ -56,25 +56,48 @@ jl.janklab.init_janklab;
 end
 
 function add_jars_under_directory(java_lib_dir)
-d = dir(java_lib_dir);
-for i = 1:numel(d)
-    file = d(i).name;
-    if endsWith(file, '.jar')
-        jar_file_path = [java_lib_dir '/' file];
-        javaaddpath(jar_file_path);
-    end
-end
+	add_jars_under_directory_impl(java_lib_dir, 'dynamic');
 end
 
 function add_jars_under_directory_static(java_lib_dir)
-hacker = jl.util.StaticClasspathHacker;
+	add_jars_under_directory_impl(java_lib_dir, 'static');
+end
+
+function add_jars_under_directory_impl(java_lib_dir, path_type)
 d = dir(java_lib_dir);
 for i = 1:numel(d)
     file = d(i).name;
-    if endsWith(file, '.jar')
+		if ismember(file, {'.', '..'})
+			continue
+		end
+    if endsWith(file, '.jar') && ~d(i).isdir
         jar_file_path = [java_lib_dir '/' file];
-        hacker.addToStaticClasspath(jar_file_path);
+        javaaddpath_type(jar_file_path, path_type);
     end
+		% Pull in one level of subdirs, too
+		if d(i).isdir
+			subdir = [java_lib_dir '/' file];
+			d2 = dir(subdir);
+			for j = 1:numel(d2)
+				file2 = d2(j).name;
+				if endsWith(file2, '.jar')
+						jar_file_path = [subdir '/' file2];
+						javaaddpath_type(jar_file_path, path_type);
+				end
+			end
+		end
+end
+end
+
+function javaaddpath_type(path_dir, path_type)
+switch path_type
+	case 'dynamic'
+		javaaddpath(path_dir);
+	case 'static'
+		hacker = jl.util.StaticClasspathHacker;
+    hacker.addToStaticClasspath(path_dir);
+	otherwise
+		error('Invalid path type: %s', path_type);
 end
 end
 
