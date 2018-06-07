@@ -8,13 +8,16 @@ function out = dispstr(x, options)
 %
 % The intention is for classes to override this method.
 %
+% Options may be a struct or an n-by-2 cell array of name/value pairs (names in
+% column 1; values in column 2).
+%
 % Options:
 %   QuoteStrings  - Put scalar strings in quotes.
 %
 % See also: DISPSTRS
 
 if nargin < 2;  options = [];  end
-options = jl.util.parseOpts(options, {'QuoteStrings',false});
+options = parseOpts(options, {'QuoteStrings',false});
 
 if ~ismatrix(x)
     out = sprintf('%s %s', size2str(size(x)), class(x));
@@ -72,3 +75,4 @@ for iRow = 1:size(strs,1)
 end
 out = [brackets{1} strjoin(rowStrs, '; ') brackets{2}];
 end
+

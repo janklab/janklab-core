@@ -19,6 +19,9 @@ function out = dispstrs(x)
 %
 % Returns a cellstr the same size as x.
 %
+% Examples:
+%   dispstrs(magic(3))
+%
 % See also: DISPSTR
 
 if isempty(x)
