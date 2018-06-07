@@ -8,7 +8,7 @@ end
 % Get source files on path
 this_file = mfilename('fullpath');
 mcode_dir = fileparts(fileparts(this_file));
-janklab_dist_root = fileparts(mcode_dir);
+janklab_project_root = fileparts(mcode_dir);
 children = dir(mcode_dir);
 children = setdiff({ children.name }, {'.', '..'});
 for i = 1:numel(children)
@@ -18,32 +18,35 @@ for i = 1:numel(children)
     end
 end
 
+% Get libraries on classpath
+lib_root = [janklab_project_root '/lib'];
+
 % Get Java libraries on classpath
 % There are "static" variants here to support static-classpath loading of things
 % that need it, like JDBC drivers.
 
 % Java libs redistributed with Janklab
-java_lib_dir = [janklab_dist_root '/lib/java'];
+java_lib_dir = [lib_root '/java'];
 add_jars_under_directory(java_lib_dir);
-java_lib_static_dir = [janklab_dist_root '/lib/java-static'];
+java_lib_static_dir = [lib_root '/java-static'];
 add_jars_under_directory_static(java_lib_static_dir);
 % And another dir for users to drop their own JAR downloads in, like non-Apache
 % JDBC drivers and so on
-java_lib_ext_dir = [janklab_dist_root '/lib/java-ext'];
+java_lib_ext_dir = [lib_root '/java-ext'];
 add_jars_under_directory(java_lib_ext_dir);
-java_lib_ext_static_dir = [janklab_dist_root '/lib/java-ext-static'];
+java_lib_ext_static_dir = [lib_root '/java-ext-static'];
 add_jars_under_directory_static(java_lib_ext_static_dir);
 % As a total hack, load Java files in the user's Dropbox directory
-userHomeDir = char(java.lang.System.getProperty('user.home'));
-userDropboxDir = fullfile(userHomeDir, 'Dropbox');
-dropboxJavaLibExtStaticDir = fullfile(userDropboxDir, 'Documents', 'Matlab', ...
+user_home_dir = char(java.lang.System.getProperty('user.home'));
+user_dropbox_dir = fullfile(user_home_dir, 'Dropbox');
+dropbox_java_lib_ext_static_dir = fullfile(user_dropbox_dir, 'Documents', 'Matlab', ...
     'Janklab', 'java', 'lib-ext-static');
-if isFolder(dropboxJavaLibExtStaticDir)
-    add_jars_under_directory_static(dropboxJavaLibExtStaticDir);
+if isFolder(dropbox_java_lib_ext_static_dir)
+    add_jars_under_directory_static(dropbox_java_lib_ext_static_dir);
 end
 
 % Pull in external Matlab libaries
-mat_lib_dir = [janklab_dist_root '/lib/matlab'];
+mat_lib_dir = [lib_root '/matlab'];
 my_mat_libs = {
     'matlab-jarext-inspector/matlab-jarext-inspector-1.0.1'
     };

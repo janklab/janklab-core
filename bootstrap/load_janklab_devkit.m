@@ -8,8 +8,7 @@ function load_janklab_devkit
 
 this_file = mfilename('fullpath');
 repo_dir = fileparts(fileparts(this_file));
-dist_dir = [repo_dir '/dist'];
-mcode_dir = [dist_dir '/Mcode'];
+mcode_dir = [repo_dir '/Mcode'];
 cd([mcode_dir '/toplevel']);
 
 init_janklab();
