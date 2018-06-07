@@ -8,11 +8,15 @@ See [Feature Areas](doc/Feature Areas.md) to learn what Janklab provides.
 
 ##  License
 
-Apache 2.0 and BSD 2-clause.
+Apache 2.0, with other FOSS licenses for dependencies.
 
 Janklab is licensed under the liberal, business-friendly Apache 2.0 License. You should be able to use it in most any application or environment, as long as you include the information from `NOTICE.txt` in your source distribution and/or user interface.
 
-The Janklab code itself is licensed under the Apache 2.0 license. Janklab includes and is redistributed with third-party software, also covered by the Apache license or the similarly liberal BSD 2-clause license.
+Janklab depends on and is redistributed with third-party libraries, some of which are covered under other FOSS licenses.
+
+* FastUtil - Apache License
+* Apache Commons - Apache License
+* SwingExplorer - LGPL
 
 ##  Contributing
 
@@ -37,6 +41,6 @@ format compact
 
 ##  Compatibility
 
-Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features. If something in Janklab actually requires a later version of Matlab, that is a bug, and feel free to report it.
+Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab. 
 
-Extended support of older Matlab versions is not a goal of Janklab.
+Extended support of older Matlab versions is not a goal of Janklab. I haven't decided how long older versions of Matlab will be supported, but it's not going to be measured in years.
