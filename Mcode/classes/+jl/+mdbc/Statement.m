@@ -16,7 +16,7 @@ classdef Statement < handle
         connection
     end
     properties (Access = protected)
-        traceLog = jl.log.Logger.getLogger('jl.mdbc.trace');
+        traceLog = logm.Logger.getLogger('jl.mdbc.trace');
     end
     properties
         % Rows per chunk when fetching results
@@ -63,7 +63,7 @@ classdef Statement < handle
         execStatus = this.jdbc.execute(this.sql);
         out = this.fetchAllResults(execStatus);
         te = toc(t0);
-        this.traceLog.debugf('SQL: EXECUTE\n  %s\n  %s in %0.3f s', ...
+        this.traceLog.debug('SQL: EXECUTE\n  %s\n  %s in %0.3f s', ...
             this.sql, summaryString(out), te);
         end
         
@@ -122,7 +122,7 @@ classdef Statement < handle
         
         function out = fetchCurrentResultSet(this)
         %FETCHCURRENTRESULTSET
-        log = jl.log.Logger.getLogger('jl.mdbc');
+        log = logm.Logger.getLogger('jl.mdbc');
         jResultSet = this.jdbc.getResultSet();
         rsMeta = jl.mdbc.jdbc.RSMetaData(jResultSet.getMetaData());
         nCols = rsMeta.columnCount;
@@ -149,7 +149,7 @@ classdef Statement < handle
             colFetchers{iCol} = colFetcher;
             if log.isDebugEnabled
                 m = colMeta;
-                log.debugf('Col %d: "%s": %s (%d,%d) (%s) -> %s', ...
+                log.debug('Col %d: "%s": %s (%d,%d) (%s) -> %s', ...
                     iCol, m.label, m.sqlType, m.precision, m.scale, m.dbmsTypeName, ...
                     conversionName);
             end

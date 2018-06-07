@@ -17,7 +17,7 @@ classdef Connection < handle
     end
     properties (Access = protected)
         % Logger for SQL tracing
-        traceLog = jl.log.Logger.getLogger('jl.mdbc.trace');
+        traceLog = logm.Logger.getLogger('jl.mdbc.trace');
     end
     properties (Dependent)
         jdbcConn              % The underlying JDBC Connection object
@@ -57,11 +57,11 @@ classdef Connection < handle
                         t0 = tic;
                         this(i).jdbcConn.close();
                         te = toc(t0);
-                        this.traceLog.debugf('SQL CLOSE: %s (in %0.3f s)', ...
+                        this.traceLog.debug('SQL CLOSE: %s (in %0.3f s)', ...
                             this.jlConn.baseUrl, te);
                     catch err
                         % quash
-                        this.traceLog.warningf('SQL CLOSE failed on connection %s: %s', ...
+                        this.traceLog.warning('SQL CLOSE failed on connection %s: %s', ...
                             this.baseUrl, err.message);
                     end
                 end
@@ -200,7 +200,7 @@ classdef Connection < handle
         t0 = tic;
         out = this.jdbcConn.isValid(timeout);
         te = toc(t0);
-        this.traceLog.debugf('SQL PING: %s (%0.3f s)', this.jlConn.baseUrl, te);
+        this.traceLog.debug('SQL PING: %s (%0.3f s)', this.jlConn.baseUrl, te);
         end
         
         function out = prepareStatement(this, sql)

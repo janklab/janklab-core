@@ -1,16 +1,16 @@
-function debugf(format, varargin)
+function debug(msg, varargin)
 % Log a DEBUG level message from caller, with printf style formatting.
 %
-% jl.log.debugf(msg, varargin)
+% logm.debug(msg, varargin)
+% logm.debug(exception, msg, varargin)
 %
 % This accepts a message with printf style formatting, using '%...' formatting
 % controls as placeholders.
 %
 % Examples:
 %
-% jl.log.debugf('Some message. value1=%s value2=%d', 'foo', 42);
+% logm.debug('Some message. value1=%s value2=%d', 'foo', 42);
 
-msg = sprintf(format, varargin{:});
-loggerCallImpl('debug', msg, {});
+loggerCallImpl('debug', msg, varargin);
 
 end

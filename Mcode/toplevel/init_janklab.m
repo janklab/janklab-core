@@ -49,6 +49,7 @@ end
 mat_lib_dir = [lib_root '/matlab'];
 my_mat_libs = {
     'matlab-jarext-inspector/matlab-jarext-inspector-1.0.1'
+    'SLF4M/SLF4M-1.1.1.1'
     };
 mcode_dirs = strcat(mat_lib_dir, '/', my_mat_libs, '/Mcode');
 addpath(mcode_dirs{:});

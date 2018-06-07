@@ -13,7 +13,7 @@ classdef Mdbc
             jl.mdbc.internal.AppDataBackedColumnTypeConversionMap('Global', 'colTypeConversions');
         globalParamConversionSelector = ...
             jl.mdbc.internal.AppDataBackedParamConversionSelector('paramTypeConversions');
-        traceLog = jl.log.Logger.getLogger('jl.mdbc.trace');
+        traceLog = logm.Logger.getLogger('jl.mdbc.trace');
     end
     
     methods (Static)
@@ -33,13 +33,13 @@ classdef Mdbc
         function out = enableSqlTracing(newValue)
         %ENABLESQLTRACING Turn SQL tracing on or off
         if nargin == 0
-            out = ismember(jl.log.Configurator.getEffectiveLevel('jl.mdbc.trace'), ...
+            out = ismember(logm.Configurator.getEffectiveLevel('jl.mdbc.trace'), ...
                 {'DEBUG','TRACE','ALL'});
         else
             if newValue
-                jl.log.Configurator.setLevels({'jl.mdbc.trace','DEBUG'});
+                logm.Configurator.setLevels({'jl.mdbc.trace','DEBUG'});
             else
-                jl.log.Configurator.setLevels({'jl.mdbc.trace','INFO'});
+                logm.Configurator.setLevels({'jl.mdbc.trace','INFO'});
             end
         end
         end

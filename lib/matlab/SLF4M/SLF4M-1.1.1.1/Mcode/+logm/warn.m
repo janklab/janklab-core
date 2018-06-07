@@ -1,16 +1,16 @@
-function warnf(format, varargin)
+function warn(msg, varargin)
 % Log a WARN level message from caller, with printf style formatting.
 %
-% jl.log.warnf(msg, varargin)
+% logm.warn(msg, varargin)
+% logm.warn(exception, msg, varargin)
 %
 % This accepts a message with printf style formatting, using '%...' formatting
 % controls as placeholders.
 %
 % Examples:
 %
-% jl.log.warnf('Some message. value1=%s value2=%d', 'foo', 42);
+% logm.warn('Some message. value1=%s value2=%d', 'foo', 42);
 
-msg = sprintf(format, varargin{:});
-loggerCallImpl('warn', msg);
+loggerCallImpl('warn', msg, varargin);
 
 end

@@ -12,7 +12,7 @@ classdef janklab
             % Initialize state data
             setappdata(0, 'JanklabState', struct);
             % Initialize logging
-            jl.log.Configurator.configureBasicConsoleLogging();
+            logm.Log4jConfigurator.configureBasicConsoleLogging();
             
             % Initialize MDBC
             jl.mdbc.Mdbc.initMdbc();
