@@ -25,7 +25,13 @@ Janklab is a personal project, not a community one. Bug reports and feature requ
 
 ##  Installation and use
 
-To use Janklab, install it to your local system by cloning the Git repo. In your Matlab session, run the `init_janklab` function found under `dist/Mcode/` in the repo. You can also use the initialization functions found in `bootstrap/`.
+To use Janklab, install it to your local system by cloning the Git repo. You must use the `--recursive` option because the Janklab repo includes submodules.
+
+```
+git clone --recursive https://github.com/apjanke/janklab
+```
+
+In your Matlab session, run the `init_janklab` function found under `dist/Mcode/` in the repo. You can also use the initialization functions found in `bootstrap/`.
 
 ```
 % Example initialization script
