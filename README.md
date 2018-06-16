@@ -17,6 +17,7 @@ Janklab depends on and is redistributed with third-party libraries, some of whic
 * FastUtil - Apache License
 * Apache Commons - Apache License
 * SwingExplorer - LGPL
+* Dispstr - BSD 2-Clause License
 
 ##  Contributing
 
