@@ -1,3 +1,6 @@
 [submodule "lib/matlab/dispstr/dispstr-HEAD"]
 	path = lib/matlab/dispstr/dispstr-HEAD
 	url = https://github.com/apjanke/dispstr
+[submodule "lib/matlab/SLF4M/SLF4M-HEAD"]
+	path = lib/matlab/SLF4M/SLF4M-HEAD
+	url = https://github.com/apjanke/SLF4M

@@ -12,6 +12,8 @@ classdef janklab
             % Initialize state data
             setappdata(0, 'JanklabState', struct);
             % Initialize logging
+            % No need to call initSLF4M, since we've loaded Dispstr ourselves
+            % Just configure the console logging.
             logm.Log4jConfigurator.configureBasicConsoleLogging();
             
             % Initialize MDBC
