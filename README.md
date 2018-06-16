@@ -4,7 +4,7 @@ Janklab is a general-purpose library of functions, classes, and extensions for M
 
 Janklab is not a standalone application. It requires Matlab or the Matlab Compiler Runtime.
 
-See [Feature Areas](doc/Feature Areas.md) to learn what Janklab provides.
+See [Feature Areas]("doc/Feature Areas.md") to learn what Janklab provides.
 
 ##  License
 
@@ -38,6 +38,6 @@ cd(oldDir)
 
 ##  Compatibility
 
-Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab. 
+Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab.
 
 Extended support of older Matlab versions is not a goal of Janklab. I haven't decided how long older versions of Matlab will be supported, but it's not going to be measured in years.
