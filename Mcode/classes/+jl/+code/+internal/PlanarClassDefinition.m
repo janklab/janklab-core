@@ -20,6 +20,10 @@ classdef PlanarClassDefinition
         hasUserSubsref = false;
         hasUserSubsasgn = false;
         hasUserNumArgumentsFromSubscript = false;
+        hasUserIsNan = false;
+        
+        % True if this class has an isnan() method from some source
+        isNanable = false;
         
         codeInfo
     end

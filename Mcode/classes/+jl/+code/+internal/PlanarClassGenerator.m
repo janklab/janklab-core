@@ -57,6 +57,9 @@ classdef PlanarClassGenerator
         defn = this.parseAnnotations(codeInfo.userCode, defn);
         defn = this.detectClassProperties(fqClassName, codeInfo.userCode, defn);
         defn.codeInfo = codeInfo;
+        % Finish inspection
+        defn.isNanable = defn.hasPlanarNanFlag || ~isempty(defn.planarNanFields) ...
+            || defn.hasUserIsNan;
         out = defn;
         end
         
@@ -149,7 +152,7 @@ classdef PlanarClassGenerator
         % attempting to parse it ourselves
         
         try
-            testClassName = sprintf('PlanarClassGenTestClass%d', round(rand*9999999999999999));
+            testClassName = sprintf('PlanarClassGenTestClass%d', round(rand*999999999999));
             myTempDir = tempname;
             mkdir(myTempDir);
             tempFile = fullfile(myTempDir, [testClassName '.m']);
@@ -166,6 +169,7 @@ classdef PlanarClassGenerator
                 notes.userMethodNames = setdiff({klass.MethodList.Name}, {testClassName});
             end
             fprintf('Found user methods: %s\n', strjoin(notes.userMethodNames, ', '));
+            notes.hasUserIsNan = ismember('isnan', notes.userMethodNames);
             notes.hasUserSubsref = ismember('subsref', notes.userMethodNames);
             notes.hasUserSubsasgn = ismember('subsasgn', notes.userMethodNames);
             notes.hasUserNumArgumentsFromSubscript = ismember('numArgumentsFromSubscript', ...
@@ -453,7 +457,7 @@ classdef PlanarClassGenerator
             'end'
             'end'
             }, '\n'));
-        if ~isempty(notes.planarNanFlag) && ~ismember('isnan', notes.userMethodNames)
+        if ~isempty(notes.planarNanFlag) && ~notes.hasUserIsNan
             publicDefns{end+1} = subst(strjoin({
                 'function out = isnan(<obj>)'
                 '%ISNAN True for Not-a-Number'
@@ -530,7 +534,7 @@ classdef PlanarClassGenerator
                 'end'
                 }, '\n'));
         end
-        if ~ismember('isnan', notes.userMethodNames)
+        if ~notes.hasUserIsNan
             nanableFields = setdiff(planarFields, [notes.planarNoNanFields notes.planarNanFlag]);
             defn = {
                 'function out = isnan(<obj>)'
@@ -900,8 +904,9 @@ classdef PlanarClassGenerator
             'tf = a.<field1> == b.<field1>;'}
             perfield('tf(tf) = a.<field>(tf) == b.<field>(tf);', relopsFields(2:end))
             'out = tf;'
-            condsection(notes.hasPlanarNanFlag, {
-            'out(a.<nanflag> | b.<nanflag>) = false;'
+            condsection(notes.isNanable, {
+            'tfNan = isnan(a) | isnan(b);'
+            'out(tfNan) = false;'
             })
             'end']), '\n');
         publicDefns{end+1} = defn;
@@ -940,9 +945,10 @@ classdef PlanarClassGenerator
                 end
             end
             defn = [defn; subst([
-                condsection(notes.hasPlanarNanFlag, {
+                condsection(notes.isNanable, {
                 '% Check NaN flags'
-                'out(a.<nanflag> | b.<nanflag>) = false;'
+                'tfNan = isnan(a) | isnan(b);'
+                'out(tfNan) = false;'
                 })
                 'end'])];
             defn = strjoin(defn, '\n');
