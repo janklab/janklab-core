@@ -17,7 +17,6 @@ classdef PlanarClassGenerator
         isHandle = false;
         % { name, H1text; ... }
         simpleQueryDelegates = {
-            'size'          'Size of array.'
             'numel'         'Number of elements in array.'
             'ndims'         'Number of dimensions.'
             'isempty'       'True for empty array.'
@@ -48,6 +47,19 @@ classdef PlanarClassGenerator
     end
     
     methods
+
+        function out = inspectFile(this, file)
+        %INSPECTFILE Inspect a class file and determine planar definition
+        fqClassName = this.determineClassName(file);
+        originalCode = jl.io.slurp(file);
+        codeInfo = this.scanCode(originalCode);
+        defn = jl.code.internal.PlanarClassDefinition;
+        defn = this.parseAnnotations(codeInfo.userCode, defn);
+        defn = this.detectClassProperties(fqClassName, codeInfo.userCode, defn);
+        defn.codeInfo = codeInfo;
+        out = defn;
+        end
+        
         function out = determineClassName(this, file) %#ok<INUSL>
         f = strrep(file, '\', '/');
         pkgPathComponent = regexp(f, '\+.*?(?=/[^+])', 'match', 'once');
@@ -61,26 +73,27 @@ classdef PlanarClassGenerator
         out = fqClassName;
         end
         
-        function out = parseAnnotations(this, code) %#ok<INUSL>
-        out = struct;
+        function out = parseAnnotations(this, code, notes) %#ok<INUSL>
+        %PARSEANNOTATIONS
+        out = notes;
         % Find global annotations
             function [isPresent,options,nPresent] = findGlobalAnnotation(code, keyword)
-                [match,tok] = regexp(code, ['^\s*%\s*@' keyword '\s*(\(.*?\))?'], ...
-                    'match', 'tokens', 'dotexceptnewline', 'lineanchors');
-                if isempty(match)
-                    isPresent = false;
-                    nPresent = 0;
+            [match,tok] = regexp(code, ['^\s*%\s*@' keyword '\s*(\(.*?\))?'], ...
+                'match', 'tokens', 'dotexceptnewline', 'lineanchors');
+            if isempty(match)
+                isPresent = false;
+                nPresent = 0;
+                options = {};
+            else
+                isPresent = true;
+                nPresent = numel(match);
+                tok = tok{1};
+                if isempty(tok)
                     options = {};
                 else
-                    isPresent = true;
-                    nPresent = numel(match);
-                    tok = tok{1};
-                    if isempty(tok)
-                        options = {};
-                    else
-                        options = regexp(regexprep(tok{1}, '[\(\)]', ''), '\s*,\s*', 'split');
-                    end
+                    options = regexp(regexprep(tok{1}, '[\(\)]', ''), '\s*,\s*', 'split');
                 end
+            end
             end
         [isPlanarClass,planarClassOptions] = findGlobalAnnotation(code, 'planarclass');
         if isempty(~isPlanarClass)
@@ -108,16 +121,21 @@ classdef PlanarClassGenerator
             end
         propertiesSections = regexp(code, '^\s*properties\s.*?^\s*end(?=\s|$)', ...
             'match', 'lineanchors');
-        planarFields = {};
+        planarNanFields = {};
+        planarNoNanFields = {};
         planarNanFlags = {};
         for i = 1:numel(propertiesSections)
             lines = strsplit(propertiesSections{i}, '\n')';
-            planarFields = [planarFields findPropertiesWithAnnotation(lines, 'planar')];
+            planarNanFields = [planarNanFields findPropertiesWithAnnotation(lines, 'planar')]; %#ok<*AGROW>
+            planarNoNanFields = [planarNoNanFields findPropertiesWithAnnotation(lines, 'planarnonan')];
             planarNanFlags = [planarNanFlags findPropertiesWithAnnotation(lines, 'planarnanflag')];
         end
+        planarFields = [ planarNanFields planarNoNanFields ];
         out.planarFields = planarFields;
-        out.planarNanFlag = planarNanFlags;
-        if isscalar(out.planarNanFlag)
+        out.planarNoNanFields = planarNoNanFields;
+        out.planarNanFields = planarNanFields;
+        out.planarNanFlags = planarNanFlags;
+        if isscalar(out.planarNanFlags)
             out.planarNanFlag = out.planarNanFlag{1};
         end
         out.hasPlanarNanFlag = ~isempty(out.planarNanFlag);
@@ -163,32 +181,8 @@ classdef PlanarClassGenerator
         end
         end
         
-        function validateAnnotations(this, notes) %#ok<INUSL>
-        %VALIDATEANNOTATIONS Validate annotations found in file
-        if isempty(notes.planarFields)
-            error('No @planar fields were found in class definition. At least one is required.');
-        end
-        bad = setdiff(notes.planarIdentityFields, notes.planarFields);
-        if ~isempty(bad)
-            error(['These fields were specified in @planaridentity(...) but are not marked ' ...
-                'as @planar. That''s not allowed. Fields: %s'], ...
-                strjoin(bad, ', '));
-        end
-        if notes.isHandle
-            warning('jl:code:GenPlanarIncompleteHandleSupport', ...
-                'genPlanarClass''s @handle support is incomplete and possibly broken. Use at your own risk.');
-        end
-        if numel(cellstr(notes.planarNanFlag)) > 1
-            error('Found multiple @planarnanflag properties (%s). Only one is allowed.', ...
-                strjoin(notes.planarNanFlag, ', '));
-        end
-        if ~isempty(notes.planarNanFlag) && ~ismember(notes.planarNanFlag, notes.planarFields)
-            error('Field ''%s'' is marked @planarnanflag, but not @planar. @planar is required.', ...
-                notes.planarNanFlag);
-        end
-        end
-        
         function out = scanCode(this, originalCode)
+        %SCANCODE
         out = struct;
         % Detect existing boilerplate section
         [ixStart,ixEnd] = regexp(originalCode, ...
@@ -199,7 +193,7 @@ classdef PlanarClassGenerator
         % BUG: For classes with local functions, this'll put it in the wrong
         % place.
         if isempty(ixStart)
-            fprintf('No existing gen-planar boilerplate section found. Sticking at end.\n');
+            %fprintf('No existing gen-planar boilerplate section found. Sticking at end.\n');
             [ixEndToken] = regexp(originalCode, '^\s*end\s*(%.*)?$', ...
                 'lineanchors', 'dotexceptnewline');
             ixStart = ixEndToken(end) - 1;
@@ -226,25 +220,49 @@ classdef PlanarClassGenerator
         out.userCode = userCode;
         end
         
+        function validateDefinition(this, defn) %#ok<INUSL>
+        %VALIDATEDEFINITION Validate planar definition found in file
+        if isempty(defn.planarFields)
+            error('No @planar fields were found in class definition. At least one is required.');
+        end
+        bad = setdiff(defn.planarIdentityFields, defn.planarFields);
+        if ~isempty(bad)
+            error(['These fields were specified in @planaridentity(...) but are not marked ' ...
+                'as @planar. That''s not allowed. Fields: %s'], ...
+                strjoin(bad, ', '));
+        end
+        if defn.isHandle
+            warning('jl:code:GenPlanarIncompleteHandleSupport', ...
+                'genPlanarClass''s @handle support is incomplete and possibly broken. Use at your own risk.');
+        end
+        if numel(cellstr(defn.planarNanFlags)) > 1
+            error('Found multiple @planarnanflag properties (%s). Only one is allowed.', ...
+                strjoin(defn.planarNanFlags, ', '));
+        end
+        if ~isempty(defn.planarNanFlag) && ~ismember(defn.planarNanFlag, defn.planarFields)
+            error('Field ''%s'' is marked @planarnanflag, but not @planar. @planar is required.', ...
+                defn.planarNanFlag);
+        end
+        end
+        
+        
         function genBoilerplate(this, file)
         %GENPOILERPLATE (re-)generate the boilerplate in a classdef file
         
+        %parser = jl.code.internal.PlanarClassParser;
         realFile = which(file);
         if isempty(realFile)
             error('File not found: %s', file);
         end
         fqClassName = this.determineClassName(realFile);
         fprintf('Generating method definitions for class: %s\n', fqClassName);
-        originalCode = jl.io.slurp(realFile);
-        codeInfo = scanCode(this, originalCode);
-        notes = this.parseAnnotations(codeInfo.userCode);
-        notes = this.detectClassProperties(fqClassName, codeInfo.userCode, notes);
-        if notes.usesPlanarClassBase
-            b = this.genBoilerplateForBaseClass(fqClassName, notes);
+        defn = this.inspectFile(realFile);
+        if defn.usesPlanarClassBase
+            b = this.genBoilerplateForBaseClass(fqClassName, defn);
         else
-            b = this.genBoilerplateForStandalone(fqClassName, notes);
+            b = this.genBoilerplateForStandalone(fqClassName, defn);
         end
-        newCode = this.assembleBoilerplateIntoNewCode(codeInfo, b);
+        newCode = this.assembleBoilerplateIntoNewCode(defn.codeInfo, b);
         bakFile = [realFile '.bak'];
         copyfile(realFile, bakFile);
         try
@@ -265,6 +283,7 @@ classdef PlanarClassGenerator
         end
         
         function out = assembleBoilerplateIntoNewCode(this, codeInfo, boilerplateParts)
+        %ASSEMBLEBOILERPLATEINTONEWCODE
         b = boilerplateParts;
         boilerplate = {
             this.boilerplateHeader
@@ -434,7 +453,7 @@ classdef PlanarClassGenerator
             'end'
             'end'
             }, '\n'));
-        if ~isempty(notes.planarNanFlag)
+        if ~isempty(notes.planarNanFlag) && ~ismember('isnan', notes.userMethodNames)
             publicDefns{end+1} = subst(strjoin({
                 'function out = isnan(<obj>)'
                 '%ISNAN True for Not-a-Number'
@@ -455,7 +474,7 @@ classdef PlanarClassGenerator
         % This version is for standalone class definitions.
         
         % Detect planar class properties
-        this.validateAnnotations(notes);
+        this.validateDefinition(notes);
         planarFields = notes.planarFields;
         fprintf('Found planar fields: %s\n', strjoin(planarFields, ', '));
         if ~isempty(notes.planarIdentityFields)
@@ -474,6 +493,7 @@ classdef PlanarClassGenerator
         vars.obj = this.objName;
         vars.class = fqClassName;
         vars.nanflag = notes.planarNanFlag;
+
             function out = subst(str)
             varnames = fieldnames(vars);
             out = str;
@@ -483,6 +503,7 @@ classdef PlanarClassGenerator
                 end
             end
             end
+        
             function out = perfield(str, fields)
             if nargin < 2; fields = planarFields; end
             str = cellstr(str);
@@ -509,28 +530,30 @@ classdef PlanarClassGenerator
                 'end'
                 }, '\n'));
         end
-        nanableFields = setdiff(planarFields, [notes.planarNoNanFields notes.planarNanFlag]);
-        defn = {
-            'function out = isnan(<obj>)'
-            '%ISNAN True for Not-a-Number.'
-            };
-        if isempty(nanableFields)
-            if isempty(notes.planarNanFlag)
-                defn{end+1} = 'out = false(size(<obj>));';
+        if ~ismember('isnan', notes.userMethodNames)
+            nanableFields = setdiff(planarFields, [notes.planarNoNanFields notes.planarNanFlag]);
+            defn = {
+                'function out = isnan(<obj>)'
+                '%ISNAN True for Not-a-Number.'
+                };
+            if isempty(nanableFields)
+                if isempty(notes.planarNanFlag)
+                    defn{end+1} = 'out = false(size(<obj>));';
+                else
+                    defn{end+1} = 'out = <obj>.<nanflag>;';
+                end
             else
-                defn{end+1} = 'out = <obj>.<nanflag>;';
+                checks = cellfun(@(fld) ['isnan2(<obj>.' fld ')'], nanableFields, ...
+                    'UniformOutput',false);
+                defn{end+1} = ['out = ' strjoin(checks, ' ...\n        | ') ';'];
+                if ~isempty(notes.planarNanFlag)
+                    defn{end+1} = 'out(<obj>.<nanflag>) = true;';
+                end
             end
-        else
-            checks = cellfun(@(fld) ['isnan2(<obj>.' fld ')'], nanableFields, ...
-                'UniformOutput',false);
-            defn{end+1} = ['out = ' strjoin(checks, ' ...\n        | ') ';'];
-            if ~isempty(notes.planarNanFlag)
-                defn{end+1} = 'out(<obj>.<nanflag>) = true;';
-            end
+            defn{end+1} = 'end';
+            defn = strjoin(subst(defn), '\n');
+            publicDefns{end+1} = defn;
         end
-        defn{end+1} = 'end';
-        defn = strjoin(subst(defn), '\n');
-        publicDefns{end+1} = defn;
         % Transform delegates
         for iFcn = 1:size(this.transformDelegates, 1)
             [vars.fcn,vars.H1] = this.transformDelegates{iFcn,:};
@@ -854,6 +877,17 @@ classdef PlanarClassGenerator
         
         publicDefns = {};
         
+        defn = strjoin(subst({
+            'function out = size(<obj>, dim)'
+            '%SIZE Size of array.'
+            'if nargin == 1'
+            '    out = size(<obj>.<field1>);'
+            'else'
+            '    out = size(<obj>.<field1>, dim);'
+            'end'
+            'end'
+            }), '\n');
+        publicDefns{end+1} = defn;
         defn = strjoin(subst([{
             'function out = eq(a, b)'
             '%EQ == Equal.'
@@ -1048,7 +1082,7 @@ classdef PlanarClassGenerator
             'if ismember(''rows'', varargin)'
             '    [~,proxyIx] = unique(<obj>);'
             '    proxyIx = reshape(proxyIx, size(<obj>));'
-            '    [sortedProxyIx,Indx] = unique(proxyIx, ''rows'', flags{:});'
+            '    [~,Indx] = unique(proxyIx, ''rows'', flags{:});'
             '    out = subset(<obj>, Indx, '':'');'
             'else'
             '    isRow = isrow(<obj>);'
