@@ -1,12 +1,12 @@
 classdef java
     % Java-related utilities
-   
+    
     methods (Static)
         function out = classForName(name)
         % Get the java.lang.Class metaclass for a named Java class
         %
         % This does a Java Class.forName, but invokes it from within the dynamic
-        % classpath's class loader, so all classes on the dynamic Java 
+        % classpath's class loader, so all classes on the dynamic Java
         % classpath are visible.
         out = net.janklab.util.Reflection.classForName(name);
         end
@@ -28,7 +28,7 @@ classdef java
         end
         
         function out = getPrivateFields(jobj)
-        % Get the field contents of a Java object, including private fields
+        %GETPRIVATEFIELDS Get the field contents of a Java object, including privates
         %
         % THIS IS A HACK. Using it may well break stuff.
         %
@@ -67,6 +67,7 @@ classdef java
         end
         
         function dumpFullMethodList(klass)
+        %DUMPFULLMETHODLIST Dump the full method list of a class, including privates
         if ischar(klass)
             klass = jl.util.java.classForName(klass);
         end
@@ -78,30 +79,61 @@ classdef java
         end
         
         function out = callPrivateConstructor(klass, args, argTypes)
-            if nargin < 2; argTypes = []; end
-            
-            if ischar(klass)
-                klass = jl.util.java.classForName(klass);
+        %CALLPRIVATECONSTRUCTOR Call a non-accessible constructor
+        %
+        % THIS IS A HACK. Using it may well break stuff.
+        if nargin < 2; argTypes = []; end
+        
+        if ischar(klass)
+            klass = jl.util.java.classForName(klass);
+        end
+        
+        % Find the constructor
+        if isempty(argTypes) && ~iscell(argTypes)
+            % Class must have a single constructor
+            ctors = klass.getDeclaredConstructors;
+            % TODO: Add disambiguation by argument count
+            if numel(ctors) > 1
+                error('Class %s declares multiple constructors. Must supply arg types to disambiguate', ...
+                    klass.getName.toString);
             end
-            
-            % Find the constructor
-            if isempty(argTypes) && ~iscell(argTypes)
-                % Class must have a single constructor
-                ctors = klass.getDeclaredConstructors;
-                % TODO: Add disambiguation by argument count
-                if numel(ctors) > 1
-                    error('Class %s declares multiple constructors. Must supply arg types to disambiguate', ...
-                        klass.getName.toString);
-                end
-                ctor = ctors(1);
-            else
-                % Locate constructor by argument types
-                ctor = klass.getDeclaredConstructor(argTypeNames2argTypes(argTypes));
-            end
-            
-            % Invoke the constructor
-            ctorArgs = wrapArgs(args);
-            out = ctor.newInstance(ctorArgs);
+            ctor = ctors(1);
+        else
+            % Locate constructor by argument types
+            ctor = klass.getDeclaredConstructor(argTypeNames2argTypes(argTypes));
+        end
+        
+        % Invoke the constructor
+        ctorArgs = boxArgsInJava(args);
+        out = ctor.newInstance(ctorArgs);
+        end
+        
+        function out = callPrivateMethod(obj, methodName, args, argTypes)
+        %CALLPRIVATEMETHOD Call a non-accessible method
+        %
+        % THIS IS A HACK. Using it may well break stuff.
+        jl.util.java.callPrivateMethodOn(obj, [], methodName, args, argTypes);
+        end
+        
+        function out = callPrivateMethodOn(obj, objClass, methodName, args, argTypes)
+        %CALLPRIVATEMETHODON Call a non-accessible method
+        %
+        % THIS IS A HACK. Using it may well break stuff.
+        if nargin < 4; argTypes = []; end
+        if isempty(objClass)
+            objClass = class(obj);
+        end
+        
+        % Find the method
+        argClasses = argTypes2argClasses(args, argTypes);        
+        klass = jl.util.java.classForName(objClass);
+        method = klass.getDeclaredMethod(methodName, argClasses);
+        % TODO: Walk up the inheritance list for obj to find superclass methods
+        if ~method.isAccessible
+            method.setAccessible(true);
+        end
+        methodArgs = boxArgsInJava(args);
+        out = method.invoke(obj, methodArgs);
         end
     end
     
@@ -113,20 +145,49 @@ classdef java
     end
 end
 
-function out = argTypeNames2argTypes(names)
-names = cellstr(names);
-out = javaArray('java.lang.Class', numel(names));
-for i = 1:numel(names)
-    out(i) = jl.util.java.classForName(names{i});
+function out = argTypes2argClasses(args, argTypes)
+if isempty(argTypes)
+    argTypes = cell(size(args));
+end
+out = javaArray('java.lang.Class', numel(args));
+args = boxArgsInJava(args);
+for i = 1:numel(out)
+    if ~isempty(argTypes{i})
+        out(i) = jl.util.java.classForName(argTypes{i});
+    else
+        className = class(args(i));
+        switch className
+            case 'logical'
+                javaClass = java.lang.Boolean.TYPE;
+            otherwise
+                javaClass = jl.util.java.classForName(className);
+        end                
+        out(i) = javaClass;
+    end
 end
 end
 
-function out = wrapArgs(args)
+function out = argTypeNames2argTypes(argTypes)
+argTypes = cellstr(argTypes);
+out = javaArray('java.lang.Class', numel(argTypes));
+for i = 1:numel(argTypes)
+    out(i) = jl.util.java.classForName(argTypes{i});
+end
+end
+
+function out = boxArgsInJava(args)
 out = javaArray('java.lang.Object', numel(args));
 for i = 1:numel(args)
     if ischar(args{i})
-        args{i} = java.lang.String(args{i});
+        out(i) = java.lang.String(args{i});
+    elseif islogical(args{i})
+        if args{i}
+            out(i) = java.lang.Boolean.TRUE;
+        else
+            out(i) = java.lang.Boolean.FALSE;
+        end
+    else
+        out(i) = args{i};        
     end
-    out(i) = args{i};
 end
 end
