@@ -15,11 +15,13 @@ init_janklab();
 
 cd(mcode_dir);
 
-% Load the dev kit
+% Load the dev kit (and scratch dir)
 
 devkit_dir = [repo_dir '/dev-kit'];
 devkit_mcode_dir = [devkit_dir '/Mcode'];
 addpath(devkit_mcode_dir);
+scratch_dir = [repo_dir '/scratch'];
+addpath(scratch_dir);
 
 % Load the unit tests
 
