@@ -101,7 +101,7 @@ classdef java
             
             % Invoke the constructor
             ctorArgs = wrapArgs(args);
-            out = ctor.invoke(ctorArgs);
+            out = ctor.newInstance(ctorArgs);
         end
     end
     
@@ -124,6 +124,9 @@ end
 function out = wrapArgs(args)
 out = javaArray('java.lang.Object', numel(args));
 for i = 1:numel(args)
+    if ischar(args{i})
+        args{i} = java.lang.String(args{i});
+    end
     out(i) = args{i};
 end
 end
