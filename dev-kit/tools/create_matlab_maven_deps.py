@@ -16,6 +16,7 @@ matlab_jar_dir = matlab_app + "/java/jar"
 
 skips = ["zh_CN", "ja_JP", "ko_KR"]
 
+print('        <!-- Internal JARs from Matlab %s -->' % (matlab_version))
 for root, subdirs, files in os.walk(matlab_jar_dir):
 	rel_dir = root[len(matlab_jar_dir)+1:]
 
@@ -40,3 +41,5 @@ for root, subdirs, files in os.walk(matlab_jar_dir):
 		print('            <scope>system</scope>')
 		print('            <systemPath>%s</systemPath>' % (file_path))
 		print('        </dependency>')
+
+print('        <!-- End internal JARs from Matlab %s -->' % (matlab_version))
