@@ -28,9 +28,9 @@ classdef MLDesktop < handle
         % Returns a Java com.mathworks.widdets.desk.DTClient[] array.
         clientList = jl.util.java.callPrivateMethodOn(this.desktop, ...
             'com.mathworks.widgets.desk.Desktop', 'getClients');
-        out = javaArray('com.mathworks.widgets.desk.DTClient', clientList.size);
+        out = repmat(jl.guihacks.DTClient, [1 clientList.size]);
         for i = 1:numel(out)
-            out(i) = clientList.get(i-1);
+            out(i) = jl.guihacks.DTClient(clientList.get(i-1));
         end
         end
         
@@ -39,7 +39,7 @@ classdef MLDesktop < handle
         clients = this.getClients;
         for i = 1:numel(clients)
             if isequal(char(clients(i).getName), name)
-                out = clients(i);
+                out = jl.guihacks.DTClient(clients(i));
                 return
             end
         end
@@ -51,11 +51,20 @@ classdef MLDesktop < handle
         clients = this.getClients;
         for i = 1:numel(clients)
             if isequal(char(clients(i).getTitle), title)
-                out = clients(i);
+                out = jl.guihacks.DTClient(clients(i));
                 return
             end
         end
         out = [];
+        end
+        
+        function addClient(this, dtClient, logical1, dtLocation, logical2)
+            if isa(dtClient, 'jl.guihacks.DTClient')
+                dtClient = dtClient.dtclient;
+            end
+            jl.util.java.callPrivateMethodOn(this.desktop, 'com.mathworks.widgets.desk.Desktop', ...
+                'addClient', { dtClient, logical1, dtLocation, logical2 }, ...
+                { [], [], 'com.mathworks.widgets.desk.DTLocation', [] });            
         end
         
         function showClient(this, dtClient, dtLocation, tf1, tf2)
@@ -68,17 +77,23 @@ classdef MLDesktop < handle
         end
         
         function showAnchoredClient(this, dtClient)
-        %SHOWCLIENT
+        %SHOWANCHOREDCLIENT
         jl.util.java.callPrivateMethodOn(this.desktop, ...
             'com.mathworks.widgets.desk.Desktop', 'showAnchoredClient', ...
             { dtClient }, ...
             { 'com.mathworks.widgets.desk.DTClient' });
         end
+        
+        function out = createDTClient(this, name, title, componentClass)
+            jDtClient = com.mathworks.widgets.desk.DTClient(this.desktop, componentClass, ...
+                name, title);
+            out = jl.guihacks.DTClient(jDtClient);
+        end
     end
     
     methods (Access = private)
         function this = MLDesktop(jDesktop)
-        this.desktop = jDesktop;
+        this.desktop = javaObjectEDT(jDesktop);
         end
     end
 end
