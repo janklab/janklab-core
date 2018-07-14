@@ -5,5 +5,5 @@ function out = cellrec(x)
 % array with names in the first column that represents a list of name/value
 % pairs.
 
-out = jl.types.cellrec(x);
+out = jl.datastruct.cellrec(x);
 end
