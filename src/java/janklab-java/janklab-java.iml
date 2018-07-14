@@ -44,5 +44,1553 @@
     <orderEntry type="library" name="Maven: javax.mail:mail:1.4" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: wsdl4j:wsdl4j:1.6.2" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:trialsinstaller:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/trialsinstaller.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:resource_core:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/resource_core.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:desktop:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/desktop.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:instwiz:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/instwiz.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:fatalexit:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/fatalexit.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:install:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/install.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:explorer_resources:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/explorer_resources.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:product:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/product.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:matlabinstaller:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/matlabinstaller.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_import:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_import.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:jit_activation:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/jit_activation.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:supportsoftwareclient:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/supportsoftwareclient.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:installbundle:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/installbundle.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mlservices:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mlservices.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:webintegration:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/webintegration.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_app:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_app.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:vrd:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/vrd.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:widgets:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/widgets.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:lmlogin:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/lmlogin.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:grouptable:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/grouptable.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mlwidgets:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mlwidgets.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addressbar_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addressbar_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:login:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/login.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:explorer_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/explorer_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:explorer:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/explorer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_zip:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_zip.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:installwizard:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/installwizard.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:engine:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/engine.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_search_path_writer:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_search_path_writer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:xml:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/xml.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:dynamic_resource:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/dynamic_resource.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addon_service_management_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addon_service_management_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:sourcecontrol:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/sourcecontrol.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:online_license_management:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/online_license_management.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:matlab:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/matlab.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:comparisons:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/comparisons.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:deactivation:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/deactivation.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addon_enable_disable_management:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addon_enable_disable_management.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:filechooser:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/filechooser.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:foundation_libraries:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/foundation_libraries.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mladdonpackaging:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mladdonpackaging.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:wizard:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/wizard.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_import_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_import_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cfbutils:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cfbutils.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:services:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/services.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox_packaging:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox_packaging.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:beans:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/beans.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:findfiles_legacy_resources:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/findfiles_legacy_resources.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:filesystem_adapter:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/filesystem_adapter.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mvm:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mvm.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:net:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/net.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:matlab_login:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/matlab_login.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mwswing:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mwswing.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:html:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/html.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_toolbox:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_toolbox.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_mlconnector:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_mlconnector.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:usm:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/usm.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolstrip:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolstrip.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mlwebservices:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mlwebservices.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:hg:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/hg.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:path_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/path_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:explorer_widget:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/explorer_widget.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:webproxy:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/webproxy.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:findfiles:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/findfiles.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mwt:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mwt.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:fileutils:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/fileutils.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:timer:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/timer.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:jail_container:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/jail_container.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:installservicehandler:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/installservicehandler.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:license_agreement_dialog:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/license_agreement_dialog.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:pathtool:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/pathtool.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:hwsmanagement:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/hwsmanagement.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:publishparser:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/publishparser.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolboxmanagement:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolboxmanagement.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:installjscommon:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/installjscommon.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:deployment:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/deployment.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:find_files_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/find_files_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:instructionset:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/instructionset.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:mde:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/mde.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_product:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_product.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:appmanagement:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/appmanagement.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:ddux_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/ddux_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:notification_client_util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/notification_client_util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:jmi:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/jmi.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:common:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addon_matlab_path_service_provider:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addon_matlab_path_service_provider.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:page:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/page.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:instutil:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/instutil.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:activationclient:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/activationclient.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:ide:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/ide.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:supportsoftwareinstaller:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/supportsoftwareinstaller.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addonsinstallerclient:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addonsinstallerclient.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:addons_common:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/addons_common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:supportsoftwarematlabmanagement:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/supportsoftwarematlabmanagement.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.connector_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/connector_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.jni_native_bridge_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/jni_native_bridge_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.jni_cosg_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/jni_cosg_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.gson:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/gson.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.framework_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/framework_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.jni_json_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/jni_json_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.standalone_host_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/standalone_host_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.client_services_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/client_services_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.jni_message_service_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/jni_message_service_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_api.editor_api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_api/editor_api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:org.netbeans:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/org/netbeans.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:org.openide:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/org/openide.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:resources.parallel_res:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/resources/parallel_res.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:datatools.variableeditor:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/datatools/variableeditor.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.gds:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/gds.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.gdsinmatlab:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/gdsinmatlab.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.matlabdrivedesktop:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/matlabdrivedesktop.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.motw:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/motw.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.gdsmounter:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/gdsmounter.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.filesystemadapter:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/filesystemadapter.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:storage.provider:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/storage/provider.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.jni_message_service_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/jni_message_service_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.worker_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/worker_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.client_services_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/client_services_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.jni_json_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/jni_json_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.connector-3popt:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/connector-3popt.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.jni_native_bridge_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/jni_native_bridge_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.connector-dev:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/connector-dev.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.standalone_host_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/standalone_host_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.connector_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/connector_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.jni_cosg_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/jni_cosg_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:connector_impl.framework_impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/connector_impl/framework_impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:project.impl:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/project/impl.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:project.api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/project/api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:system.editor:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/system/editor.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.apps:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/apps.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.slproject:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/slproject.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.coder:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/coder.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.rptgenxmlcomp:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/rptgenxmlcomp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.database:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/database.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.control:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/control.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.optim:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/optim.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.rptgencore:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/rptgencore.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.testmeas:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/testmeas.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.stats:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/stats.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.compilerwebapp:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/compilerwebapp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.compiler:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/compiler.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.timeseries:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/timeseries.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.distcomp:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/distcomp.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.instrument:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/instrument.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.parallel.pctutil:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/parallel/pctutil.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.parallel.mapreduce:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/parallel/mapreduce.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.parallel.util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/parallel/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.shared.controllib:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/shared/controllib.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.shared.computils:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/shared/computils.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.shared.hwconnectinstaller.util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/shared/hwconnectinstaller/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.shared.hwconnectinstaller.common:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/shared/hwconnectinstaller/common.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.shared.supportpkgservices.sprootsettingwriter:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/shared/supportpkgservices/sprootsettingwriter.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.matlab.cefclient_java:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/matlab/cefclient_java.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.matlab.webwindow:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/matlab/webwindow.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.matlab.guide:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/matlab/guide.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.matlab.appdesigner:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/matlab/appdesigner.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.difflink.server:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/difflink/server.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.difflink.client:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/difflink/client.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.difflink.util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/difflink/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:toolbox.fixedpoint.util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/toolbox/fixedpoint/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.management:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/management.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.util:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/util.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.api:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/api.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.git:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/git.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.svnkitintegration:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/svnkitintegration.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.svncore:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/svncore.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.svnintegration:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/svnintegration.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.msscci:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/msscci.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:cmlink.implementations.localcm:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/cmlink/implementations/localcm.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.mathworks.matlab:help.helpui:R2017b">
+        <CLASSES>
+          <root url="jar:///Applications/MATLAB_R2017b.app/java/jar/help/helpui.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
