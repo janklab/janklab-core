@@ -5,7 +5,7 @@ classdef NaryTreeNode
         % The value held at this node
         value = []
         % This node's child nodes
-        children jl.types.NaryTreeNode
+        children jl.datastruct.NaryTreeNode
     end
     
     properties (Dependent)
@@ -30,7 +30,7 @@ classdef NaryTreeNode
             child = value;
             this.children(end+1) = child;
         else
-            child = jl.types.NaryTreeNode(value);
+            child = jl.datastruct.NaryTreeNode(value);
             this.children(end+1) = child;
         end
         end

@@ -45,12 +45,12 @@ end
 
 function out = inhtreeForMatlabClass(klass)
 rootNode = inhtreeNodeForMatlabClass(klass);
-out = jl.types.NaryTree;
+out = jl.datastruct.NaryTree;
 out.rootNode = rootNode;
 end
 
 function node = inhtreeNodeForMatlabClass(klass)
-node = jl.types.NaryTreeNode(klass.Name);
+node = jl.datastruct.NaryTreeNode(klass.Name);
 supers = klass.SuperclassList();
 for i = 1:numel(supers)
     node.children(end+1) = inhtreeNodeForMatlabClass(supers(i));
@@ -59,7 +59,7 @@ end
 
 function out = inhtreeForJavaClass(klass)
 rootNode = inhtreeNodeForJavaClass(klass);
-out = jl.types.NaryTree;
+out = jl.datastruct.NaryTree;
 out.rootNode = rootNode;
 end
 
@@ -69,7 +69,7 @@ if klass.isInterface()
 else
     descr = char(klass.getName());
 end
-node = jl.types.NaryTreeNode(descr);
+node = jl.datastruct.NaryTreeNode(descr);
 interfaces = klass.getInterfaces();
 for i = 1:numel(interfaces)
     interface = interfaces(i);

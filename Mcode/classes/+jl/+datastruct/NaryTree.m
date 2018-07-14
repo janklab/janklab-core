@@ -4,7 +4,7 @@ classdef NaryTree
     % "N-ary" means that each node can have any number of children.
     
     properties
-        rootNode jl.types.NaryTreeNode
+        rootNode jl.datastruct.NaryTreeNode
     end
     
     methods
