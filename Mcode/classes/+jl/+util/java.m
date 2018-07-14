@@ -1,5 +1,9 @@
 classdef java
-    % Java-related utilities
+    %JAVA Java-related utilities
+    %
+    % Note: the methods with "private" in their names are dirty tricks that
+    % violate encapsulation and may break things. You probably shouldn't use
+    % them.
     
     methods (Static)
         function out = classForName(name)
@@ -112,6 +116,8 @@ classdef java
         %CALLPRIVATEMETHOD Call a non-accessible method
         %
         % THIS IS A HACK. Using it may well break stuff.
+        if nargin < 3; args = {}; end
+        if nargin < 4; argTypes = {}; end        
         jl.util.java.callPrivateMethodOn(obj, [], methodName, args, argTypes);
         end
         
@@ -119,7 +125,8 @@ classdef java
         %CALLPRIVATEMETHODON Call a non-accessible method
         %
         % THIS IS A HACK. Using it may well break stuff.
-        if nargin < 4; argTypes = []; end
+        if nargin < 4; args = {}; end
+        if nargin < 5; argTypes = {}; end
         if isempty(objClass)
             objClass = class(obj);
         end
