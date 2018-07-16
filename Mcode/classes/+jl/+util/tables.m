@@ -6,11 +6,21 @@ classdef tables
         function out = tableFromVectors(varargin)
             %TABLEFROMVECTORS Construct a table from row or column vector inputs
             %
+            % out = tableFromVectors(A, B, C, ...)
+            %
             % This lets you build a table without worrying about whether
             % your variables are row or column vectors.
+            %
+            % Accepts any number of inputs. Each of them must be a vector.
+            %
+            % The variable names are taken from the input names, as with the
+            % table(...) constructor.
             names = {};
             for i = 1:nargin
                 names{i} = inputname(i); %#ok<*AGROW>
+                if isempty(names{i})
+                    names{i} = sprintf('Column%d', i);
+                end
             end
             values = varargin;
             for i = 1:numel(values)
@@ -22,8 +32,14 @@ classdef tables
         function out = tableFromCellrec(c)
             %TABLEFROMCELLREC Construct a table from a cellrec of variable names and values
             %
+            % out = jl.util.tables.tableFromCellrec(c)
+            %
             % Constructs a table from a cellrec that contains variable
             % names in column 1 and variable values in column 2.
+            %
+            % c is a cellrec.
+            %
+            % Returns a table.
             names = c(:,1);
             values = c(:,2);
             for i = 1:numel(values)
@@ -35,7 +51,7 @@ classdef tables
         function out = groupby(tbl, groupCols, groupSpec)
             %GROUPBY SQL-style grouping operation
             %
-            % out = groupby(tbl, groupCols, groupSpec)
+            % out = jl.util.tables.groupby(tbl, groupCols, groupSpec)
             %
             % Tbl is the table object to group.
             %
@@ -90,6 +106,16 @@ classdef tables
         
         function [S,P,SP] = supplierPartsExample()
             %SUPPLIERPARTSEXAMPLE The classic "Supplier Parts" example database
+            %
+            % s = jl.util.tables.supplierPartsExample
+            % [S,P,SP] = jl.util.tables.supplierPartsExample
+            %
+            % Generates the classic C. J. Date "Supplier Parts" example database
+            % as a set of table objects.
+            %
+            % If a single output is captured, returns a struct with fields S, P,
+            % and SP. If multiple outputs are captured, returns S, P, and SP as
+            % separate outputs.
             S = cell2table({
                 'S1'    'Smith'     20  'London'
                 'S2'    'Jones'     10  'Paris'
@@ -131,6 +157,8 @@ classdef tables
         function out = tableFromStructRecArray(s)
             %TABLEFROMSTRUCTRECARRAY Convert array of record structs to table
             %
+            % out = jl.util.tables.tableFromStructRecArray(s)
+            %
             % Takes an array of structs that each represent a single record
             % and turns it in to a table.
             fields = fieldnames(s);
@@ -148,6 +176,8 @@ classdef tables
         
         function [status,message] = xlswrite(file, tbl, sheet)
             %XLSWRITE Write table to Excel spreadsheet file
+            %
+            % [status,message] = jl.util.tables.xlswrite(file, tbl, sheet)
             %
             % You probably don't want to use this method. Use Matlab's own
             % WRITETABLE instead.
