@@ -62,7 +62,7 @@ elseif ispc()
     out = fullfile(userHomeDir, 'Dropbox');
 else
     % I don't know where Dropbox lives on Linux. Let's just guess it's at
-    % ~/Dropbox
+    % ~/Dropbox.
     out = fullfile(userHomeDir, 'Dropbox');
 end
 end

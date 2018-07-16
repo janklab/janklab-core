@@ -1,5 +1,5 @@
 classdef DTClient < handle
-    %DTClient A wrapper for Matlab's DTClient
+    %DTCLIENT A wrapper for Matlab's DTClient
     %
     % This class provides methods that are not readily accessible on DTClient
     % itself.
