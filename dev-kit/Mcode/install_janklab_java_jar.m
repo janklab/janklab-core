@@ -16,10 +16,10 @@ if ~exist(jarInBuild, 'file')
     error('JAR file does not exist: %s', jarInBuild);
 end
 
-distLibDir = [srcroot '/dist/lib/java'];
+distLibDir = [srcroot '/lib/java'];
 [ok,message] = copyfile(jarInBuild, distLibDir, 'f');
 if ~ok
-    error('Failed installing JAR file to dist/lib/java: %s', message);
+    error('Failed installing JAR file to lib/java: %s', message);
 end
 
 fprintf('Installed %s to %s\n', jarBaseName, distLibDir);
