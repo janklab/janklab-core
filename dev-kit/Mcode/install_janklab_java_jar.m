@@ -16,7 +16,7 @@ if ~exist(jarInBuild, 'file')
     error('JAR file does not exist: %s', jarInBuild);
 end
 
-distLibDir = [srcroot '/lib/java'];
+distLibDir = [srcroot '/lib/java-static'];
 [ok,message] = copyfile(jarInBuild, distLibDir, 'f');
 if ~ok
     error('Failed installing JAR file to lib/java: %s', message);
