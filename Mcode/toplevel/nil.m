@@ -13,7 +13,7 @@ classdef nil
 % instance of @nil, but I'm not sure how to implement that in Matlab.)
 
 methods
-	function tf = isnil(~)
+	function tf = isnil(this) %#ok<*MANU>
 		%ISNIL True if input is nil
 		tf = true;
 	end
@@ -28,19 +28,19 @@ methods
 	
 	% Overrides for structural stuff
 	
-	function out = size(~)
+	function out = size(this)
 		out = [0 0];
 	end
 	
-	function out = numel(~)
+	function out = numel(this)
 		out = 0;
 	end
 	
-	function out = isempty(~)
+	function out = isempty(this)
 		out = true;
 	end
 	
-	function out = length(~)
+	function out = length(this)
 		out = 0;
 	end
 	
@@ -64,11 +64,13 @@ methods
 	  error('jl:BadOperation', 'vertcat() is not supported for @nil inputs');
 	end
 	
-	function disp(~)
+	function disp(this)
 		disp('@nil');
 	end
 	
-	
+    function out = isnan(this)
+        out = false;
+    end
 end
 
 end
