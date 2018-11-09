@@ -24,6 +24,7 @@ public class TimestampColumnBuffer extends AbstractColumnBuffer {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void fetchNextValue() throws SQLException {
     java.sql.Timestamp sqlDate = rs.getTimestamp(colIndex);
     if (rs.wasNull()) {

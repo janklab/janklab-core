@@ -20,6 +20,7 @@ public class SqlTimeToLocalTimenumColumnBuffer extends AbstractColumnBuffer {
   }
 
   @Override
+  @SuppressWarnings("deprecation")
   public void fetchNextValue() throws SQLException {
     java.sql.Time sqlTime = rs.getTime(colIndex);
     if (rs.wasNull()) {
