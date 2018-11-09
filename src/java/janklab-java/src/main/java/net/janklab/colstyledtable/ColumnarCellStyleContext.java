@@ -34,6 +34,7 @@ public class ColumnarCellStyleContext extends CellStyleContext {
      * @param columnIndex column index of the cell
      * @return CellStyle to use for rendering that cell's value; never null
      */
+    @Override
     public CellStyle effectiveCellStyle(TableModel tm, int rowIndex, int columnIndex) {
         requireNonNull(tm);
 

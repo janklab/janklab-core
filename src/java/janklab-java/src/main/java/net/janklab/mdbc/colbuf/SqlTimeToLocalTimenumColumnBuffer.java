@@ -30,7 +30,7 @@ public class SqlTimeToLocalTimenumColumnBuffer extends AbstractColumnBuffer {
     // JDBC only exposes milliseconds. We'll just use the milliseconds for now.
     // Later, we may be able to get microsecond support by using vendor extensions.
     long utcMillis = sqlTime.getTime();
-    long offsetMillis = sqlTime.getTimezoneOffset() * 60 * 1000;
+    long offsetMillis = sqlTime.getTimezoneOffset() * 60L * 1000L;
     long localMillis = utcMillis - offsetMillis;
     double localMicros = localMillis * 1000;
     buf.add(localMicros);

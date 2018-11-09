@@ -21,7 +21,7 @@ public class Example02NumberFormats {
         String[] colNames = { "x1", "x2", "x3" };
         int[] x1    = { 1, 2, 3, 4, 5, 6 };
         int[] x2    = { 1, 2, 3, 4, 5, 123_456_789 };
-        double[] x3 = { 1.0, 1.01, 1.001, 999999999.999, 999999999999.999999, 0.0000001 };
+        double[] x3 = { 1.0, 1.01, 1.001, 999999999.999, 999999999.999999, 0.0000001 };
         DumbTableColumn[] cols = {
                 new LongDumbTableColumn(x1),
                 new LongDumbTableColumn(x2),

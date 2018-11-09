@@ -3,11 +3,11 @@ package net.janklab.test;
 public class DemoType {
 
     public Object getData() {
-        return new java.lang.Integer(42);
+        return 42;
     }
 
     public Integer getDataAsInteger() {
-        return new java.lang.Integer(42);
+        return 42;
     }
 
     public Object getStringAsObject() {
