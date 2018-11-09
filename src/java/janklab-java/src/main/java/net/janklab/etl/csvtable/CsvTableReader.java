@@ -18,6 +18,8 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * Knows how to read tabular data with different column types from a CSV file.
  * Not thread-safe.
@@ -64,13 +66,14 @@ public class CsvTableReader {
     }
     
     /**
-     * Convenience method to attach this reader to a file.
+     * Convenience method to attach this reader to a file. The file is assumed to be in UTF-8
+     * encoding.
      * @param file File to read from
      * @throws java.io.FileNotFoundException
      */
     public void attach(File file) throws FileNotFoundException {
         this.reader = new BufferedReader(new InputStreamReader(new BOMInputStream(
-                new BufferedInputStream(new FileInputStream(file)))));
+                new BufferedInputStream(new FileInputStream(file))), UTF_8));
     }
     
     /**
