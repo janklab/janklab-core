@@ -35,13 +35,13 @@ out = cell(sz);
 for i = 1:numel(out)
     theseArgs = cell(size(args));
     for iArg = 1:numel(args)
-        if isscalar(theseArgs{iArg})
+        if isscalar(args{iArg})
             ix_i = 1;
         else
             ix_i = i;
         end
-        if iscell(theseArgs{iArg})
-            theseArgs{iArg} = theseArgs{iArg}{ix_i};
+        if iscell(args{iArg})
+            theseArgs{iArg} = args{iArg}{ix_i};
         else
             theseArgs{iArg} = args{iArg}(ix_i);
         end
