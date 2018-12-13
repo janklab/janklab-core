@@ -12,21 +12,38 @@ function out = sprintfv(format, varargin)
 % Returns cellstr.
 
 args = varargin;
+sz = [];
 for i = 1:numel(args)
     if ischar(args{i})
         args{i} = { args{i} };  %#ok<CCAT1>
     end
+    if ~isscalar(args{i})
+        if isempty(sz)
+            sz = size(args{i});
+        else
+            if ~isequal(sz, size(args{i}))
+                error('Inconsistent dimensions in inputs');
+            end
+        end
+    end
 end
-[args{:}] = scalarexpand(args{:});
+if isempty(sz)
+    sz = [1 1];
+end
 
-sz = size(args{1});
 out = cell(sz);
 for i = 1:numel(out)
     theseArgs = cell(size(args));
     for iArg = 1:numel(args)
-        theseArgs{iArg} = args{iArg}(i);
+        if isscalar(theseArgs{iArg})
+            ix_i = 1;
+        else
+            ix_i = i;
+        end
         if iscell(theseArgs{iArg})
-            theseArgs{iArg} = theseArgs{iArg}{1};
+            theseArgs{iArg} = theseArgs{iArg}{ix_i};
+        else
+            theseArgs{iArg} = args{iArg}(ix_i);
         end
     end
     out{i} = sprintf(format, theseArgs{:});
