@@ -33,6 +33,7 @@ public class StyledCellText {
         this.text = text;
     }
 
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[");
         sb.append("\"").append(text).append("\"");

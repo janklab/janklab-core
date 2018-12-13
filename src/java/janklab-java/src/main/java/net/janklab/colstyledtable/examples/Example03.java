@@ -20,7 +20,7 @@ public class Example03 {
         int[] x1    = { 1, 2, 3, 4, 5, 6 };
         int[] x2    = { 1, 2, 3, 4, 5, 123_456_789 };
         String[] str2 = { "a", "b", "a much longer string, hello", "d", "e", "f" };
-        double[] x3 = { 1.0, 1.01, 1_111.111, 999999999.999, 999999999999.999999, 0.0000001 };
+        double[] x3 = { 1.0, 1.01, 1_111.111, 999999999.999, 999999999.999999, 0.0000001 };
         int[] x4    = { 1, 2, 3, 4, 5, 6 };
         DumbTableColumn[] cols = {
                 new ObjectDumbTableColumn(String.class, str1),

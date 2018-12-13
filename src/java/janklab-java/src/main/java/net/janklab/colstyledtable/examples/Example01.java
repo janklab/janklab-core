@@ -16,7 +16,7 @@ public class Example01 {
         String[] colNames = {"names", "x", "y"};
         String[] names = {"foo", "bar", "baz", "foobar",  "qux", "quux", "quuux", "quuuux"};
         int[] x        = {   1,      2,  1234, 12345678,  999,   6, 7, 8 };
-        double[] y     = {   1,     1.1, 1.001, 1.000001, 999999999, 999999999.999999999, 0.01, -0.01};
+        double[] y     = {   1,     1.1, 1.001, 1.000001, 999999999, 999999.999999999, 0.01, -0.01};
 
         DumbTableColumn[] cols = {
                 new ObjectDumbTableColumn(String.class, names),
