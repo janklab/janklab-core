@@ -28,3 +28,5 @@ for i = 1:nargin
     varargout{i} = repmat(varargin{i}, sz);
 	end
 end
+
+end
