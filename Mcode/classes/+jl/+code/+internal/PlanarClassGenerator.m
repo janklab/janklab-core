@@ -1096,7 +1096,7 @@ classdef PlanarClassGenerator
             '    tfNaN = isnan(<obj>);'
             '    nans = subset(<obj>, tfNaN);'
             '    nonnans = subset(<obj>, ~tfNaN);'
-            '    ixNonnan = find(~ftNaN);'
+            '    ixNonnan = find(~tfNaN);'
             '    keys = proxyKeys(nonnans);'
             '    if isa(keys, ''table'')'
             '        [~,ix] = unique(keys, flags{:});'
