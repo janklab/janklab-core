@@ -19,6 +19,7 @@ classdef PlanarClassGenerator
         simpleQueryDelegates = {
             'numel'         'Number of elements in array.'
             'ndims'         'Number of dimensions.'
+            'size'          'Size of array.'
             'isempty'       'True for empty array.'
             'isscalar'      'True if input is scalar.'
             'isvector'      'True if input is a vector.'
