@@ -1131,7 +1131,7 @@ classdef PlanarClassGenerator
             'end'
             }, '\n'));
         publicDefns{end+1} = subst(strjoin({
-            'function [out,Indx] = setdiff(a, b)'
+            'function [out,Indx] = setdiff(a, b, varargin)'
             '%SETDIFF Set difference.'
             'if ismember(''rows'', varargin)'
             '    error(''setdiff(..., ''''rows'''') is unsupported'');'
