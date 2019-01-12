@@ -43,7 +43,14 @@ function out = slurp(file, precision, encoding)
 if nargin < 2 || isempty(precision);  precision = '*char'; end
 if nargin < 3 || isempty(encoding);   encoding = 'UTF-8';  end
 
-[fid,msg] = fopen(file, 'r', 'native', encoding);
+if jl.util.isoctave
+  % Octave doesn't support encodings. Just hope that it's in the default
+  % encoding.
+  [fid,msg] = fopen(file, 'r', 'native');
+else
+  [fid,msg] = fopen(file, 'r', 'native', encoding);
+end
+
 if fid < 0
     error('jl:io', 'Failed opening file ''%s'': %s', file, msg);
 end

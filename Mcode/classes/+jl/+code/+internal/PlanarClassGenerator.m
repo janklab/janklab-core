@@ -1182,8 +1182,8 @@ if isequal(klass.Name, targetClass)
     out = true;
     return;
 end
-for i = 1:numel(klass.SuperclassList)
-    out = recursiveSearchForSuperclass(klass.SuperclassList(i), targetClass);
+for i = 1:numel(klass.SuperClassList)
+    out = recursiveSearchForSuperclass(klass.SuperClassList(i), targetClass);
     if out
         return;
     end
