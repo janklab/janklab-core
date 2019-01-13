@@ -140,7 +140,7 @@ classdef PlanarClassGenerator
         out.planarNanFields = planarNanFields;
         out.planarNanFlags = planarNanFlags;
         if isscalar(out.planarNanFlags)
-            out.planarNanFlag = out.planarNanFlag{1};
+            out.planarNanFlag = out.planarNanFlags{1};
         end
         out.hasPlanarNanFlag = ~isempty(out.planarNanFlag);
         end
