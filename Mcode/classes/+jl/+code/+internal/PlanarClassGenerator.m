@@ -1182,8 +1182,16 @@ if isequal(klass.Name, targetClass)
     out = true;
     return;
 end
-for i = 1:numel(klass.SuperClassList)
-    out = recursiveSearchForSuperclass(klass.SuperClassList(i), targetClass);
+if jl.util.isoctave
+    % Compatibility hack - Octave capitalizes the field differently
+    % This matches the Matlab "meta.class" documentation, which differs from
+    % the actual implementation.
+    superclasses = klass.SuperClassList;
+else
+    superclasses = klass.SuperclassList;
+end
+for i = 1:numel(superclasses)
+    out = recursiveSearchForSuperclass(superclasses(i), targetClass);
     if out
         return;
     end
