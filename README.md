@@ -48,3 +48,14 @@ cd(oldDir)
 Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab.
 
 Extended support of older Matlab versions is not a goal of Janklab. I haven't decided how long older versions of Matlab will be supported, but it's not going to be measured in years.
+
+###  Octave compatibility
+
+Parts of Janklab are compatible with GNU Octave; others are not. If you're interested in seeing a particular part work under Octave, let me know.
+
+Janklab makes extensive use of some features not supported by Octave. Parts using these won't be made Octave-compatible unless Octave grows support for them. Features:
+  * Dot-style Java class references
+  * `table`
+  * `datetime`
+  * Handle object destructors
+
