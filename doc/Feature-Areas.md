@@ -5,13 +5,13 @@ Janklab provides several feature areas, many of which interact with each other.
 
 ## Extended Type System
 
-The Janklab "extended type system" provides a unified view of the entire Matlab type system by defining new pseudotypes that represent sets of types (like `primitive` or `java`) or subtypes that depend on the state of values (like `cellstr` or `cellrec`). This is in the `jl.types` namespace.
+The Janklab “extended type system” provides a unified view of the entire Matlab type system by defining new pseudotypes that represent sets of types (like `primitive` or `java`) or subtypes that depend on the state of values (like `cellstr` or `cellrec`). This is in the `jl.types` namespace.
 
 This lets you write concise type tests using `isa2` instead of having to do combinations of `isnumeric`/`iscellstr`/`isjava` and so on. This can be used to do concise type conversions that look almost like declarative type constraints/coercions for function arguments.
 
 ## Date/Time
 
-Janklab provides additional date/time types to supplement Matlab's new `datetime` class. These are inspired by the Joda-Time and JSR-310 Java APIs.
+Janklab provides additional date/time types to supplement Matlab’s new `datetime` class. These are inspired by the Joda-Time and JSR-310 Java APIs.
 
 * `localdate` - a calendar date without a time component
 * `localtime` - a local (wall clock) time
@@ -21,13 +21,13 @@ These are found in the `jl.time` namespace.
 
 ## Validators
 
-Janklab provides several validator functions for use with Matlab R2017b's new function-based object property validation feature. These are in the `validators` directory; browse through it to learn what's available.
+Janklab provides several validator functions for use with Matlab R2017b’s new function-based object property validation feature. These are in the `validators` directory; browse through it to learn what's available.
 
 ## Data Structures
 
 ### Relation
 
-The `relation` class is a container data type much like Matlab's `table`, but supports:
+The `relation` class is a container data type much like Matlab’s `table`, but supports:
 
 * Arbitrary column names (instead of just valid Matlab variable names)
 * Arrays of relation objects (compared to how `table` itself is an array)
@@ -42,7 +42,7 @@ Janklab monkey-patches a couple of the Matlab-provided types with additional fun
 
 ## CSV Reader
 
-The `jl.etl.CsvTableReader` is an improved version of Matlab's `csvread()`/`readtable()` that provides support for additional data types and column type autodetection. It is implemented primarily in Java for speed.
+The `jl.etl.CsvTableReader` is an improved version of Matlab’s `csvread()`/`readtable()` that provides support for additional data types and column type autodetection. It is implemented primarily in Java for speed.
 
 ## Algorithms
 
@@ -62,17 +62,17 @@ Located in the `jl.sql` namespace. These are utilities for manipulating SQL quer
 
 ### SQL QueryBuilder
 
-A "sentence diagram" for SQL statements that lets you build them incrementally and programmatically.
+A “sentence diagram” for SQL statements that lets you build them incrementally and programmatically.
 
 ## Miscellaneous
 
-The rest of Janklab is a grab bag of miscellaneous classes and utility functions. Browse the source to see what's available. These are aimed at supporting concise, readable code, and filling in the behavior around some of Matlab's edge cases.
+The rest of Janklab is a grab bag of miscellaneous classes and utility functions. Browse the source to see what’s available. These are aimed at supporting concise, readable code, and filling in the behavior around some of Matlab’s edge cases.
 
 Here are some highlights.
 
 ### ifthen()
 
-A function that operates like C and Java's ternary operator. Useful for concise one-liners that replace five-line `if`/`else` structures.
+A function that operates like C and Java’s ternary operator (except that all inputs are evaluated eagerly). Useful for concise one-liners that replace five-line `if`/`else` structures.
 
 ```
 value = ifthen(condition, valueIfTrue, valueIfFalse);

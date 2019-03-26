@@ -1,8 +1,8 @@
 #  Coding Style and Approach
 
-* Failures are indicated with errors (exceptions), not return codes that need to be checked.
+* Failures are generally indicated with errors (exceptions), not return codes that need to be checked.
  * Except for tasks inside UIs that need to be reported back to the user, in which case the status and result are both wrapped in a single return object.
-* Do not change output types or structure based on whether inputs are scalar.
+* Do not change output types or structure based on whether inputs are scalar vs. non-scalar.
 * Prefer OOP approaches instead of sets of related functions, in general.
 * M-Lint-warning-clean
  * All M-Lint warnings should be suppressed or worked around.

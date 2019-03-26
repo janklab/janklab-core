@@ -1,6 +1,6 @@
 # Goals
 
-These are the goals guiding Janklab's development. In addition to goals, we explicitly define non-goals, the things we are willing to give up in order to achieve our goals. Engineering is all about trade-offs.
+These are the goals guiding Janklab’s development. In addition to goals, we explicitly define non-goals, the things we are willing to give up in order to achieve our goals. Engineering is all about trade-offs.
 
 ## Goals
 
@@ -8,7 +8,7 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
 * Portability of non-OS-specific features
 * Support for useful OS-specific features
 * Support for polymorphic programming
-* Avoiding edge cases and "discontinuities" in our data types
+* Avoiding edge cases and “discontinuities” in our data types
 
 ## Secondary goals
 
@@ -38,7 +38,7 @@ These are the goals guiding Janklab's development. In addition to goals, we expl
  * Definitely not strings, and not raw numerics/datenums
 * Smooth edge cases and uniform types
  * E.g. empty result sets returned as empty table types, not '[]'
-* Support "INSERT ... RETURNING"
+* Support “INSERT ... RETURNING”
 * Support JDBC driver tuning parameters
  * Preferably with reasonable Matlab-tuned per-flavor defaults
 * Symbol/categorical support with Java-side conversion
