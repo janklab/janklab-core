@@ -1,7 +1,7 @@
 function varargout = mapnu(func, varargin)
 %MAP Apply a function to each element in an array, with non-uniform output
 %
-% Applies a function to each elements in the input, using cellfun, objfun,
+% Applies a function to each of the elements in the inputs, using cellfun, objfun,
 % structfun, or arrayfun as appropriate.
 %
 % * If input is cell, uses cellfun

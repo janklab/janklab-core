@@ -7,7 +7,7 @@ function out = size2str(sz)
 %
 % Examples:
 %
-% size2str(magic(3))
+% size2str(size(magic(3)))
 
 strs = cell(size(sz));
 for i = 1:numel(sz)
