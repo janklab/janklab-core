@@ -1,9 +1,9 @@
-function mustBeSingleCharStr(x)
-%MUSTBESINGLECHARSTR Validate that value is a single string as char
+function mustBeCharvec(x)
+%MUSTBECHARVEC Validate that value is a single string as char row vector
 %
-% mustBeSingleCharStr(x)
+% mustBeCharvec(x)
 %
-% Errors if x is not a single string represented as a char vector. This
+% Errors if x is not a single string represented as a char row vector. This
 % means it must be the empty string '' or a char row vector.
 
 mustBeType(x, 'char');

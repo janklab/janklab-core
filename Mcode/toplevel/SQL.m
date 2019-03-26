@@ -58,7 +58,7 @@ if isnumeric(x)
         out = num2str(x, 16);
     end
 elseif ischar(x)
-    mustBeSingleCharStr(x);
+    mustBeCharvec(x);
     if isempty(x)
         out = '''';
     else
