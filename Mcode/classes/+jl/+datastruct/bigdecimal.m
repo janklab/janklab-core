@@ -94,7 +94,7 @@ classdef BigDecimal
         end
         
         function this = set.jval(this, x)
-        mustBeType(x, 'java.math.BigDecimal');
+        mustBeA(x, 'java.math.BigDecimal');
         this.jval = x;
         end
         

@@ -70,13 +70,13 @@ classdef relation < jl.util.Displayable
             end
         elseif nargin == 2
             [colNames, colData] = varargin{:};
-            mustBeType(colNames, 'cellstr');
+            mustBeA(colNames, 'cellstr');
             if isempty(colNames)
                 colNames = reshape(colNames, [1 0]);
             end
             mustBeVector(colNames);
             colNames = colNames(:)';
-            mustBeType(colData, 'cell');
+            mustBeA(colData, 'cell');
             mustBeVector(colData);
             for i = 1:numel(colData)
                 if isempty(colData{i})
@@ -754,7 +754,7 @@ classdef relation < jl.util.Displayable
         % A and B must be scalar relations with the same column names, and
         % compatible column types.
         mustBeScalar(A);
-        mustBeType(A, 'relation');
+        mustBeA(A, 'relation');
         if nargin == 1
             proxyKeysA = NaN(nrows(A), ncols(A));
             for i = 1:ncols(A)
@@ -762,7 +762,7 @@ classdef relation < jl.util.Displayable
             end
         else
             mustBeScalar(B);
-            mustBeType(B, 'relation');
+            mustBeA(B, 'relation');
             proxyKeysA = NaN(nrows(A), ncols(A));
             proxyKeysB = NaN(nrows(B), ncols(B));
             for i = 1:ncols(A)

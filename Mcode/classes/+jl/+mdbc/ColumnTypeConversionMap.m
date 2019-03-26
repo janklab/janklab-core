@@ -21,7 +21,7 @@ classdef ColumnTypeConversionMap < handle
         if isempty(fallbackMap)
             this.jval = net.janklab.mdbc.ColumnTypeConversionMap(label);
         else
-            mustBeType(fallbackMap, 'jl.mdbc.ColumnTypeConversionMap');
+            mustBeA(fallbackMap, 'jl.mdbc.ColumnTypeConversionMap');
             this.fallback = fallbackMap;
             this.jval = net.janklab.mdbc.ColumnTypeConversionMap(label, ...
                 fallbackMap.jval);
@@ -66,7 +66,7 @@ classdef ColumnTypeConversionMap < handle
         end
         
         function registerForSqlTypes(this, sqlTypeConversions)
-        mustBeType(sqlTypeConversions, 'cell');
+        mustBeA(sqlTypeConversions, 'cell');
         if ~ismatrix(sqlTypeConversions) || size(sqlTypeConversions, 2) ~= 2
             error('jl:InvalidInput', 'Input must be n-by-2 cell; got %s %s', ...
                 sizestr(sqlTypeConversions), class(sqlTypeConversions));
@@ -83,7 +83,7 @@ classdef ColumnTypeConversionMap < handle
         end
         
         function registerForVendorTypes(this, conversions)
-        mustBeType(conversions, 'cell');
+        mustBeA(conversions, 'cell');
         if ~ismatrix(conversions) || size(conversions, 2) ~= 2
             error('jl:InvalidInput', 'Input must be n-by-2 cell; got %s %s', ...
                 sizestr(conversions), class(conversions));
@@ -105,7 +105,7 @@ classdef ColumnTypeConversionMap < handle
         
         function registerStrategies(this, strategies)
         mustBeCellstr(strategies);
-        mustBeType(strategies, 'cellrec');
+        mustBeA(strategies, 'cellrec');
         for i = 1:size(strategies, 1)
             [strategyName, strategyClassName] = strategies{i,:};
             registerStrategy(this, strategyName, strategyClassName);

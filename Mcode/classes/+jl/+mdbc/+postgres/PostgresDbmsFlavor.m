@@ -25,7 +25,7 @@ classdef PostgresDbmsFlavor < jl.mdbc.DbmsFlavor
         %
         % This registers column conversions and parameter conversions for
         % vendor-defined types supported by this DbmsFlavor.
-        mustBeType(conn, 'jl.mdbc.Connection');
+        mustBeA(conn, 'jl.mdbc.Connection');
         conn.columnTypeConversionMap.registerForVendorTypes({
             'uuid'      'uuid'
             });

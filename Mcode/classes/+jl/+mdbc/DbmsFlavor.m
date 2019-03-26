@@ -24,7 +24,7 @@ classdef DbmsFlavor < handle
         %INITIALIZECONNECTION Do flavor-specific connection initialization
         %
         % This should be called once on each new jl.mdbc.Connection.
-        mustBeType(conn, 'jl.mdbc.Connection');
+        mustBeA(conn, 'jl.mdbc.Connection');
         end
         
         function registerDbmsSpecificTypeMappings(this, conn)
@@ -32,7 +32,7 @@ classdef DbmsFlavor < handle
         %
         % This registers column conversions and parameter conversions for
         % vendor-defined types lssupported by this DbmsFlavor.
-        mustBeType(conn, 'jl.mdbc.Connection');
+        mustBeA(conn, 'jl.mdbc.Connection');
         % Default: do nothing
         end
     end
@@ -45,7 +45,7 @@ classdef DbmsFlavor < handle
         %
         % FlavorName (char) is the name used to identify the DBMS flavor. This
         % is probably just going to be the prefix used in the JDBC URL.
-        mustBeType(flavorClass, 'char');
+        mustBeA(flavorClass, 'char');
         s = getappdata(0, 'JanklabState');
         if ~isfield(s, 'mdbc')
             s.mdbc = struct;

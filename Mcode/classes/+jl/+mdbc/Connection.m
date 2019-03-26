@@ -290,8 +290,8 @@ classdef Connection < handle
         if isa(data, 'table')
             data = relation(data);
         end
-        mustBeType(data, 'relation');
-        mustBeType(table, 'char');
+        mustBeA(data, 'relation');
+        mustBeA(table, 'char');
         mustBeValidSqlTableName(table);
         % Can we do some validation of the column names to prevent SQL injection
         % issues here?

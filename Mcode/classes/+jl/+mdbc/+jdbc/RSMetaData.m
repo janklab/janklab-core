@@ -13,7 +13,7 @@ classdef RSMetaData < handle
     
     methods
         function this = RSMetaData(jResultSetMetaData)
-        mustBeType(jResultSetMetaData, 'java.sql.ResultSetMetaData');
+        mustBeA(jResultSetMetaData, 'java.sql.ResultSetMetaData');
         this.jdbc = jResultSetMetaData;
         end
         

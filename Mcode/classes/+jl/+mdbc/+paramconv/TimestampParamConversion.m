@@ -2,7 +2,7 @@ classdef TimestampParamConversion < jl.mdbc.ParamConversion
     
     methods
         function out = convertParamData(this, paramData)
-        mustBeType(paramData, 'jl.time.timestamp');
+        mustBeA(paramData, 'jl.time.timestamp');
         datenums = datenum(paramData.date);
         nanosOfDay = paramData.time.getNanosOfDay();
         out = net.janklab.mdbc.colbuf.BufferedTimestampComponents( ...

@@ -18,7 +18,7 @@ classdef DTClient < handle
                 this = dtclient;
                 return
             end
-            mustBeType(dtclient, 'com.mathworks.widgets.desk.DTClient');
+            mustBeA(dtclient, 'com.mathworks.widgets.desk.DTClient');
             this.dtclient = javaObjectEDT(dtclient);
         end
         

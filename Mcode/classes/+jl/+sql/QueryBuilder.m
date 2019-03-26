@@ -102,7 +102,7 @@ classdef QueryBuilder
         if nargin == 0
             return
         end
-        mustBeType(arg, 'cell');
+        mustBeA(arg, 'cell');
         validClauses = [jl.sql.QueryBuilder.clauseMap(:,1); {'distinct'; 'top'}];
         for i = 1:size(arg, 1)
             [clause,values] = arg{i,:};

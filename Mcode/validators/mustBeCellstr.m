@@ -6,7 +6,7 @@ function mustBeCellstr(value, name)
 %
 % See also: mustBeVector, mustBeNonEmpty
 
-% Dev note: this is a copy-and-paste from mustBeType's cellstr special
+% Dev note: this is a copy-and-paste from mustBeA's cellstr special
 % case. Could probably refactor. Avoiding it for now because I'm concerned
 % about method call overhead. Probably spuriously, but still.
 

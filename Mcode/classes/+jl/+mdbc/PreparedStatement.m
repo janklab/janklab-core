@@ -108,7 +108,7 @@ classdef PreparedStatement < jl.mdbc.Statement
     methods (Access = private)
         function [binders,nRows] = setUpParameterBinding(this, params)
         % Set up parameter bindings, but don't actually bind yet
-        mustBeType(params, 'cell');
+        mustBeA(params, 'cell');
         
         % Do initial type conversion
         for i = 1:numel(params)
