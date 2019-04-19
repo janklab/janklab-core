@@ -3,6 +3,12 @@ function out = eqnan(a, b)
 %
 % Elementwise equality test with equal NaNs.
 % This is like EQ, but considers all NaNs to be equal.
+%
+% Works on any type for which == and isnan() are both defined.
+%
+% Will not work on cells.
+%
+% Returns a logical array the size of (the scalar expansion of) a and b.
 
 if isscalar(a)
 	if isnan(a)

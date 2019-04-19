@@ -13,7 +13,14 @@ function out = valcmp(a, b)
 % imposed by SORT.
 %
 % Works on any inputs for which <, ==, >, and ISNAN are defined and are
-% consistent.
+% consistent. Note that this does not include charvecs the way you might
+% expect! They are compared characterwise. And it does not work on cellstrs
+% at all.
+%
+% Returns a double array the size of (the scalar expansion of) a and b.
+% Each element will be -1, 0, or 1.
+%
+% See also: CMP
 
 if isscalar(a)
 	sz = size(b);
