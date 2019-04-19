@@ -21,7 +21,7 @@ classdef strings
                 if isempty(str) && size(str,1) > 1
                     out = zeros(size(str,1), 1);
                 else
-                    out = jl.utils.strings.strlen(cellstr(str));
+                    out = jl.util.strings.strlen(cellstr(str));
                 end
             elseif isa(str, 'string')
                 out = strlength(str);
