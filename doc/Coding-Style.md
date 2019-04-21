@@ -5,7 +5,7 @@
 * Do not change output types or structure based on whether inputs are scalar vs. non-scalar.
 * Prefer OOP approaches instead of sets of related functions, in general.
 * M-Lint-warning-clean
- * All M-Lint warnings should be suppressed or worked around.
+ * All M-Lint warnings should be suppressed (in the source files, not your Matlab configuration) or worked around.
 
 ##  Formatting
 
@@ -16,6 +16,11 @@
 * Indent with tabs, not spaces.
  * Assume a two-space tab display width, if it matters
 * 80-character lines.
+* Spacing
+ * No space between function name and open paren in function calls
+ * Spaces after commas between function arguments
+ * Spaces after commas between argouts in multi-argout lists
+ * No spaces after commas in array indexing calls
 
 ###  Matlab Editor Configuration for Formatting
 
@@ -30,7 +35,7 @@
 * `tf` - a logical array, indicating whether a test was met
 * `loc` - an array of indexes indicating the location of something
 * `i`, `j` - loop indexes
- * I use `i` and `j` as loop indexes even though they mask the `i` and `j` functions. Imaginary values can still be constructed with the `1i` syntax.
+ * Yes, I use `i` and `j` as loop indexes even though they mask the `i` and `j` functions. Imaginary values can still be constructed with the `1i` syntax.
 * `iFoo` - an index into `foo`, usually used in iteration
 * `ixFoo` - an array of indexes into `foo`
 * `r` - a relation held in a local variable
