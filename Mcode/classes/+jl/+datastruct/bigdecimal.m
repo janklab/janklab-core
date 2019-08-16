@@ -11,14 +11,16 @@ classdef bigdecimal
 	%
 	% The implementation is a wrapper around java.math.BigDecimal.
 	
-	properties (Constant = true)
-		% The value 0, with a scale of 0
-		ZERO = jl.datastruct.bigdecimal(java.math.BigDecimal.ZERO);
-		% The value 1, with a scale of 0
-		ONE = jl.datastruct.bigdecimal(java.math.BigDecimal.ONE);
-		% The value 10, with a scale of 0
-		TEN = jl.datastruct.bigdecimal(java.math.BigDecimal.TEN);
-	end
+	% TODO:
+	%   - ones(...)
+	%   - zeros(...)
+	%   - one/three-arg min/max/mean.
+	%   - median()?
+	%   - <, >, >=, <=, ~=
+	%   - nonscalar disp()
+	%   - Symbolic Toolbox support (conversion to/from)
+	%   - promote()
+	%   - isequal()
 	
 	properties
 		% The underlying java.math.BigDecimal value
@@ -26,8 +28,8 @@ classdef bigdecimal
 	end
 	
 	methods
-		function this = BigDecimal(x)
-			%BIGDECIMAL Construct a new BigDecimal
+		function this = bigdecimal(x)
+			%BIGDECIMAL Construct a new bigdecimal
 			%
 			% jl.datastruct.bigdecimal(x)
 			% jl.datastruct.bigdecimal(javaBigDecimal)
@@ -154,8 +156,7 @@ classdef bigdecimal
 		end
 		
 		function out = plus(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -168,8 +169,7 @@ classdef bigdecimal
 		end
 		
 		function out = compareTo(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = NaN(size(a));
 			for i = 1:numel(out)
@@ -178,8 +178,7 @@ classdef bigdecimal
 		end
 		
 		function out = rdivide(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -188,8 +187,7 @@ classdef bigdecimal
 		end
 		
 		function out = eq(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = true(size(A));
 			for i = 1:numel(out)
@@ -198,8 +196,7 @@ classdef bigdecimal
 		end
 		
 		function out = equals(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = true(size(A));
 			for i = 1:numel(out)
@@ -208,8 +205,7 @@ classdef bigdecimal
 		end
 		
 		function out = max(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -218,8 +214,7 @@ classdef bigdecimal
 		end
 		
 		function out = min(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -244,8 +239,7 @@ classdef bigdecimal
 		end
 		
 		function out = times(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -261,7 +255,7 @@ classdef bigdecimal
 		end
 		
 		function out = power(this, n)
-			this = jl.datastruct.bigdecimal(this);
+			this = promote(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -291,8 +285,7 @@ classdef bigdecimal
 		end
 		
 		function out = rem(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -301,7 +294,7 @@ classdef bigdecimal
 		end
 		
 		function out = scaleByPowerOfTen(this, n)
-			this = jl.datastruct.bigdecimal(this);
+			this = promote(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -310,7 +303,7 @@ classdef bigdecimal
 		end
 		
 		function out = setScale(this, n)
-			this = jl.datastruct.bigdecimal(this);
+			this = promote(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -326,8 +319,7 @@ classdef bigdecimal
 		end
 		
 		function out = minus(A, B)
-			A = jl.datastruct.bigdecimal(A);
-			B = jl.datastruct.bigdecimal(B);
+			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -352,6 +344,15 @@ classdef bigdecimal
 			for i = 1:numel(out)
 				out(i).jval = java.math.BigDecimal.valueOf(unscaledVal(i), scale(i));
 			end
+		end
+	end
+end
+
+function varargout = promote(varargin)
+  varargout = cell(size(varargin));
+	for i = 1:numel(varargin)
+		if ~isa(varargin{i}, 'jl.datastruct.bigdecimal')
+			varargout{i} = jl.datastruct.bigdecimal(varargin{i});
 		end
 	end
 end
