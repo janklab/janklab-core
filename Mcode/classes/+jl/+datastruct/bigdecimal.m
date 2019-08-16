@@ -20,6 +20,8 @@ classdef bigdecimal
 	%   - nonscalar disp()
 	%   - Symbolic Toolbox support (conversion to/from)
 	%   - isequal()
+	%   - move out of jl.datastruct; that doesn't feel like the right place.
+	%   - sort(), ismember(), unique(), setdiff(), union(), intersect()
 	
 	properties
 		% The underlying java.math.BigDecimal value
