@@ -19,7 +19,6 @@ classdef bigdecimal
 	%   - <, >, >=, <=, ~=
 	%   - nonscalar disp()
 	%   - Symbolic Toolbox support (conversion to/from)
-	%   - promote()
 	%   - isequal()
 	
 	properties
