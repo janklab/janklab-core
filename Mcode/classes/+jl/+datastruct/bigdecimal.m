@@ -168,6 +168,22 @@ classdef bigdecimal
 			out = this;
 		end
 		
+		function out = minus(A, B)
+			[A, B] = promote(A, B);
+			[A, B] = scalarexpand(A, B);
+			out = A;
+			for i = 1:numel(out)
+				out(i).jval = A(i).jval.subtract(B(i).jval);
+			end
+		end
+		
+		function out = uminus(this)
+			out = this;
+			for i = 1:numel(out)
+				out(i).jval = this(i).jval.negate();
+			end
+		end
+		
 		function out = compareTo(A, B)
 			[A, B] = promote(A, B);
 			[A, B] = scalarexpand(A, B);
@@ -247,13 +263,6 @@ classdef bigdecimal
 			end
 		end
 		
-		function out = uminus(this)
-			out = this;
-			for i = 1:numel(out)
-				out(i).jval = this(i).jval.negate();
-			end
-		end
-		
 		function out = power(this, n)
 			this = promote(this);
 			[this, n] = scalarexpand(this, n);
@@ -315,15 +324,6 @@ classdef bigdecimal
 			out = this;
 			for i = 1:numel(out)
 				out(i).jval = this(i).jval.stripTrailingZeros();
-			end
-		end
-		
-		function out = minus(A, B)
-			[A, B] = promote(A, B);
-			[A, B] = scalarexpand(A, B);
-			out = A;
-			for i = 1:numel(out)
-				out(i).jval = A(i).jval.subtract(B(i).jval);
 			end
 		end
 		
