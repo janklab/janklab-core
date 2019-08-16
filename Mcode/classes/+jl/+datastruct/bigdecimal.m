@@ -13,11 +13,11 @@ classdef bigdecimal
 	
 	properties (Constant = true)
 		% The value 0, with a scale of 0
-		ZERO = jl.types.BigDecimal(java.math.BigDecimal.ZERO);
+		ZERO = jl.datastruct.bigdecimal(java.math.BigDecimal.ZERO);
 		% The value 1, with a scale of 0
-		ONE = jl.types.BigDecimal(java.math.BigDecimal.ONE);
+		ONE = jl.datastruct.bigdecimal(java.math.BigDecimal.ONE);
 		% The value 10, with a scale of 0
-		TEN = jl.types.BigDecimal(java.math.BigDecimal.TEN);
+		TEN = jl.datastruct.bigdecimal(java.math.BigDecimal.TEN);
 	end
 	
 	properties
@@ -29,8 +29,8 @@ classdef bigdecimal
 		function this = BigDecimal(x)
 			%BIGDECIMAL Construct a new BigDecimal
 			%
-			% jl.types.BigDecimal(x)
-			% jl.types.BigDecimal(javaBigDecimal)
+			% jl.datastruct.bigdecimal(x)
+			% jl.datastruct.bigdecimal(javaBigDecimal)
 			%
 			% X may be one of:
 			%   * double
@@ -39,7 +39,7 @@ classdef bigdecimal
 			%
 			% For more advanced construction options, construct a
 			% java.math.BigDecimal object directly, and pass it in to the
-			% jl.types.BigDecimal constructor to wrap it.
+			% jl.datastruct.bigdecimal constructor to wrap it.
 			%
 			% The zero-arg constructor returns a BigDecimal of value 0, with a scale
 			% of 0. This may change if NaN support is added to BigDecimal.
@@ -47,7 +47,7 @@ classdef bigdecimal
 			if nargin == 0
 				return;
 			end
-			if isa(x, 'jl.types.BigDecimal')
+			if isa(x, 'jl.datastruct.bigdecimal')
 				this = x;
 				return;
 			end
@@ -119,6 +119,10 @@ classdef bigdecimal
 		%% Conversions
 		
 		function out = double(this)
+			%DOUBLE Convert to double
+			%
+			% Converts this to a Matlab double array. Note that this is a lossy
+			% conversion! It will result in roundoff error.
 			out = NaN(size(this));
 			for i = 1:numel(out)
 				out(i) = this(i).jval.doubleValue();
@@ -150,8 +154,8 @@ classdef bigdecimal
 		end
 		
 		function out = plus(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -164,8 +168,8 @@ classdef bigdecimal
 		end
 		
 		function out = compareTo(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = NaN(size(a));
 			for i = 1:numel(out)
@@ -174,8 +178,8 @@ classdef bigdecimal
 		end
 		
 		function out = rdivide(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -184,8 +188,8 @@ classdef bigdecimal
 		end
 		
 		function out = eq(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = true(size(A));
 			for i = 1:numel(out)
@@ -194,8 +198,8 @@ classdef bigdecimal
 		end
 		
 		function out = equals(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = true(size(A));
 			for i = 1:numel(out)
@@ -204,8 +208,8 @@ classdef bigdecimal
 		end
 		
 		function out = max(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -214,8 +218,8 @@ classdef bigdecimal
 		end
 		
 		function out = min(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -240,8 +244,8 @@ classdef bigdecimal
 		end
 		
 		function out = times(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -257,7 +261,7 @@ classdef bigdecimal
 		end
 		
 		function out = power(this, n)
-			this = jl.types.BigDecimal(this);
+			this = jl.datastruct.bigdecimal(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -287,8 +291,8 @@ classdef bigdecimal
 		end
 		
 		function out = rem(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -297,7 +301,7 @@ classdef bigdecimal
 		end
 		
 		function out = scaleByPowerOfTen(this, n)
-			this = jl.types.BigDecimal(this);
+			this = jl.datastruct.bigdecimal(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -306,7 +310,7 @@ classdef bigdecimal
 		end
 		
 		function out = setScale(this, n)
-			this = jl.types.BigDecimal(this);
+			this = jl.datastruct.bigdecimal(this);
 			[this, n] = scalarexpand(this, n);
 			out = this;
 			for i = 1:numel(out)
@@ -322,8 +326,8 @@ classdef bigdecimal
 		end
 		
 		function out = minus(A, B)
-			A = jl.types.BigDecimal(A);
-			B = jl.types.BigDecimal(B);
+			A = jl.datastruct.bigdecimal(A);
+			B = jl.datastruct.bigdecimal(B);
 			[A, B] = scalarexpand(A, B);
 			out = A;
 			for i = 1:numel(out)
@@ -344,7 +348,7 @@ classdef bigdecimal
 		function out = ofValueAndScale(unscaledVal, scale)
 			unscaledVal = int64(unscaledVal);
 			[unscaledVal, scale] = scalarexpand(unscaledVal, scale);
-			out = repmat(jl.types.BigDecimal, size(unscaledVal));
+			out = repmat(jl.datastruct.bigdecimal, size(unscaledVal));
 			for i = 1:numel(out)
 				out(i).jval = java.math.BigDecimal.valueOf(unscaledVal(i), scale(i));
 			end
