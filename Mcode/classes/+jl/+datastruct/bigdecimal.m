@@ -12,6 +12,7 @@ classdef bigdecimal
 	% The implementation is a wrapper around java.math.BigDecimal.
 	
 	% TODO:
+	%   - NaN support (so we can represent SQL NULLs)
 	%   - ones(...)
 	%   - zeros(...)
 	%   - one/three-arg min/max/mean.
