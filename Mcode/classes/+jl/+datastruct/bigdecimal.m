@@ -1,4 +1,4 @@
-classdef BigDecimal
+classdef bigdecimal
     %BIGDECIMAL Arbitrary-precision decimal values
     %
     % Bigdecimal represents arbitrary-precision exact decimal values. (As
