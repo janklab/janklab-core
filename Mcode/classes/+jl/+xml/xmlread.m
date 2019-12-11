@@ -9,33 +9,58 @@ function out = xmlread(input, varargin)
 % jl.xml.Document object.
 %
 % Valid InputType values:
-%   * 'auto' - auto-detect input type based on its type. Strings are
-%              treated as filenames for now, because Matlab doesn't have
-%              a distinct File type.
+%   * 'auto'* - auto-detect input type based on its type. Strings are
+%               treated as filenames for now, because Matlab doesn't have
+%               a distinct File type.
 %   * 'file' - input is a filename
 %   * 'string' - input is a string, a string or char or java.lang.String
+%
+% Valid input types:
+%   * string/char (treated as a file name by default)
+%   * java.lang.String
+%   * java.io.InputStream
+%   * org.xml.sax.InputSource
+%   * java.io.File
 
-% TODO: Support java.io.InputStream or java.io.Reader as input.
-% TODO: Support java.io.File as input.
+% TODO: Maybe do away with InputType option and detect it entirely based
+%       on actual type of input. Except... how do we decide between strings
+%       and files?
 % TODO: Maybe support URLs?
+% TODO: Add options for validation, external DTDs, etc
 
 opts = jl.util.parseOpts(varargin, {'InputType','file'});
 
 mustBeMember(opts.InputType, {'file','string'});
 
+if isequal(opts.InputType, 'auto')
+  if isstring(input) || isa(input, 'java.io.File')
+    inputType = 'file';
+  elseif isa(input, 'java.lang.String')
+    inputType = 'string';
+  elseif isa(input, 'java.io.InputStream') ...
+      || isa(input, 'org.xml.sax.InputSource')
+    inputType = 'java';
+  else
+    error('Could not automatically determine input type (input is a %s)', ...
+      class(input));
+  end
+else
+  inputType = opts.InputType;
+end
+
 % Read the XML doc into a Java DOM structure
-switch opts.InputType
+
+switch inputType
   case 'file'
     jdoc = xmlread(input);
+  case 'java'
+    % This uses undocumented "advanced" behavior of Matlab's xmlread
+    jdoc = xmlread(input);
   case 'string'
-    % Ugh; have to bounce to a temp file
-    % TODO: Replace the xmlread() call here with direct Java calls so we
-    % can parse the string in-memory.
-    tempFile = [tempname '.xml'];
-    str = string(input);
-    jl.io.spew(tempFile, str);
-    jdoc = xmlread(tempFile);
-    delete(tempFile);
+    % This uses undocumented "advanced" behavior of Matlab's xmlread
+    jstr = java.lang.String(str);
+    jByteStream = java.io.ByteArrayInputStream(jstr.getBytes);
+    jdoc = xmlread(jByteStream);
 end
 
 % Convert the DOM structure into jl.xml objects
