@@ -58,9 +58,9 @@ classdef CDATASection < jl.xml.Node
       out = sprintf("<![CDATA[%s]]>", this.text);
     end
     
-    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSD>
+    function out = prettyprint_step(this, depth, opts) %#ok<INUSD>
       mustBeScalar(this);
-      indent = repmat('  ', [1 indentLevel]);
+      indent = repmat('  ', [1 depth]);
       out = sprintf("%s<![CDATA[%s]]>\n", indent, this.text);
     end
   end

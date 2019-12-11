@@ -122,12 +122,25 @@ classdef Element < jl.xml.Node
       end
     end
     
-    function out = prettyprint_step(this, indentLevel, opts)
+    function out = prettyprint_step(this, depth, opts)
       
-      indent = repmat('  ', [1 indentLevel]);
+      if depth <= opts.expandDepth
+        indent = repmat('  ', [1 depth]);
+      else
+        indent = '';
+      end
+      if depth < opts.expandDepth
+        lineEnd = newline;
+      else
+        lineEnd = '';
+      end
 
       % Special tag text
-      attrStrs = dispstrs(this.attributes);
+      attrStrs = repmat("", size(this.attributes));
+      for i = 1:numel(this.attributes)
+        attrStrs(i) = sprintf("%s = ""%s""", this.attributes(i).name, ...
+          this.attributes(i).value);
+      end
       if isempty(attrStrs)
         tagText = this.name;
       else
@@ -143,19 +156,22 @@ classdef Element < jl.xml.Node
       end
       
       if isempty(this.children)
-        out = sprintf("%s<%s/>\n", indent, tagText);
+        out = sprintf("%s<%s/>%s", indent, tagText, lineEnd);
       elseif isscalar(this.children) && isa(this.children, 'jl.xml.Text')
-        out = sprintf("%s<%s>%s</%s>\n", indent, tagText, ...
-          this.children(1).text, this.name);
+        out = sprintf("%s<%s>%s</%s>%s", indent, tagText, ...
+          this.children(1).text, this.name, lineEnd);
       else
         s = string.empty;
         for i = 1:numel(this.children)
-          s(end+1) = char(prettyprint_step(this.children(i), ...
-            indentLevel + 1, opts));
+          child_str = prettyprint_step(this.children(i), depth + 1, opts);
+          s(end+1) = child_str;
         end
-        out = sprintf("%s<%s>\n%s%s</%s>\n", indent, tagText, ...
-          strjoin(s, ""), ...
-          indent, this.name);
+        if depth < opts.expandDepth
+          out = sprintf("%s<%s>\n%s%s</%s>\n", indent, tagText, ...
+            strjoin(s, ""), indent, this.name);
+        else
+          out = sprintf("<%s>%s</%s>", tagText, strjoin(s, ""), this.name);
+        end
       end
     end
   end

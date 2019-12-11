@@ -49,8 +49,8 @@ classdef Comment < jl.xml.Node
       end
     end
 
-    function out = prettyprint_step(this, indentLevel, opts)
-      indent = repmat('  ', [1 indentLevel]);
+    function out = prettyprint_step(this, depth, opts) %#ok<INUSD>
+      indent = repmat('  ', [1 depth]);
       out = sprintf("%s<!-- %s -->\n", indent, this.text_);
     end
   end

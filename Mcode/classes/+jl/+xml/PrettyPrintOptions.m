@@ -1,8 +1,23 @@
 classdef PrettyPrintOptions
   % PrettyPrintOptions Controls appearance of pretty-printing
+  %
+  % Properties:
+  %
+  %  attrsOnSeparateLines (logical,false*) - If true, then element
+  %    attributes are each printed on a separate line. This makes it easier
+  %    to read documents whose elements have many attributes, which would
+  %    otherwise turn into really long lines.
+  %
+  %  expandDepth (double,Inf*) - How many levels deep to expand elements
+  %    into multiple lines. Setting this to a low number lets you see the
+  %    high-level structure of a document. NOTE: This one is still a work
+  %    in progress.
+  
+  % TODO: Add a Depth option to coompletely elide deeper nodes
   
   properties
     attrsOnSeparateLines logical = false
+    expandDepth double = Inf
   end
   
   methods

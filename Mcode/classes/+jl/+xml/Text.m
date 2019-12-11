@@ -1,6 +1,9 @@
 classdef Text < jl.xml.Node
   % Text Textual content of an Element or Attr
   
+  % TODO: Add isIgnorableWhitespace()
+  % TODO: Escape pretty-printed text
+  
   properties
     text {mustBeScalarString} = ""
   end
@@ -23,7 +26,18 @@ classdef Text < jl.xml.Node
       if numel(args) > 0
         this.text = string(args{1});
       end
-    end    
+    end
+    
+    function out = isIgorableWhitespace(this)
+      %isIgnorableWhitespace
+      %
+      % NOTE: This is a HACK! It doesn't correspond to something that's
+      % really defined in the XML spec. Use at your own risk.
+      out = false(size(this));
+      for i = 1:numel(this)
+        out(i) = ~isempty(regexp(this(i).text, '^\s*$', 'once'));
+      end
+    end
   end
   
   methods (Access = protected)
@@ -42,9 +56,23 @@ classdef Text < jl.xml.Node
       out = this.text;
     end
     
-    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSD>
-      indent = repmat('  ', [1 indentLevel]);
-      out = sprintf("%s%s", indent, this.text);
+    function out = prettyprint_step(this, depth, opts)
+      mustBeScalar(this);
+      if depth <= opts.expandDepth
+        indent = repmat('  ', [1 depth]);
+      else
+        indent = '';
+      end
+      if depth >= opts.expandDepth
+        if this.isIgorableWhitespace
+          out = "";
+        else
+          out = strrep(this.text, sprintf('\r'), '\r');
+          out = strrep(out, sprintf('\n'), '\n'); %#ok<SPRINTFN>
+        end
+      else
+        out = sprintf("%s%s", indent, this.text);
+      end
     end
     
     function out = getName(this) %#ok<MANU>

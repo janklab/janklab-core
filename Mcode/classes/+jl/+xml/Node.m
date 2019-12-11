@@ -87,7 +87,10 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
     function out = prettyprint(this, opts)
       % prettyprint Print in a nicely-formatted human-readable manner
       %
-      % opts (jl.xml.PrettyPrintOptions)
+      % opts (jl.xml.PrettyPrintOptions) controls the display behavior.
+      %
+      % See also:
+      % jl.xml.PrettyPrintOptions
       if nargin < 2 || isempty(opts); opts = {}; end
       opts = jl.xml.PrettyPrintOptions(opts);
       str = prettyprint_step(this, 0, opts);
@@ -141,7 +144,7 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
       end
     end
     
-    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSD,STOUT>
+    function out = prettyprint_step(this, depth, opts) %#ok<INUSD,STOUT>
       error('jl:Unimplemented', ['Subclasses of Node must override ' ...
         'prettyprint_step(); %s does not'], class(this));
     end

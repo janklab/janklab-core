@@ -107,8 +107,8 @@ end
       out = s;
     end
     
-    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSL>
-      % Ignore indentLevel because Documents are always root level
+    function out = prettyprint_step(this, depth, opts) %#ok<INUSL>
+      % Ignore depth because Documents are always root level
       s = sprintf("%s\n", this.xmlHeaderStr);
       if ~isnil(this.documentType)
         s = s + this.documentType.dumpText + newline;
