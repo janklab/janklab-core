@@ -4,11 +4,14 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
   % Elements, text, and attributes are all Nodes, and they are arranged in
   % a tree structure that uses the generic Node type for all nodes in the
   % tree.
+  %
+  % Note that Node is a handle class. This is needed to support
+  % back-references to the Node's parent Node and owner Document, which are
+  % not possible with normal pass-by-value objects.
   
   % TODO: Prefix support
   % TODO: Index/sibling navigation
   % TODO: Namespace support
-  % TODO: Parent references
   % TODO: normalize()
   % TODO: clone()
   % TODO: XPath selection support
@@ -24,15 +27,20 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
   end
 
   properties
+    % Children of this node
+    % This *should* be enforced to be a jl.xml.Node array, but that would
+    % cause a circular dependency in construction.
+    children = [];
+  end
+
+  properties (GetAccess = public, SetAccess = protected)
     % The immediate parent node of this node
     % Must be a scalar Node or empty.
     % This *should* be enforced to be a jl.xml.Node array, but that would
     % cause a circular dependency in construction.
     parent = []
-    % Children of this node
-    % This *should* be enforced to be a jl.xml.Node array, but that would
-    % cause a circular dependency in construction.
-    children = [];
+    % The index of this node in the children list of its parent
+    index double = NaN
   end
   
   properties (Access = protected)
@@ -61,6 +69,12 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
     function set.children(this, children)
       this.validateChildren(children);
       this.children = children;
+      % Update references! Putting a Node in another Node's child array
+      % transfers ownership of that node
+      for i = 1:numel(this.children)
+        this.children(i).index = i;
+        this.children(i).parent = this;
+      end
     end
         
     function out = get.name(this)
