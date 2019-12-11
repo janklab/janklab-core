@@ -5,6 +5,10 @@ function mustBeCharvec(x)
 %
 % Errors if x is not a single string represented as a char row vector. This
 % means it must be the empty string '' or a char row vector.
+%
+% See also:
+% mustBeString
+% mustBeScalarString
 
 mustBeA(x, 'char');
 if size(x,1) > 1 || ~ismatrix(x)

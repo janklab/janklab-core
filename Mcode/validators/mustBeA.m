@@ -1,7 +1,7 @@
 function mustBeA(value, type)
-%MUSTBETYPE Validate that an input is of a particular data type
+%MUSTBEA Validate that an input is of a particular data type
 %
-% MUSTBETYPE(value, type)
+% MUSTBEA(value, type)
 %
 % Validates that the input Value is of the specified Type or a
 % subtype. If Value is not of Type, an error is raised. If Value is
@@ -23,7 +23,6 @@ function mustBeA(value, type)
 % Avoid infinite recursion
 assert(ischar(type), 'jl:InvalidInput',...
     'type must be a char, but got a %s', class(type));
-
 
 % Special pseudotype cases
 % TODO: These can probably go away now that we're using isa2()

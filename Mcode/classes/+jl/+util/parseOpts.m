@@ -15,7 +15,7 @@ function out = parseOpts(opts, defaults)
 out = parseOptsArg(opts);
 if nargin > 1
     defaults = parseOptsArg(defaults);
-    out = jl.types.copyfields(defaults, out);
+    out = jl.datastruct.copyfields(defaults, out);
 end
 end
 
@@ -26,8 +26,8 @@ end
 if isstruct(opts)
     out = opts;
 elseif iscell(opts)
-    opts = jl.types.cellrec(opts);
-    out = jl.types.cellrec2struct(opts);
+    opts = jl.datastruct.cellrec(opts);
+    out = jl.datastruct.cellrec2struct(opts);
 else
     error('jl:InvalidInput', 'Unsupported input type: %s', class(opts));
 end

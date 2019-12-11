@@ -1,5 +1,5 @@
-classdef Displayable
-  %DISPLAYABLE A mixin for defining custom display format using dispstrs()
+classdef DisplayableHandle < handle
+  %DISPLAYABLEHANDLE A mixin for defining custom display format using dispstrs()
   %
   % This defines custom disp(), display(), and dispstr() behavior in terms of
   % dispstrs().
@@ -7,8 +7,11 @@ classdef Displayable
   % Classes inheriting from this should implement a dispstrs() that conforms
   % to its standard signature.
   %
+  % This is exactly the same as jl.util.Displayable, except that it is a
+  % handle, so it can be used as a mixin by handle classes.
+  %
   % See also:
-  % jl.util.DisplayableHandle
+  % jl.util.Displayable
   
   methods
     function disp(this)
