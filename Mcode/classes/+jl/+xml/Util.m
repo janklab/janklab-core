@@ -1,4 +1,5 @@
 classdef Util
+  % Util Static utility methods for the XML stuff
   
   properties (Constant)
     % The missing string value

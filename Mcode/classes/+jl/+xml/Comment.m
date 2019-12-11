@@ -1,4 +1,8 @@
 classdef Comment < jl.xml.Node
+  % Comment An XML comment
+  %
+  % Represents an XML comment (those things represented as "<!-- ... -->"
+  % in the XML text.
   
   properties (Access = private)
     text_ {mustBeScalarString} = ""

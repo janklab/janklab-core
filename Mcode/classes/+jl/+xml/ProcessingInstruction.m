@@ -1,4 +1,5 @@
 classdef ProcessingInstruction < jl.xml.Node
+  % ProcessingInstruction An XML processing instruction
   
   properties
     target string = jl.xml.Util.missing_string
