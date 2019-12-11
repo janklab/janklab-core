@@ -30,7 +30,7 @@ classdef Comment < jl.xml.Node
   end
   
   methods (Access = protected)
-    function out = getName(this)
+    function out = getName(this) %#ok<MANU>
       out = "#comment";
     end
     

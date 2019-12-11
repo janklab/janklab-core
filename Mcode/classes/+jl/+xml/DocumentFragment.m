@@ -1,4 +1,7 @@
 classdef DocumentFragment < jl.xml.Node
+  % DocumentFragment A fragment of an XML document
+  
+  %#ok<*MANU>
   
   methods
   end
