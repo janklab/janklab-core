@@ -1,5 +1,9 @@
 classdef Text < jl.xml.Node
   % Text Textual content of an Element or Attr
+  %
+  % A Text represents basic textual content in an XML file. This is the
+  % text stuff you see between <foo>...</foo> tags, that is not itself
+  % another tag.
   
   % TODO: Escape pretty-printed text with XML entities
   
