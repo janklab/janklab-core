@@ -20,17 +20,9 @@ classdef Element < jl.xml.Node
     name_ {mustBeScalarString} = ""
   end
   
-  methods (Static)
-    function out = ofJavaDom(doc, jnode)
-      % ofJavaDom Convert a Java DOM object to an Element
-      mustBeA(doc, 'jl.xml.Document');
-      mustBeA(jnode, 'org.w3c.dom.Element');
-      out = jl.xml.Element(doc, string(jnode.getNodeName));
-    end
-  end
-  
   methods
     function this = Element(varargin)
+      % Element Construct a new Element
       %
       % Element()
       % Element(name)
