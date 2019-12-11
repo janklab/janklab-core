@@ -1,8 +1,6 @@
 classdef CDATASection < jl.xml.Node
-% CDATASection a CDATA section of escaped text
+% CDATASection a CDATA section of non-parsed text
 %
-
-  % TODO: Validation: make sure contents don't include "]]"
   
   properties
     text {mustBeScalarString} = ""
@@ -26,6 +24,15 @@ classdef CDATASection < jl.xml.Node
       if numel(args) > 0
         this.text_ = args{1};
       end
+    end
+    
+    function set.text(this, text)
+      ix = strfind(text, "]]");
+      if ~isempty(ix)
+        error(['CDATASection text may not contain the string '']]''. ' ...
+          'Input contains it at indexes %s'], mat2str(ix));
+      end
+      this.text = text;
     end
     
   end
