@@ -31,6 +31,10 @@ classdef CDATASection < jl.xml.Node
   end
   
   methods (Access = protected)
+    function out = getName(this)
+      out = "#cdata-section";
+    end
+    
     function out = dispstr_scalar(this)
       out = sprintf("<![CDATA[[%s]]>", this.text);
     end

@@ -30,6 +30,10 @@ classdef Comment < jl.xml.Node
   end
   
   methods (Access = protected)
+    function out = getName(this)
+      out = "#comment";
+    end
+    
     function out = dispstr_scalar(this)
       out = sprintf("<--%s-->", this.text_);
     end

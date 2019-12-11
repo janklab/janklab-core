@@ -7,8 +7,9 @@ classdef DocumentType < handle
 
   %#ok<*MANU>
   
+  % TODO: Convert this to be a Node
   % TODO: Enforce types in the field Maps
-  % TODO: publicId, systemId, entities, and notations in text outpu
+  % TODO: publicId, systemId, entities, and notations in text output
   
   methods (Static)
     function out = nil
@@ -51,6 +52,12 @@ classdef DocumentType < handle
       s = s + this.internalSubset;
       s = s + "]>";
       out = s;
+    end
+  end
+  
+  methods (Access = protected)
+    function out = getName(this)
+      out = this.name;
     end
   end
   

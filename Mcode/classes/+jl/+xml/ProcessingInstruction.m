@@ -27,4 +27,10 @@ classdef ProcessingInstruction < jl.xml.Node
       end
     end
   end
+  
+  methods (Access = protected)
+    function out = getName(this)
+      out = this.target;
+    end    
+  end
 end

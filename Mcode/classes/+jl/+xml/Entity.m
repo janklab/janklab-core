@@ -36,4 +36,11 @@ classdef Entity < jl.xml.Node
       end
     end
   end
+  
+  methods (Access = protected)
+    function out = getName(this) %#ok<STOUT,MANU>
+      % TODO: Fix this
+      error('jl:Unimplemented', 'jl.xml.Entity.getName() is unimplemented')
+    end    
+  end
 end

@@ -41,6 +41,10 @@ classdef Text < jl.xml.Node
     function out = dumpText_scalar(this)
       out = this.text;
     end
+    
+    function out = getName(this)
+      out = "#text";
+    end
   end
   
 end
