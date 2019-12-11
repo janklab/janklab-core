@@ -9,7 +9,7 @@ classdef Element < jl.xml.Node
 
   properties (Constant, Hidden)
     allowedChildTypes = ["jl.xml.Element", "jl.xml.Comment", ...
-      "jl.xml.Text"];
+      "jl.xml.Text", "jl.xml.CDATASection", "jl.xml.EntityReference"];
   end
   
   properties
