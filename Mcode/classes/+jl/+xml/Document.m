@@ -72,7 +72,7 @@ end
       else
         rootNodeDesc = sprintf("rootNode=%s", this.rootNode.name);
       end
-      out = sprintf("Document (%s)", rootNodeDesc);
+      out = sprintf("XML Document (%s)", rootNodeDesc);
     end
     
     function validateChildren(this, children)

@@ -131,7 +131,7 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
     
     function out = dispstr_scalar(this)
       type = regexprep(class(this), '.*\.', '');
-      out = sprintf("%s name='%s'", type, this.name);
+      out = sprintf("XML %s name='%s'", type, this.name);
       extra = string.empty;
       if ~isempty(this.children)
         extra(end+1) = sprintf("%d children", numel(this.children));

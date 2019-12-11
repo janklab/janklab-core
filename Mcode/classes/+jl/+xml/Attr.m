@@ -75,7 +75,7 @@ classdef Attr < jl.xml.Node
       if isempty(this.name_)
         out = '<null Attr>';
       else
-        out = sprintf('%s="%s"', this.name_, this.value_);
+        out = sprintf('XML Attr: %s="%s"', this.name_, this.value_);
       end
     end
     

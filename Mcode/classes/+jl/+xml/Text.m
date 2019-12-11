@@ -28,7 +28,7 @@ classdef Text < jl.xml.Node
   
   methods (Access = protected)
     function out = dispstr_scalar(this)
-      out = sprintf("Text: '%s'", this.text);
+      out = sprintf("XML Text: '%s'", this.text);
     end
     
     function validateChildren(this, children)

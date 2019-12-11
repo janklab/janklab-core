@@ -29,7 +29,7 @@ classdef Comment < jl.xml.Node
     end
     
     function out = dumpText(this)
-      out = sprintf("<--%s-->", this.text_);
+      out = sprintf("XML Comment: <--%s-->", this.text_);
     end
   end
   

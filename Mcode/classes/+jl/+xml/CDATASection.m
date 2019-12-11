@@ -36,7 +36,7 @@ classdef CDATASection < jl.xml.Node
     end
     
     function out = dispstr_scalar(this)
-      out = sprintf("<![CDATA[[%s]]>", this.text);
+      out = sprintf("XML CDATASection: <![CDATA[[%s]]>", this.text);
     end
     
     function validateChildren(this, children)

@@ -86,7 +86,7 @@ classdef Element < jl.xml.Node
     
     function out = dispstr_scalar(this)
       type = regexprep(class(this), '.*\.', '');
-      out = sprintf("%s <%s>", type, this.name);
+      out = sprintf("XML %s <%s>", type, this.name);
       extra = string.empty;
       if ~isempty(this.children)
         extra(end+1) = sprintf("%d children", numel(this.children));
