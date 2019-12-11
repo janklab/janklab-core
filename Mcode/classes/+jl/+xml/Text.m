@@ -23,7 +23,7 @@ classdef Text < jl.xml.Node
       if numel(args) > 0
         this.text = string(args{1});
       end
-    end
+    end    
   end
   
   methods (Access = protected)
@@ -36,6 +36,10 @@ classdef Text < jl.xml.Node
       if ~isempty(children)
         error('Text nodes do not allow children');
       end
+    end
+    
+    function out = dumpText_scalar(this)
+      out = this.text;
     end
   end
   

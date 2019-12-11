@@ -1,9 +1,16 @@
 classdef Document < jl.xml.Node
+  % Document An XML document
+  
+  % TODO: Support empty/unspecified xmlEncoding and xmlVersion
   
   %#ok<*MANU>
   
   properties
-    documentType jl.xml.DocumentType = jl.xml.DocumentType.nil;
+    documentType jl.xml.DocumentType = jl.xml.DocumentType.nil
+    documentURI string = jl.xml.Util.missing_string
+    xmlEncoding string = "UTF-8"
+    xmlStandalone logical = false
+    xmlVersion string = "1.0"
   end
   
   properties (Access = private)
@@ -31,7 +38,8 @@ classdef Document < jl.xml.Node
     function set.rootNode(this, node)
       this.children = node;
     end
-  end
+    
+end
   
   % Factory methods
   methods
@@ -80,5 +88,14 @@ classdef Document < jl.xml.Node
       end
     end
     
+    function out = dumpText_scalar(this)
+      s = sprintf("<?xml version=""%s"" encoding=""%s"" ?>\n", ...
+          this.xmlVersion, this.xmlEncoding);
+      if ~isnil(this.documentType)
+        s = s + this.documentType.dumpText + newline;
+      end
+      s = s + this.rootNode.dumpText;
+      out = s;
+    end
   end
 end

@@ -2,6 +2,8 @@ classdef CDATASection < jl.xml.Node
 % CDATASection a CDATA section of escaped text
 %
 
+  % TODO: Validation: make sure contents don't include "]]"
+  
   properties
     text {mustBeScalarString} = ""
   end
@@ -25,6 +27,7 @@ classdef CDATASection < jl.xml.Node
         this.text_ = args{1};
       end
     end
+    
   end
   
   methods (Access = protected)
@@ -37,6 +40,11 @@ classdef CDATASection < jl.xml.Node
       if ~isempty(children)
         error('CDATASection nodes do not allow children');
       end
+    end
+    
+    function out = dumpText_scalar(this)
+      mustBeScalar(this);
+      out = sprintf("<![CDATA[[%s]]>", this.text);
     end
   end
   

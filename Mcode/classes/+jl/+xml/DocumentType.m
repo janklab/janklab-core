@@ -8,22 +8,24 @@ classdef DocumentType < handle
   %#ok<*MANU>
   
   % TODO: Enforce types in the field Maps
+  % TODO: publicId, systemId, entities, and notations in text outpu
   
   methods (Static)
     function out = nil
       out = jl.xml.DocumentType;
+      out.isNil = true;
     end
   end
   
   properties (Access = private)
-    isNil logical = true
+    isNil logical = false
   end
   
   properties
     name string = string(missing)
     publicId string = string(missing)
     systemId string = string(missing)
-    internalSubset string = string(missing)
+    internalSubset string = ""
     entities containers.Map = containers.Map
     notations containers.Map = containers.Map
   end
@@ -32,12 +34,23 @@ classdef DocumentType < handle
     function out = DocumentType()
       % DocumentType Construct a new DocumentType
       %
-      % Note: DocumentType is currently mostly unimplemented, and we currently
-      % only support a nil value for it.
+      % Note: DocumentType is currently mostly unimplemented. Careful with
+      % it. You may just lose data if you depend on it in its current form.
     end
     
     function out = isnil(this)
       out = this.isNil;
+    end
+    
+    function out = dumpText(this)
+      % dumpText
+      %
+      % TODO: I don't know what to do with publicId, systemId, entities,
+      % or notations here.
+      s = sprintf("<!DOCTYPE %s [\n", this.name);
+      s = s + this.internalSubset;
+      s = s + "]>";
+      out = s;
     end
   end
   

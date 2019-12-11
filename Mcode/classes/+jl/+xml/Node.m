@@ -6,7 +6,13 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
   % tree.
   
   % TODO: Prefix support
-  % TODO: index/sibling navigation
+  % TODO: Index/sibling navigation
+  % TODO: Namespace support
+  % TODO: Parent references
+  % TODO: normalize()
+  % TODO: pretty-print
+  % TODO: Make dumpText() work on arrays; probably by delegating to
+  % a protected dumpText_scalar()
   
   %#ok<*MANU>
   %#ok<*INUSL>
@@ -73,6 +79,11 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
     function out = getAttributes(this)
       out = jl.xml.Attr.empty;
     end
+    
+    function out = dumpText(this)
+      strs = arrayfun(@(x) dumpText_scalar(x), this);
+      out = strjoin(strs, "");
+    end
   end
   
   methods (Access = protected)
@@ -96,6 +107,11 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
       mustBeA(children, 'jl.xml.Node');
       % The generic Node type does no further validation. That's left up to
       % the subclasses.
+    end
+    
+    function out = dumpText_scalar(this) %#ok<STOUT>
+      error('jl:Unimplemented', ['Subclasses of Node must override ' ...
+        'dumpText_scalar(); %s does not'], class(this));
     end
     
     function out = dispstr_scalar(this)

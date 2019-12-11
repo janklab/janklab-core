@@ -11,6 +11,9 @@ classdef JavaDomConverter
       mustBeA(jnode, 'org.w3c.dom.Document');
       jdoc = jnode;
       doc = jl.xml.Document;
+      doc.xmlEncoding = string(jdoc.getXmlEncoding);
+      doc.xmlStandalone = jdoc.getXmlStandalone;
+      doc.xmlVersion = string(jdoc.getXmlVersion);
       jDocType = jdoc.getDoctype;
       if ~isempty(jDocType)
         doc.documentType = this.ofJavaDomDoctype(doc, jDocType);
@@ -25,8 +28,6 @@ classdef JavaDomConverter
       narginchk(3, 3);
       mustBeA(doc, 'jl.xml.Document');
       mustBeA(jnode, 'org.w3c.dom.Node');
-      
-      fprintf('Converting a %s: %s\n', class(jnode), string(jnode.toString));
       
       switch jnode.getNodeType
         case org.w3c.dom.Node.ATTRIBUTE_NODE

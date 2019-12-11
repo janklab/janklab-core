@@ -97,5 +97,20 @@ classdef Element < jl.xml.Node
         out = sprintf("%s (%s)", out, strjoin(extra, ", "));
       end
     end
+    
+    function out = dumpText_scalar(this)
+      attrStrs = strjoin(dispstrs(this.attributes), " ");
+      kidStrs = repmat(string(missing), size(this.children));
+      for i = 1:numel(this.children)
+        kidStrs(i) = this.children(i).dumpText;
+      end
+      if isempty(attrStrs)
+        openTag = sprintf("<%s>", this.name);
+      else
+        openTag = sprintf("<%s %s>", this.name, attrStrs);
+      end
+      out = sprintf("%s%s</%s>", openTag, strjoin(kidStrs, ""), this.name);
+    end
+    
   end
 end

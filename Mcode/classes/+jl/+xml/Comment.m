@@ -23,6 +23,10 @@ classdef Comment < jl.xml.Node
         this.text_ = args{1};
       end
     end
+    
+    function out = dumpText(this)
+      out = sprintf("<--%s-->", this.text_);
+    end
   end
   
   methods (Access = protected)
