@@ -146,10 +146,13 @@ classdef Element < jl.xml.Node
           tagText = sprintf("%s %s", this.name, strjoin(attrStrs, " "));
         end
       end
+      tagText = sprintf("d=%d %s", depth, tagText);
       
+      % The expandDepth logic here isn't working quite right
       if isempty(this.children)
         out = sprintf("%s<%s/>%s", indent, tagText, lineEnd);
       elseif isscalar(this.children) && isa(this.children, 'jl.xml.Text')
+        % TODO: Need to elide ignorable whitespace here based on depth
         out = sprintf("%s<%s>%s</%s>%s", indent, tagText, ...
           this.children(1).text, this.name, lineEnd);
       else
@@ -159,8 +162,15 @@ classdef Element < jl.xml.Node
           s(end+1) = child_str;
         end
         if depth < opts.expandDepth
-          out = sprintf("%s<%s>\n%s%s</%s>\n", indent, tagText, ...
-            strjoin(s, ""), indent, this.name);
+          child_text = strjoin(s, "");
+          outs = repmat(string(missing), [3 1]);
+          outs(1) = sprintf("%s<%s>\n", indent, tagText);
+          outs(2) = child_text;
+          outs(3) = sprintf("\n%s</%s>\n", indent, this.name);
+          out = strjoin(outs, "");
+        elseif depth == opts.expandDepth
+          out = sprintf("%s<%s>%s</%s>\n", indent, tagText, ...
+            strjoin(s, ""), this.name);
         else
           out = sprintf("<%s>%s</%s>", tagText, strjoin(s, ""), this.name);
         end
