@@ -1,6 +1,8 @@
 classdef JavaDomConverter
   % JavaDomConverter Converts between Java DOM objects and jl.xml objects
   
+  % TODO: String canonicalization
+  
   %#ok<*INUSL>
   %#ok<*STOUT>
   %#ok<*INUSD>
@@ -102,6 +104,9 @@ classdef JavaDomConverter
       mustBeA(doc, 'jl.xml.Document');
       mustBeA(jnode, 'org.w3c.dom.Element');
       name = string(jnode.getNodeName);
+      if name == "w:font"
+        keyboard
+      end
       out = jl.xml.Element(doc, name);
       % Attributes
       jAttrMap = jnode.getAttributes;

@@ -42,6 +42,11 @@ classdef Text < jl.xml.Node
       out = this.text;
     end
     
+    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSD>
+      indent = repmat('  ', [1 indentLevel]);
+      out = sprintf("%s%s", indent, this.text);
+    end
+    
     function out = getName(this) %#ok<MANU>
       out = "#text";
     end

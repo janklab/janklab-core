@@ -44,6 +44,11 @@ classdef Comment < jl.xml.Node
         error('Comment nodes do not allow children');
       end
     end
+
+    function out = prettyprint_step(this, indentLevel, opts)
+      indent = repmat('  ', [1 indentLevel]);
+      out = sprintf("%s<!-- %s -->\n", indent, this.text_);
+    end
   end
   
 end

@@ -10,9 +10,8 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
   % TODO: Namespace support
   % TODO: Parent references
   % TODO: normalize()
-  % TODO: pretty-print
-  % TODO: Make dumpText() work on arrays; probably by delegating to
-  % a protected dumpText_scalar()
+  % TODO: clone()
+  % TODO: XPath selection support
   
   %#ok<*MANU>
   %#ok<*INUSL>
@@ -84,6 +83,22 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
       strs = arrayfun(@(x) dumpText_scalar(x), this);
       out = strjoin(strs, "");
     end
+    
+    function out = prettyprint(this, opts)
+      % prettyprint Print in a nicely-formatted human-readable manner
+      %
+      % opts (jl.xml.PrettyPrintOptions)
+      if nargin < 2 || isempty(opts); opts = {}; end
+      opts = jl.xml.PrettyPrintOptions(opts);
+      str = prettyprint_step(this, 0, opts);
+      if nargout == 0
+        % Display as char because I don't like the extra indentation that
+        % displaying a string array gives you
+        disp(char(str));
+      else
+        out = str;
+      end
+    end
   end
   
   methods (Access = protected)
@@ -124,6 +139,11 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
       if ~isempty(extra)
         out = sprintf("%s (%s)", out, strjoin(extra, ", "));
       end
+    end
+    
+    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSD,STOUT>
+      error('jl:Unimplemented', ['Subclasses of Node must override ' ...
+        'prettyprint_step(); %s does not'], class(this));
     end
   end
 end

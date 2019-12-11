@@ -88,14 +88,33 @@ end
       end
     end
     
+    function out = xmlHeaderStr(this)
+      mustBeScalar(this);
+      standaloneStr = "";
+      if this.xmlStandalone
+        standaloneStr = "standalone=""yes""";
+      end
+      out = sprintf("<?xml version=""%s"" encoding=""%s"" %s?>", ...
+          this.xmlVersion, this.xmlEncoding, standaloneStr);
+    end
+    
     function out = dumpText_scalar(this)
-      s = sprintf("<?xml version=""%s"" encoding=""%s"" ?>\n", ...
-          this.xmlVersion, this.xmlEncoding);
+      s = sprintf("%s\n", this.xmlHeaderStr);
       if ~isnil(this.documentType)
         s = s + this.documentType.dumpText + newline;
       end
       s = s + this.rootNode.dumpText;
       out = s;
     end
-  end
+    
+    function out = prettyprint_step(this, indentLevel, opts) %#ok<INUSL>
+      % Ignore indentLevel because Documents are always root level
+      s = sprintf("%s\n", this.xmlHeaderStr);
+      if ~isnil(this.documentType)
+        s = s + this.documentType.dumpText + newline;
+      end
+      s = s + this.rootNode.prettyprint(opts);
+      out = s;
+    end
+end
 end

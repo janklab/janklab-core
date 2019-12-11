@@ -5,7 +5,8 @@ classdef Element < jl.xml.Node
   % same owner document as this.
   
   %#ok<*NASGU>
-  
+  %#ok<*AGROW>
+
   properties (Constant, Hidden)
     allowedChildTypes = ["jl.xml.Element", "jl.xml.Comment", ...
       "jl.xml.Text"];
@@ -98,19 +99,64 @@ classdef Element < jl.xml.Node
       end
     end
     
-    function out = dumpText_scalar(this)
+    function out = tagText(this)
+      mustBeScalar(this);
       attrStrs = strjoin(dispstrs(this.attributes), " ");
-      kidStrs = repmat(string(missing), size(this.children));
-      for i = 1:numel(this.children)
-        kidStrs(i) = this.children(i).dumpText;
-      end
       if isempty(attrStrs)
-        openTag = sprintf("<%s>", this.name);
+        out = this.name;
       else
-        openTag = sprintf("<%s %s>", this.name, attrStrs);
+        out = sprintf("%s %s", this.name, attrStrs);
       end
-      out = sprintf("%s%s</%s>", openTag, strjoin(kidStrs, ""), this.name);
     end
     
+    function out = dumpText_scalar(this)
+      if isempty(this.children)
+        out = sprintf("<%s/>", this.tagText);
+      else
+        kidStrs = repmat(string(missing), size(this.children));
+        for i = 1:numel(this.children)
+          kidStrs(i) = this.children(i).dumpText;
+        end
+        out = sprintf("<%s>%s</%s>", this.tagText, ...
+          strjoin(kidStrs, ""), this.name);
+      end
+    end
+    
+    function out = prettyprint_step(this, indentLevel, opts)
+      
+      indent = repmat('  ', [1 indentLevel]);
+
+      % Special tag text
+      attrStrs = dispstrs(this.attributes);
+      if isempty(attrStrs)
+        tagText = this.name;
+      else
+        if opts.attrsOnSeparateLines && numel(attrStrs) > 1
+          s = sprintf("%s", this.name);
+          for i = 1:numel(attrStrs)
+            s = s + newline + indent + "    " + attrStrs(i);
+          end
+          tagText = s;
+        else
+          tagText = sprintf("%s %s", this.name, strjoin(attrStrs, " "));
+        end
+      end
+      
+      if isempty(this.children)
+        out = sprintf("%s<%s/>\n", indent, tagText);
+      elseif isscalar(this.children) && isa(this.children, 'jl.xml.Text')
+        out = sprintf("%s<%s>%s</%s>\n", indent, tagText, ...
+          this.children(1).text, this.name);
+      else
+        s = string.empty;
+        for i = 1:numel(this.children)
+          s(end+1) = char(prettyprint_step(this.children(i), ...
+            indentLevel + 1, opts));
+        end
+        out = sprintf("%s<%s>\n%s%s</%s>\n", indent, tagText, ...
+          strjoin(s, ""), ...
+          indent, this.name);
+      end
+    end
   end
 end
