@@ -15,6 +15,7 @@ classdef Node < handle & matlab.mixin.Heterogeneous & jl.util.DisplayableHandle
   % TODO: normalize()
   % TODO: clone()
   % TODO: XPath selection support
+  % TODO: Convenient .child(...) access taking indexes or element names
   
   %#ok<*MANU>
   %#ok<*INUSL>

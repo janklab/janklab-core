@@ -4,6 +4,10 @@ classdef Text < jl.xml.Node
   % A Text represents basic textual content in an XML file. This is the
   % text stuff you see between <foo>...</foo> tags, that is not itself
   % another tag.
+  %
+  % Note that while Matlab chars are technically UCS-2, Text nodes in
+  % jl.xml.text may actually contain UTF-16 data, to allow for support of
+  % characters outside the Unicode Basic Multilingual Plane, such as emoji.
   
   % TODO: Escape pretty-printed text with XML entities
   
