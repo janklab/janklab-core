@@ -13,7 +13,7 @@ classdef PrettyPrintOptions
   %    high-level structure of a document. NOTE: This one is still a work
   %    in progress.
   
-  % TODO: Add a Depth option to coompletely elide deeper nodes
+  % TODO: Add a Depth option to completely elide deeper nodes
   
   properties
     attrsOnSeparateLines logical = false
@@ -28,7 +28,12 @@ classdef PrettyPrintOptions
       % jl.xml.PrettyPrintOptions({'Name',Val, ...})
       % jl.xml.PrettyPrintOptions('Name',Val, ...)
       %
-      % 'Name' can be the name of any property on this class.
+      % 'Name' can be the name of any property on this class. The
+      % properties are described in PrettyPrintOptions' class
+      % documentation.
+      %
+      % See also:
+      % jl.xml.PrettyPrintOptions
       args = varargin;
       if nargin == 0
         return

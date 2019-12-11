@@ -1,8 +1,7 @@
 classdef Text < jl.xml.Node
   % Text Textual content of an Element or Attr
   
-  % TODO: Add isIgnorableWhitespace()
-  % TODO: Escape pretty-printed text
+  % TODO: Escape pretty-printed text with XML entities
   
   properties
     text {mustBeScalarString} = ""
@@ -29,7 +28,7 @@ classdef Text < jl.xml.Node
     end
     
     function out = isIgorableWhitespace(this)
-      %isIgnorableWhitespace
+      % isIgnorableWhitespace
       %
       % NOTE: This is a HACK! It doesn't correspond to something that's
       % really defined in the XML spec. Use at your own risk.
