@@ -35,6 +35,13 @@ classdef Connection < handle
             % NOP
             return
         end
+        % Database Toolbox license check
+        [status,errmsg] = license('checkout','database_toolbox');
+        if ~status
+          error('jl:licensing:NoLicense', ['MDBC requires the Matlab ' ...
+            'Database Toolbox.\n\n%s'], errmsg);
+        end
+        % Real constructor logic
         this.jlConn = jlConn;
         this.dbmsFlavor = dbmsFlavor;
         this.columnTypeConversionMap = jl.mdbc.ColumnTypeConversionMap(...
