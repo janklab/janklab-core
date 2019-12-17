@@ -27,7 +27,7 @@ classdef java
         out = struct;
         scopes = fieldnames(s);
         for iScope = 1:numel(scopes)
-            out = jl.types.copyfields(out, s.(scopes{iScope}));
+            out = jl.datastruct.copyfields(out, s.(scopes{iScope}));
         end
         end
         
