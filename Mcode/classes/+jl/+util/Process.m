@@ -85,6 +85,9 @@ classdef Process < jl.util.DisplayableHandle
       this.stderr = proc.getErrorStream;
       % No buffering, since we're interacting with a process!
       this.stdin_txt = java.io.OutputStreamWriter(this.stdin);
+      % It would probably be fine to buffer these, but then the caller
+      % would have to be careful to only use either the InputStreams or the
+      % Readers, and not switch between them.
       this.stdout_txt = java.io.InputStreamReader(this.stdout);
       this.stderr_txt = java.io.InputStreamReader(this.stderr);
     end
