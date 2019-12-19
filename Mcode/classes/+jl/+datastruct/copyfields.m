@@ -1,7 +1,7 @@
 function out = copyfields(s, s2)
 %COPYFIELDS Copy field values between structs
 %
-% out = jl.types.copyfields(s, s2)
+% out = jl.datastruct.copyfields(s, s2)
 %
 % Copies fields from s2 to s. S2 and s may be structs, or any other type which
 % supports field access by dot-referencing and the fieldnames() function.
