@@ -5,12 +5,16 @@ classdef Process < jl.util.DisplayableHandle
   %
   % proc = jl.util.Process.run("ls")
   % output = proc.readText()
+  %
+  % See also:
+  % jl.util.ProcessBuilder
   
   % TODO: Expose the ProcessBuilder options like redirecting in/out/err,
   % setting environment and working directory, etc.
+  % TODO: Merge command and arguments into a single arg/property?
   
   properties (SetAccess = private)
-    % The underlying java.util.Process object
+    % The underlying java.lang.Process object
     proc
     % The process's PID, if known
     pid

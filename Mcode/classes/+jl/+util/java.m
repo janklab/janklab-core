@@ -12,7 +12,26 @@ classdef java
       % This does a Java Class.forName, but invokes it from within the dynamic
       % classpath's class loader, so all classes on the dynamic Java
       % classpath are visible.
+      % 
+      % If you want an inner (nested) class, you need to reference it with
+      % "$" notation, not "." notation. E.g.
+      % "java.lang.ProcessBuilder$Redirect", not
+      % "java.lang.ProcessBuilder.Redirect".
+      %
+      % Returns a java.lang.Class object.
       out = net.janklab.util.Reflection.classForName(name);
+    end
+    
+    function out = getStaticFieldOnClass(className, fieldName)
+      % Get a static field for a class
+      %
+      % Returns whatever Java value was in that static field.
+      %
+      % Examples:
+      % pipe = jl.util.java.getStaticFieldOnClass('java.lang.ProcessBuilder$Redirect', 'PIPE')
+      klass = jl.util.java.classForName(className);
+      reflectField = klass.getField(fieldName);
+      out = reflectField.get(klass);
     end
     
     function out = getPrivateFieldsCombined(jobj)
@@ -86,9 +105,9 @@ classdef java
       %CALLPRIVATECONSTRUCTOR Call a non-accessible constructor
       %
       % THIS IS A HACK. Using it may well break stuff.
-      if nargin < 2; argTypes = []; end
+      if nargin < 3; argTypes = []; end
       
-      if ischar(klass)
+      if ischar(klass) || isstring(klass)
         klass = jl.util.java.classForName(klass);
       end
       
@@ -113,16 +132,20 @@ classdef java
     end
     
     function out = callPrivateMethod(obj, methodName, args, argTypes)
-      %CALLPRIVATEMETHOD Call a non-accessible method
+      %CALLPRIVATEMETHOD Call a non-accessible method on an object
       %
       % THIS IS A HACK. Using it may well break stuff.
       if nargin < 3; args = {}; end
       if nargin < 4; argTypes = {}; end
-      jl.util.java.callPrivateMethodOn(obj, [], methodName, args, argTypes);
+      if nargout == 0
+        jl.util.java.callPrivateMethodOn(obj, [], methodName, args, argTypes);
+      else
+        out = jl.util.java.callPrivateMethodOn(obj, [], methodName, args, argTypes);
+      end
     end
     
     function out = callPrivateMethodOn(obj, objClass, methodName, args, argTypes)
-      %CALLPRIVATEMETHODON Call a non-accessible method
+      %CALLPRIVATEMETHODON Call a non-accessible method on an object, by class
       %
       % THIS IS A HACK. Using it may well break stuff.
       if nargin < 4; args = {}; end
@@ -142,8 +165,22 @@ classdef java
       methodArgs = boxArgsInJava(args);
       out = method.invoke(obj, methodArgs);
     end
+    
+    function out = callStaticMethod(klass, methodName, args, argTypes)
+      if nargin < 3; args = {}; end
+      if nargin < 4; argTypes = {}; end
+      
+      if ischar(klass) || isstring(klass)
+        klass = jl.util.java.classForName(klass);
+      end
+      
+      % Find the method
+      argClasses = argTypes2argClasses(args, argTypes);
+      method = klass.getDeclaredMethod(methodName, argClasses);
+      methodArgs = boxArgsInJava(args);
+      out = method.invoke([], methodArgs);
+    end
   end
-  
   
   methods (Access = private)
     function this = java()
