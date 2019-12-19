@@ -1,4 +1,4 @@
-classdef ProcessBuilderRedirect < handle
+classdef ProcessBuilderRedirect < jl.util.DisplayableHandle
   % Indicates an input or output redirection for a Process
   %
   % This class is only used with ProcessBuilder.
@@ -7,8 +7,6 @@ classdef ProcessBuilderRedirect < handle
   % jl.util.ProcessBuilder
   % jl.util.Process
 
-  % TODO: Custom display
-  
   %#ok<*PROP>
   
   properties
@@ -23,7 +21,7 @@ classdef ProcessBuilderRedirect < handle
     type
   end
   
-  properties (Constant, Hidden)
+  properties (Constant)
     % Special value indicating a pipe
     PIPE = jl.util.ProcessBuilderRedirect(jl.util.java.getStaticFieldOnClass(...
       'java.lang.ProcessBuilder$Redirect', 'PIPE'))
@@ -65,6 +63,30 @@ classdef ProcessBuilderRedirect < handle
       else
         out = char(this.jobj.type.toString);
       end
+    end
+  end
+  
+  methods (Access = protected)
+    function out = dispstr_scalar(this)
+      if isempty(this.jobj)
+        descr = '<null>';
+      else
+        switch this.type
+          case 'PIPE'
+            descr = 'PIPE';
+          case 'INHERIT'
+            descr = 'INHERIT';
+          case 'APPEND'
+            descr = sprintf('>> %s', this.file);
+          case 'READ'
+            descr = sprintf('< %s', this.file);
+          case 'WRITE'
+            descr = sprintf('> %s', this.file);
+          otherwise
+            descr = sprintf('<unrecognized type: %s>', this.type);
+        end
+      end
+      out = sprintf('ProcessBuilderRedirect: %s', descr);
     end
   end
   

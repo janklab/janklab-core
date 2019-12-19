@@ -1,4 +1,4 @@
-classdef ProcessBuilder < handle
+classdef ProcessBuilder < jl.util.DisplayableHandle
   % ProcessBuilder Launcher for processes with redirection, env, etc
   %
   % A ProcessBuilder lets you build up a new Process with input/output
@@ -9,8 +9,6 @@ classdef ProcessBuilder < handle
   % See also:
   % jl.util.Process
   
-  % TODO: Custom display
-
   properties (SetAccess = private)
     % The underlying java.lang.ProcessBuilder object
     jobj
@@ -144,6 +142,32 @@ classdef ProcessBuilder < handle
     end
   end
   
+  methods (Access = protected)
+    function out = dispstr_scalar(this)
+      if isempty(this.jobj)
+        out = 'ProcessBuilder: <null>';
+        return;
+      end
+      s.commandLine = this.commandLine;
+      if this.redirectErrorStream
+        s.redirectErrorStream = true; 
+      end
+      if ~isempty(this.directory)
+        s.directory = this.directory; %#ok<STRNU>
+      end
+      out = sprintf('ProcessBuilder:\n%s', chomp(evalc('disp(s)')));
+      envVars = fieldnames(this.envadd);
+      if ~isempty(envVars)
+        out = sprintf('%s\nEnvironment:', out);
+        for i = 1:numel(envVars)
+          out = sprintf('%s\n  %s = %s', out, envVars{i}, ...
+            this.envadd.(envVars{i}));
+        end
+        out = [out newline];
+      end
+    end
+  end
+  
   methods (Access = private)
     function setEnvVar(this, name, val)
       this.envadd.(name) = val;
@@ -151,4 +175,8 @@ classdef ProcessBuilder < handle
       envmap.put(name, val);
     end
   end
+end
+
+function out = chomp(str)
+out = regexprep(str, '\r?\n$', '');
 end
