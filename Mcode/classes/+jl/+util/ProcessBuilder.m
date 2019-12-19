@@ -146,9 +146,9 @@ classdef ProcessBuilder < handle
   
   methods (Access = private)
     function setEnvVar(this, name, val)
-      this.envadd(name) = val;
+      this.envadd.(name) = val;
       envmap = this.jobj.environment;
-      envmap.set(name, val);
+      envmap.put(name, val);
     end
   end
 end
