@@ -12,17 +12,22 @@ classdef ProcessBuilderRedirect < handle
   %#ok<*PROP>
   
   properties
+    % The underlying java.lang.ProcessBuilder.Redirect object
     jobj
   end
   
   properties (Dependent)
+    % The file this redirect is writing to or from, if any
     file
+    % The type of this redirect, as a string
     type
   end
   
   properties (Constant, Hidden)
+    % Special value indicating a pipe
     PIPE = jl.util.ProcessBuilderRedirect(jl.util.java.getStaticFieldOnClass(...
       'java.lang.ProcessBuilder$Redirect', 'PIPE'))
+    % Special value indicating inherited I/O
     INHERIT = jl.util.ProcessBuilderRedirect(jl.util.java.getStaticFieldOnClass(...
       'java.lang.ProcessBuilder$Redirect', 'INHERIT'))
   end
@@ -65,6 +70,7 @@ classdef ProcessBuilderRedirect < handle
   
   methods (Static)
     function out = appendTo(file)
+      % appendTo Create a new ProcessBuilderRedirect for appending to a file
       jFile = java.io.File(file);
       jobj = jl.util.java.callStaticMethod('java.lang.ProcessBuilder$Redirect', ...
         'appendTo', { jFile });
@@ -72,6 +78,7 @@ classdef ProcessBuilderRedirect < handle
     end
     
     function out = to(file)
+      % to Create a new ProcessBuilderRedirect for writing to a file
       jFile = java.io.File(file);
       jobj = jl.util.java.callStaticMethod('java.lang.ProcessBuilder$Redirect', ...
         'to', { jFile });
@@ -79,6 +86,7 @@ classdef ProcessBuilderRedirect < handle
     end
     
     function out = from(file)
+      % from Create a new ProcessBuilderRedirect for reading from a file
       jFile = java.io.File(file);
       jobj = jl.util.java.callStaticMethod('java.lang.ProcessBuilder$Redirect', ...
         'from', { jFile });

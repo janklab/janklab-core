@@ -1,6 +1,16 @@
 classdef Process < jl.util.DisplayableHandle
   % Process An external process that you can control and interact with
   %
+  % This class allows you to create, control, and interact with a
+  % subprocess using M-code. This differs from the system() and ! commands
+  % in that your M-code can interact with the process while it is still
+  % running, whereas system() and ! wait until the process completes and
+  % then return its results.
+  %
+  % I can't actually think of a practical use for this, aside from getting
+  % Matlab to play interactive adventure games like Zork, but here it is
+  % anyway.
+  %
   % Examples:
   %
   % proc = jl.util.Process.run("ls")
