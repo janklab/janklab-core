@@ -9,6 +9,9 @@ classdef ProcessBuilder < jl.util.DisplayableHandle
   % See also:
   % jl.util.Process
   
+  % TODO: A convenient way to access the full effective environment, not
+  % just envadd. But don't include that in the default display.
+  
   properties (SetAccess = private)
     % The underlying java.lang.ProcessBuilder object
     jobj
@@ -27,6 +30,12 @@ classdef ProcessBuilder < jl.util.DisplayableHandle
     command
     % The arguments after the command for the process
     arguments
+    % How to redirect the process's stdin
+    redirectInput
+    % How to redirect the process's stdout
+    redirectOutput
+    % How to redirect the process's stderr
+    redirectError
   end
   
   methods
@@ -67,6 +76,79 @@ classdef ProcessBuilder < jl.util.DisplayableHandle
     function set.redirectErrorStream(this, tf)
       mustBeScalarLogical(tf);
       this.jobj.redirectErrorStream(tf);
+    end
+    
+    function out = get.redirectInput(this)
+      out = jl.util.ProcessBuilderRedirect(this.jobj.redirectInput);
+    end
+    
+    function set.redirectInput(this, redirect)
+      if isempty(redirect)
+        this.jobj.redirectInput(jl.util.ProcessBuilderRedirect.PIPE.jobj);
+      elseif ischar(redirect) || isstring(redirect)
+        redirect = char(redirect);
+        if startsWith(redirect, '<')
+          redirect = redirect(2:end);
+        end
+        redirect = strtrim(redirect);
+        red = jl.util.ProcessBuilderRedirect.from(redirect);
+        this.jobj.redirectInput(red.jobj);
+      elseif isa(redirect, 'jl.util.ProcessBuilderRedirect')
+        this.jobj.redirectInput(redirect.jobj)
+      else
+        error('jl:InvalidInput', ['redirect must be a string or ' ...
+          'jl.util.ProcessBuilderRedirect; got a %s'], class(redirect));
+      end
+    end
+    
+    function out = get.redirectOutput(this)
+      out = jl.util.ProcessBuilderRedirect(this.jobj.redirectOutput);
+    end
+    
+    function set.redirectOutput(this, redirect)
+      if isempty(redirect)
+        this.jobj.redirectOutput(jl.util.ProcessBuilderRedirect.PIPE.jobj);
+      elseif ischar(redirect) || isstring(redirect)
+        redirect = char(redirect);
+        if startsWith(redirect, '>>')
+          file = strtrim(redirect(3:end));
+          red = jl.util.ProcessBuilderRedirect.appendTo(file);
+        else
+          file = strtrim(regexprep(redirect, '^>', ''));
+          red = jl.util.ProcessBuilderRedirect.to(file);
+        end
+        this.jobj.redirectOutput(red.jobj);
+      elseif isa(redirect, 'jl.util.ProcessBuilderRedirect')
+        this.jobj.redirectOutput(redirect.jobj)
+      else
+        error('jl:InvalidInput', ['redirect must be a string or ' ...
+          'jl.util.ProcessBuilderRedirect; got a %s'], class(redirect));
+      end
+    end
+    
+    function out = get.redirectError(this)
+      out = jl.util.ProcessBuilderRedirect(this.jobj.redirectError);
+    end
+    
+    function set.redirectError(this, redirect)
+      if isempty(redirect)
+        this.jobj.redirectError(jl.util.ProcessBuilderRedirect.PIPE.jobj);
+      elseif ischar(redirect) || isstring(redirect)
+        redirect = char(redirect);
+        if startsWith(redirect, '>>')
+          file = strtrim(redirect(3:end));
+          red = jl.util.ProcessBuilderRedirect.appendTo(file);
+        else
+          file = strtrim(regexprep(redirect, '^>', ''));
+          red = jl.util.ProcessBuilderRedirect.to(file);
+        end
+        this.jobj.redirectError(red.jobj);
+      elseif isa(redirect, 'jl.util.ProcessBuilderRedirect')
+        this.jobj.redirectError(redirect.jobj)
+      else
+        error('jl:InvalidInput', ['redirect must be a string or ' ...
+          'jl.util.ProcessBuilderRedirect; got a %s'], class(redirect));
+      end
     end
     
     function inheritIO(this)
@@ -153,7 +235,16 @@ classdef ProcessBuilder < jl.util.DisplayableHandle
         s.redirectErrorStream = true; 
       end
       if ~isempty(this.directory)
-        s.directory = this.directory; %#ok<STRNU>
+        s.directory = this.directory;
+      end
+      if ~isequal(this.redirectInput.type, 'PIPE')
+        s.redirectInput = shortstr(this.redirectInput);
+      end
+      if ~isequal(this.redirectOutput.type, 'PIPE')
+        s.redirectOutput = shortstr(this.redirectOutput);
+      end
+      if ~isequal(this.redirectError.type, 'PIPE')
+        s.redirectError = shortstr(this.redirectError); %#ok<STRNU>
       end
       out = sprintf('ProcessBuilder:\n%s', chomp(evalc('disp(s)')));
       envVars = fieldnames(this.envadd);

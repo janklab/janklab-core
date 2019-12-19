@@ -19,8 +19,6 @@ classdef Process < jl.util.DisplayableHandle
   % See also:
   % jl.util.ProcessBuilder
   
-  % TODO: Expose the ProcessBuilder options like redirecting in/out/err,
-  % setting environment and working directory, etc.
   % TODO: Merge command and arguments into a single arg/property?
   
   properties (SetAccess = private)

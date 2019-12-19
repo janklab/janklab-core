@@ -22,10 +22,12 @@ classdef ProcessBuilderRedirect < jl.util.DisplayableHandle
   end
   
   properties (Constant)
-    % Special value indicating a pipe
+    % Indicates that subprocess I/O will be connected to the current
+    % process via a pipe
     PIPE = jl.util.ProcessBuilderRedirect(jl.util.java.getStaticFieldOnClass(...
       'java.lang.ProcessBuilder$Redirect', 'PIPE'))
-    % Special value indicating inherited I/O
+    % Indicates that subprocess I/O source/destination will be the same as
+    % that of the current process
     INHERIT = jl.util.ProcessBuilderRedirect(jl.util.java.getStaticFieldOnClass(...
       'java.lang.ProcessBuilder$Redirect', 'INHERIT'))
   end
@@ -64,10 +66,9 @@ classdef ProcessBuilderRedirect < jl.util.DisplayableHandle
         out = char(this.jobj.type.toString);
       end
     end
-  end
-  
-  methods (Access = protected)
-    function out = dispstr_scalar(this)
+    
+    function out = shortstr(this)
+      mustBeScalar(this);
       if isempty(this.jobj)
         descr = '<null>';
       else
@@ -86,6 +87,13 @@ classdef ProcessBuilderRedirect < jl.util.DisplayableHandle
             descr = sprintf('<unrecognized type: %s>', this.type);
         end
       end
+      out = descr;
+    end
+  end
+  
+  methods (Access = protected)
+    function out = dispstr_scalar(this)
+      descr = shortstr(this);
       out = sprintf('ProcessBuilderRedirect: %s', descr);
     end
   end
