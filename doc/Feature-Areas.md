@@ -19,9 +19,28 @@ Janklab provides additional date/time types to supplement Matlab’s new `dateti
 
 These are found in the `jl.time` namespace.
 
+Note: `jl.time.duration` is probably going away because Matlab’s own `duration` object provides the same functionality.
+
 ## Validators
 
 Janklab provides several validator functions for use with Matlab R2017b’s new function-based object property validation feature. These are in the `validators` directory; browse through it to learn what's available.
+
+## MDBC Database Connectivity
+
+MDBC is an extension to the Matlab Database Toolbox that provides additional features and improved performance.
+
+Additional features:
+
+* Placeholders and bound parameters in SQL queries
+* `datetime`, `categorical`, `BigDecimal`, and other types in result sets and inserts
+* Prepared statements
+* SQL query tracing
+* Larger data sets for inserts and query result sets
+* Multiple result sets and out-of-band management data support
+
+Performance of MDBC is improved in some cases over the JDBC mode of the Database Toolbox. This is accomplished by using custom column buffering code and other optimizations down in the Java layer.
+
+MDBC is an extension to the Database Toolbox, not a replacement for it. But you still need to use the new API and objects that MDBC provides, instead of using the regular Database Toolbox API.
 
 ## Data Structures
 
