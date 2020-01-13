@@ -15,6 +15,7 @@ Janklab TODO
 ### Code
 
 * Add spaces between output arguments in planargen code.
+  * Or don’t. I’m actually not sure which style I prefer.
 * Change `isna` to be Octave-compatible, and respect the new `ismissing` indicators in recent Matlab versions.
 * Refactor the validators to just do all the name-gathering and message construction inline; it’s not worth having that `reportBadValue`; its error messages just aren’t flexible enough.
 * Maybe rename `nop` to `pass` to be like Python
