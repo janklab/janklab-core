@@ -17,7 +17,7 @@ classdef Connection < handle
     end
     properties (Access = protected)
         % Logger for SQL tracing
-        traceLog = logm.Logger.getLogger('jl.mdbc.trace');
+        traceLog = logger.Logger.getLogger('jl.mdbc.trace');
     end
     properties (Dependent)
         jdbcConn              % The underlying JDBC Connection object

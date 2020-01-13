@@ -16,7 +16,7 @@ classdef Statement < handle
         connection
     end
     properties (Access = protected)
-        traceLog = logm.Logger.getLogger('jl.mdbc.trace');
+        traceLog = logger.Logger.getLogger('jl.mdbc.trace');
     end
     properties
         % Rows per chunk when fetching results
@@ -122,7 +122,7 @@ classdef Statement < handle
         
         function out = fetchCurrentResultSet(this)
         %FETCHCURRENTRESULTSET
-        log = logm.Logger.getLogger('jl.mdbc');
+        log = logger.Logger.getLogger('jl.mdbc');
         jResultSet = this.jdbc.getResultSet();
         rsMeta = jl.mdbc.jdbc.RSMetaData(jResultSet.getMetaData());
         nCols = rsMeta.columnCount;

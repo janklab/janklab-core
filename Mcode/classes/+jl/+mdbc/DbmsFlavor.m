@@ -72,7 +72,7 @@ classdef DbmsFlavor < handle
         if isfield(s.mdbc.registeredFlavors, flavorName)
             flavorClass = s.mdbc.registeredFlavors.(flavorName);
         else
-            logm.debug(['No handler registered for DBMS flavor ''%s'';' ...
+            logger.debug(['No handler registered for DBMS flavor ''%s'';' ...
                 'falling back to generic flavor.'], flavorName);
             flavorClass = 'jl.mdbc.DbmsFlavor';
         end
