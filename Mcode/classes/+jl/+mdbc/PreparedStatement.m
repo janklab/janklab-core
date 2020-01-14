@@ -37,10 +37,10 @@ classdef PreparedStatement < jl.mdbc.Statement
         display(dispstr(this));
         end
         
-        function out = execute(this, params)
+        function out = exec(this, params)
         % Execute statement with given parameters
         %
-        % out = execute(this, params)
+        % out = exec(this, params)
         %
         % This is the general case of execution, where the results may be any
         % combination of update counts and ResultSets.
@@ -49,7 +49,7 @@ classdef PreparedStatement < jl.mdbc.Statement
         % placeholders in this's previously prepared statement. It may also be []
         % or omitted to indicate no parameters are to be bound.
         %
-        % Returns a jl.mdbc.Results.
+        % Returns a jl.mdbc.Results object.
         if nargin < 2 || isempty(params);  params = {}; end
         
         t0 = tic;
@@ -69,7 +69,7 @@ classdef PreparedStatement < jl.mdbc.Statement
             params, 'UniformOutput',false));
         logDetails = sprintf('%s\n  Params: %s', ...
             this.sql, strjoin(paramDescrs, ', '));
-        this.traceLog.debugj('SQL EXECUTE\n%s\n  %s in %0.3f s', ...
+        this.traceLog.debugj('SQL EXEC\n%s\n  %s in %0.3f s', ...
             logDetails, summaryString(out), te);
         end
         

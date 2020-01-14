@@ -227,15 +227,15 @@ classdef Connection < handle
         % Create a statement that does not use placeholders
         %
         % You will generally not need to use this; it's provided just for
-        % completeness. Use execute() instead.
+        % completeness. Use exec() instead.
         jdbcStatement = this.jdbcConn.createStatement();
         out = jl.mdbc.Statement(this, sql, jdbcStatement);
         end
         
-        function out = execute(this, sql, params, options)
-        %EXECUTE Execute a statement and return its results
+        function out = exec(this, sql, params, options)
+        %EXEC Execute a statement and return its results
         %
-        % out = execute(obj, sql, params, options)
+        % out = exec(obj, sql, params, options)
         %
         % Sql (char) is the SQL statement to execute.
         %
@@ -249,7 +249,8 @@ classdef Connection < handle
         %     symbols instead of strings. Useful for efficiently retrieving
         %     low-cardinality string data.
         %
-        % Returns a jl.mdbc.Results.
+        % Returns a jl.mdbc.Results object.
+        narginchk(2, 4);
         if nargin < 3 || isempty(params);    params = [];  end
         if nargin < 4 || isempty(options);   options = []; end
         options = jl.util.parseOpts(options, {
@@ -265,9 +266,9 @@ classdef Connection < handle
             stmt.columnTypeConversionMap.useAllStringsAsSymbols();
         end
         if isempty(params)
-            out = stmt.execute();
+            out = stmt.exec();
         else
-            out = stmt.execute(params);
+            out = stmt.exec(params);
         end
         end
         

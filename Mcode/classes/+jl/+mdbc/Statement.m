@@ -51,19 +51,19 @@ classdef Statement < handle
         display(dispstr(this));
         end
         
-        function out = execute(this)
-        % Execute the statement
+        function out = exec(this)
+        % EXEC Execute the statement
         %
-        % out = execute(obj)
+        % out = exec(obj)
         %
         % Executes the statement, returning all results.
         %
-        % Returns a jl.mdbc.Results.
+        % Returns a jl.mdbc.Results object.
         t0 = tic;
         execStatus = this.jdbc.execute(this.sql);
         out = this.fetchAllResults(execStatus);
         te = toc(t0);
-        this.traceLog.debug('SQL: EXECUTE\n  %s\n  %s in %0.3f s', ...
+        this.traceLog.debug('SQL: EXEC\n  %s\n  %s in %0.3f s', ...
             this.sql, summaryString(out), te);
         end
         
