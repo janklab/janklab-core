@@ -14,13 +14,13 @@ classdef QueryBuilder
     % supports easy construction of a set of them in a form that happens a lot in
     % data analysis.
     %
-    % The query in a SqlQueryBuildern is broken down in to a set of clauses common in SQL 
+    % The query in a SqlQueryBuildern is broken down in to a set of clauses common in SQL
     % statements, each of which holds a list of SQL fragments. These fragments and
     % clauses are then combined to produce the resulting SQL statement as a string.
     % Each of the clauses combines its fragments using a predefined combining
     % operator or "glue". Certain clauses do not have glue because they only
     % support single values.
-    % 
+    %
     % Clause              Glue       Notes
     % ---------------     ---------  --------------
     % Select              ,
@@ -77,65 +77,65 @@ classdef QueryBuilder
     
     methods
         function this = QueryBuilder(arg)
-        % Construct a new QueryBuilder
-        %
-        % QB = jl.sql.QueryBuilder()
-        % QB = jl.sql.QueryBuilder(spec)
-        % QB = jl.sql.QueryBuilder({
-        %     'clause1'      values1
-        %     'clause2'      values2
-        % });
-        %
-        % Constructs a new QueryBuilder from a "spec" cell array that contains names
-        % of clauses and values to stick in them.
-        %
-        % This constructor argument format is intended to make the code readable and
-        % resemble equivalent SQL queries.
-        %
-        % Examples:
-        %
-        % QB = jl.sql.QueryBuilder({
-        %     'SELECT'      {'PNum' 'PName' 'Color'}
-        %     'FROM'        'P'
-        %     'WHERE'       'Weight > 13'
-        % });
-        if nargin == 0
-            return
-        end
-        mustBeA(arg, 'cell');
-        validClauses = [jl.sql.QueryBuilder.clauseMap(:,1); {'distinct'; 'top'}];
-        for i = 1:size(arg, 1)
-            [clause,values] = arg{i,:};
-            clause = lower(clause);
-            if ~ismember(clause, validClauses)
-                error('Invalid clause: ''%s''', clause);
+            % Construct a new QueryBuilder
+            %
+            % QB = jl.sql.QueryBuilder()
+            % QB = jl.sql.QueryBuilder(spec)
+            % QB = jl.sql.QueryBuilder({
+            %     'clause1'      values1
+            %     'clause2'      values2
+            % });
+            %
+            % Constructs a new QueryBuilder from a "spec" cell array that contains names
+            % of clauses and values to stick in them.
+            %
+            % This constructor argument format is intended to make the code readable and
+            % resemble equivalent SQL queries.
+            %
+            % Examples:
+            %
+            % QB = jl.sql.QueryBuilder({
+            %     'SELECT'      {'PNum' 'PName' 'Color'}
+            %     'FROM'        'P'
+            %     'WHERE'       'Weight > 13'
+            % });
+            if nargin == 0
+                return
             end
-            this.(clause) = values;
+            mustBeA(arg, 'cell');
+            validClauses = [jl.sql.QueryBuilder.clauseMap(:,1); {'distinct'; 'top'}];
+            for i = 1:size(arg, 1)
+                [clause,values] = arg{i,:};
+                clause = lower(clause);
+                if ~ismember(clause, validClauses)
+                    error('Invalid clause: ''%s''', clause);
+                end
+                this.(clause) = values;
+            end
         end
-        end
-
+        
         function this = set.select(this, val)
-        this.select = cellstr(val);
+            this.select = cellstr(val);
         end
         
         function this = set.from(this, val)
-        this.from = cellstr(val);
+            this.from = cellstr(val);
         end
         
         function this = set.where(this, val)
-        this.where = cellstr(val);
+            this.where = cellstr(val);
         end
         
         function this = set.groupBy(this, val)
-        this.groupBy = cellstr(val);
+            this.groupBy = cellstr(val);
         end
         
         function this = set.having(this, val)
-        this.having = cellstr(val);
+            this.having = cellstr(val);
         end
         
         function this = set.orderBy(this, val)
-        this.orderBy = cellstr(val);
+            this.orderBy = cellstr(val);
         end
         
         function disp(this)
@@ -146,10 +146,10 @@ classdef QueryBuilder
             end
             fprintf('QueryBuilder:\n%s\n', sql);
         end
-
+        
         function this = set.format(this, newValue)
-        mustBeValidFormat(newValue);
-        this.format = newValue;
+            mustBeValidFormat(newValue);
+            this.format = newValue;
         end
         
         function out = char(this)
@@ -234,7 +234,7 @@ classdef QueryBuilder
                     if isequal(lineLocation, 'before')
                         out = sprintf('\n       %s', str);
                     else
-                       out = sprintf('%s\n        ', str);
+                        out = sprintf('%s\n        ', str);
                     end
                 otherwise
                     error('Invalid format');
