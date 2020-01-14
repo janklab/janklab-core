@@ -5,6 +5,8 @@ classdef Statement < handle
     %
     % See also: PREPAREDSTATEMENT, CALLABLESTATEMENT
     
+    %#ok<*INUSL>
+    
     properties (GetAccess = public, SetAccess = private)
         % The underlying JDBC Statement. May be a subclass.
         jdbc
