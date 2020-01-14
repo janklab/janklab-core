@@ -6,8 +6,8 @@ classdef ColumnTypeConversionMap < handle
         jval
         % Maps strategy names to Matlab implementation classes
         strategyMap = struct;
-        % The fallback map
-        fallback jl.mdbc.ColumnTypeConversionMap
+        % The fallback map, a jl.mdbc.ColumnTypeConversionMap
+        fallback
     end
     properties (Dependent)
         label
