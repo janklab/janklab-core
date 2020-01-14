@@ -183,7 +183,7 @@ classdef Mdbc
         out.dbmsFlavor.initializeConnection(out);
         te = toc(t0);
         
-        jl.mdbc.Mdbc.traceLog.debugf('SQL CONNECT: %s (flavor %s) (in %0.3f s)', ...
+        jl.mdbc.Mdbc.traceLog.debugj('SQL CONNECT: %s (flavor %s) (in %0.3f s)', ...
             url, dbmsFlavorName, te);
         end
         
