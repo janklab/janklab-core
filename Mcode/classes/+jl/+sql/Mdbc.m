@@ -134,6 +134,7 @@ classdef Mdbc
                 'jl.time.localdate' 'jl.sql.paramconv.LocalDateParamConversion'
                 'jl.time.localtime' 'jl.sql.paramconv.LocalTimeParamConversion'
                 'jl.time.timestamp' 'jl.sql.paramconv.TimestampParamConversion'
+                'datetime'  'jl.sql.paramconv.TimestampParamConversion'
                 });
         end
         
