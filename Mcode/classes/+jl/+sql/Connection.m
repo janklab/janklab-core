@@ -1,5 +1,7 @@
 classdef Connection < handle
     % A connection to a database
+    %
+    %
     
     % Dev note: A Connection object "owns" the underlying jlConn and jdbConn
     % objects. It will close them upon cleanup, and they cannot be shared with
@@ -245,26 +247,21 @@ classdef Connection < handle
             % in sql. If your statement does not have placeholder parameters, you
             % may omit params by omitting the argument or passing [].
             %
-            % Options is a set of options that controls the behavior of this
-            % statement execution. Available options:
-            %   AllStringsAsSymbols - All character data will be retrieved as
-            %     symbols instead of strings. Useful for efficiently retrieving
-            %     low-cardinality string data.
+            % Options is a jl.sql.QueryOptions object that controls the behavior of this
+            % statement execution.
             %
             % Returns a jl.sql.Results object.
             narginchk(2, 4);
             if nargin < 3 || isempty(params);    params = [];  end
             if nargin < 4 || isempty(options);   options = []; end
-            options = jl.util.parseOpts(options, {
-                'AllStringsAsSymbols'   false
-                });
+            options = jl.sql.QueryOptions(options);
             
             if isempty(params)
                 stmt = this.createStatement(sql);
             else
                 stmt = this.prepareStatement(sql);
             end
-            if options.AllStringsAsSymbols
+            if isequal(options.textReturnFormat, 'symbol')
                 stmt.columnTypeConversionMap.useAllStringsAsSymbols();
             end
             if isempty(params)
@@ -282,6 +279,15 @@ classdef Connection < handle
             % Runs a query (SQL statement) that is expected to return one
             % result set, and returns that single result set.
             %
+            % Sql (char) is the SQL statement to execute.
+            %
+            % Params (cell) is the list of values to bind to placeholder parameters
+            % in sql. If your statement does not have placeholder parameters, you
+            % may omit params by omitting the argument or passing [].
+            %
+            % Options is a jl.sql.QueryOptions object that controls the behavior of this
+            % statement execution.
+            %
             % If the query produces multiple result sets, warns and returns
             % just the first result set.
             %
@@ -290,9 +296,8 @@ classdef Connection < handle
             narginchk(2, 4);
             if nargin < 3 || isempty(params);    params = [];  end
             if nargin < 4 || isempty(options);   options = []; end
-            options = jl.util.parseOpts(options, {
-                'AllStringsAsSymbols'   false
-                });
+            options = jl.sql.QueryOptions(options);
+
             rslts = exec(this, sql, params, options);
             
             % TODO: Decide what to do with the result's sqlWarnings. Log them?
@@ -332,17 +337,18 @@ classdef Connection < handle
             % Table (char) is the name of the SQL table to insert to. It may be
             % qualified by database and schema if the database driver supports it.
             %
-            % Data (relation,table) is the set of data to be inserted to table. The
+            % Data (table,relation) is the set of data to be inserted to table. The
             % column/variable names in data must match columns in the target table.
             %
-            % Options:
-            %   * QuoteColumnNames (logical) - enables
+            % Options is a jl.sql.InsertOptions object that controls the
+            % behavior of the insert.
             %
-            % Returns a jl.sql.BatchUpdateResults object, or may throw an error if
-            % one or more of the updates failed.
+            % Returns a jl.sql.BatchUpdateResults object. Raises an error if
+            % one or more of the updates failed. Note that even if an error
+            % is raised, the update may have partially succeeded!
             
             if nargin < 4 || isempty(options); options = [];  end
-            options = jl.util.parseOpts(options, {'QuoteColumnNames',false});
+            options = jl.sql.InsertOptions(options);
             
             % Check inputes
             if isa(data, 'table')
@@ -353,6 +359,7 @@ classdef Connection < handle
             mustBeValidSqlTableName(table);
             % Can we do some validation of the column names to prevent SQL injection
             % issues here?
+            % TODO: Auto-detect whether column name identifier quoting is necessary?
             
             % Insert
             t0 = tic;
@@ -360,7 +367,7 @@ classdef Connection < handle
             nCols = numel(colNames);
             % Using quoted column names can make the logic stricter and cause
             % breakage with PostgreSQL. Let's leave it off by default
-            if options.QuoteColumnNames
+            if options.quoteColumnNames
                 colNames = sprintfv('"%s"', colNames);
             end
             sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', ...
