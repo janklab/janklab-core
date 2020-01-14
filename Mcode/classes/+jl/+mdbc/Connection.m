@@ -38,8 +38,8 @@ classdef Connection < handle
         % Database Toolbox license check
         [status,errmsg] = license('checkout','database_toolbox');
         if ~status
-          error('jl:licensing:NoLicense', ['MDBC requires the Matlab ' ...
-            'Database Toolbox.\n\n%s'], errmsg);
+            error('jl:licensing:NoLicense', ['MDBC requires the Matlab ' ...
+                'Database Toolbox.\n\n%s'], errmsg);
         end
         % Real constructor logic
         this.jlConn = jlConn;
@@ -272,6 +272,10 @@ classdef Connection < handle
         end
         end
         
+        function out = query(this, sql, params, options)
+        % QUERY Run a query that returns a single result set
+        end
+        
         function out = insert(this, table, data, options)
         %INSERT Insert data into a table
         %
@@ -286,7 +290,7 @@ classdef Connection < handle
         % column/variable names in data must match columns in the target table.
         %
         % Options:
-        %   * QuoteColumnNames (logical) - enables 
+        %   * QuoteColumnNames (logical) - enables
         %
         % Returns a jl.mdbc.BatchUpdateResults object, or may throw an error if
         % one or more of the updates failed.

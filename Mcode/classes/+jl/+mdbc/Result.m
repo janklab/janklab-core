@@ -22,7 +22,7 @@ classdef Result
             this.resultSet = in;
         elseif isa(in, 'table')
             this.type = 'ResultSet';
-            this.resultSet = in;            
+            this.resultSet = in;
         else
             error('jl:InvalidInput', 'Invalid input type: %s', class(in));
         end
@@ -62,7 +62,7 @@ classdef Result
                 out = sprintf('%d updates', this.updateCount);
             otherwise
                 out = '<invalid type>';
-        end            
+        end
         end
     end
     

@@ -115,7 +115,7 @@ classdef ColumnTypeConversionMap < handle
         function out = debugDump(this)
         out = char(this.jval.debugDump);
         out = sprintf('%sStrategy Class Map:\n%s', out, ...
-            this.debugDumpStrategyMap);        
+            this.debugDumpStrategyMap);
         if nargout == 0
             disp(out); %#ok<DSPS>
             clear out
