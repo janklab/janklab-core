@@ -43,7 +43,7 @@ xlabel('Connect/Close Time in milliseconds');
 end
 
 function out = connectDb(connInfo)
-out = jl.mdbc.Mdbc.connectFromJdbcUrl(connInfo.url, connInfo.user, ...
+out = jl.sql.Mdbc.connectFromJdbcUrl(connInfo.url, connInfo.user, ...
     connInfo.password);
 end
 

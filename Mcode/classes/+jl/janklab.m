@@ -17,7 +17,7 @@ classdef janklab
             logger.Log4jConfigurator.configureBasicConsoleLogging();
             
             % Initialize MDBC
-            jl.mdbc.Mdbc.initMdbc();
+            jl.sql.Mdbc.initMdbc();
             
             % Add common synchronized folders, as a developer convenience
             addSynchronizedFoldersToPath();
