@@ -124,26 +124,26 @@ classdef (Abstract) intn < jl.util.Displayable
 		function out = plus(a, b)
 			[a,b] = promote(a, b);
 			out = a;
-			out.ints = a.ints + b.ints;
+			out.ints = plus(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
 		end
 		
 		function out = minus(a, b)
 			[a,b] = promote(a, b);
 			out = a;
-			out.ints = a.ints - b.ints;
+			out.ints = minus(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
 		end
 		
 		function out = uminus(a)
 			out = a;
-			out.ints = -out.ints;
+			out.ints = uminus(out.ints);
 		end
 		
 		function out = times(a, b)
 			[a,b] = promote(a, b);
 			out = a;
-			out.ints = a.ints .* b.ints;
+			out.ints = times(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
 		end
 		
@@ -165,14 +165,14 @@ classdef (Abstract) intn < jl.util.Displayable
 		function out = ldivide(a, b)
 			[a,b] = promote(a, b);
 			out = a;
-			out.ints = a.ints .\ b.ints;
+			out.ints = ldivide(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
 		end
 		
 		function out = rdivide(a, b)
 			[a,b] = promote(a, b);
 			out = a;
-			out.ints = a.ints ./ b.ints;
+			out.ints = rdivide(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
 		end
 		
