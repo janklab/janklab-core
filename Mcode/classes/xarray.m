@@ -591,6 +591,10 @@ classdef (Sealed) xarray
       % into the values of the output xarrays. Each valCol will produce one
       % argout which contains the values from that corresponding input column.
       % Defaults to all columns in tbl which are not named in keyCols.
+      %
+      % Examples:
+      % [s,p,sp] = jl.examples.table.SpDb;
+      % xarr = xarray.pivot(sp, {'SNum','PNum'})
       if nargin < 3; valCols = []; end
       keyCols = string(keyCols);
       cols = tbl.Properties.VariableNames;
