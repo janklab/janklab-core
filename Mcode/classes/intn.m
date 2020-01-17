@@ -6,6 +6,15 @@ classdef (Abstract) intn < jl.util.Displayable
 	% INTN is the abstract base type for all the various [u]int*n
 	% classes. Each size of integer has its own concrete subclass.
 	%
+	% To use INTN, create an array using one of its numeric-type-specific
+	% subclasses, and then work with that.
+	%
+	% Examples:
+	%
+	% x = int32n([1 2 NaN 4])
+	% isnan(x)
+	% y = x .* 3
+	% 
 	% See also:
 	% INT8N, UINT8N, INT16N, UINT16N, INT32N, UINT32N, INT64N, UINT64N
 
