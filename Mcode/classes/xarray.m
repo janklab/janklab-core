@@ -8,7 +8,6 @@ classdef (Sealed) xarray
   % TODO: isequal, isequaln, eq, ne, < > <= >= relops
   % TODO: Promotion of plain arrays in arithmetic and relops
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
-  % TODO: shiftdims
   % TODO: DataUnits
   % TODO: 1- and 0-dim values: since we have labels and names along dims, a 2-D
   % xarray is not the same as a vector or a 0-by-0 empty! Decide what the
@@ -226,6 +225,17 @@ classdef (Sealed) xarray
       out.vals = squeeze(this.vals);
       out.labels(ixScalar) = [];
       out.dimNames(ixScalar) = [];
+    end
+    
+    function out = shiftdim(this, n)
+      if nargin == 1
+        % TODO: implement 1-arg shiftdim
+        error('The 1-arg form of shiftdim is unimplemented for xarray');
+      end
+      out = this;
+      out.vals = shiftdim(this.vals, n);
+      out.dimNames = circshift(this.dimNames, n);
+      out.labels = circshift(this.labels, n);
     end
     
     function varargout = apply(fcn, a, b, varargin)
