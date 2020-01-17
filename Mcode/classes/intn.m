@@ -17,11 +17,13 @@ classdef (Abstract) intn < jl.util.Displayable
 	% x = int32n([1 2 NaN 4])
 	% isnan(x)
 	% y = x .* 3
+	% unique([x x x])
 	% 
 	% See also:
 	% INT8N, UINT8N, INT16N, UINT16N, INT32N, UINT32N, INT64N, UINT64N
 
-	% TODO: Array display
+	% TODO: Max, min, mean, median, sum, prod, diff
+	% TODO: cumprod, cumsum
 	
 	% @planarprecedence(tfnan,ints)
 	
