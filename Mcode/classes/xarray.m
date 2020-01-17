@@ -198,7 +198,6 @@ classdef xarray
         keyVals = tbl.(keyCols{iKey});
         [uKeys,Indx,Jndx] = unique(keyVals);
         labels{iKey} = uKeys;
-        % TODO: Figure out how to do the index mapping
         ixs{iKey} = Jndx;
       end
       % Here's the magic
@@ -218,7 +217,9 @@ classdef xarray
       for iOut = 1:numel(valCols)
         xarr = template;
         valsIn = tbl.(valCols(iOut));
-        xarr.vals = valsIn(ix);
+        valsOut = repmat(fillValFor(valsIn), sz);
+        valsOut(ix) = valsIn;
+        xarr.vals = valsOut;
         varargout{iOut} = xarr;
       end
     end
@@ -260,4 +261,13 @@ classdef xarray
       out.labels{iDim} = this.labels{iDim}(ix);
     end
   end
+end
+
+function out = fillValFor(x)
+if isempty(x)
+  x = feval(class(x)); % Hope this produces a valid scalar object
+end
+tmp = x(1);
+tmp(3) = x(1);
+out = tmp(2);
 end

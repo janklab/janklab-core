@@ -10,6 +10,8 @@ function out = ellipses(x, n)
 %
 % Returns a scalar string
 
+if nargin < 2 || isempty(n); n = 40; end
+
 strs = dispstrs(x);
 strs = strs(:)';
 if numel(strs) > n
