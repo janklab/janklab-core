@@ -51,13 +51,8 @@ classdef (Sealed) DataArray
   % TODO: Broadcasting and scalar expansion! Broadcasting should operate by
   %       dimension name, not position.
   % TODO: groupby()
-  % TODO: Rename align() to align() to be like Python xarray?
-  % TODO: Label-based indexing where you name a dimension instead of
-  %       passing it in to a positional parameter in {}-indexing. (sel()
-  %       and isel())
   % TODO: Support dimensions without coordinates?
   % TODO: sortrows, N-D generalization of sortrows
-  % TODO: Update valuesName based on function application
   % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
@@ -365,24 +360,31 @@ classdef (Sealed) DataArray
     function out = or(a, b)
       [a,b] = promote(a, b);
       mustBeSameDimStructure(a, b);
-      out = or(a.values, b.values);
+      out = a;
+      out.values = or(a.values, b.values);
+      out.valueName = maybeSprintf('(%s | %s)', a.valueName, b.valueName);
     end
     
     function out = and(a, b)
       [a,b] = promote(a, b);
       mustBeSameDimStructure(a, b);
-      out = and(a.values, b.values);
+      out = a;
+      out.values = and(a.values, b.values);
+      out.valueName = maybeSprintf('(%s & %s)', a.valueName, b.valueName);
     end
     
     function out = xor(a, b)
       [a,b] = promote(a, b);
       mustBeSameDimStructure(a, b);
-      out = xor(a.values, b.values);
+      out = a;
+      out.values = and(a.values, b.values);
+      out.valueName = maybeSprintf('(%s XOR %s)', a.valueName, b.valueName);
     end
     
     function out = not(this)
       out = this;
       out.values = not(this.values);
+      out.valueName = maybeSprintf('~%s', this.valueName);
     end
     
     function varargout = apply(fcn, a, b, varargin)
@@ -420,31 +422,39 @@ classdef (Sealed) DataArray
       varargout = cell(size(outvalues));
       for i = 1:numel(outvalues)
         outvalues{i} = DataArray(outvalues{i}, a.coords, a.dims);
+        outvalues{i}.valueName = maybeSprintf('%s(%s, %s)', ...
+          func2str(fcn), a.valueName, b.valueName);
       end
     end
     
     function out = plus(a, b, varargin)
       out = apply(@plus, a, b, varargin{:});
+      out.valueName = maybeSprintf('(%s + %s)', a.valueName, b.valueName);
     end
     
     function out = minus(a, b, varargin)
       out = apply(@minus, a, b, varargin{:});
+      out.valueName = maybeSprintf('(%s - %s)', a.valueName, b.valueName);
     end
     
     function out = times(a, b, varargin)
       out = apply(@times, a, b, varargin{:});
+      out.valueName = maybeSprintf('(%s .* %s)', a.valueName, b.valueName);
     end
     
     function out = ldivide(a, b, varargin)
       out = apply(@ldivide, a, b, varargin{:});
+      out.valueName = maybeSprintf('(%s .\ %s)', a.valueName, b.valueName);
     end
     
     function out = rdivide(a, b, varargin)
       out = apply(@rdivide, a, b, varargin{:});
+      out.valueName = maybeSprintf('(%s ./ %s)', a.valueName, b.valueName);
     end
     
     function out = mod(a, b, varargin)
       out = apply(@mod, a, b, varargin{:});
+      out.valueName = maybeSprintf('mod(%s, %s)', a.valueName, b.valueName);
     end
     
     function out = mtimes(a, b, varargin)
@@ -469,11 +479,13 @@ classdef (Sealed) DataArray
       out.values = mtimes(a.values, b.values);
       out.coords{2} = b.coords{2};
       out.dims(2) = b.dims(2);
+      out.valueName = maybeSprintf('(%s * %s)', a.valueName, b.valueName);
     end
     
     function out = uminus(this)
       out = this;
       out.values = uminus(this.values);
+      out.valueName = maybeSprintf('(-%s)', this.valueName);
     end
     
     function out = sum(this, varargin)
@@ -510,6 +522,7 @@ classdef (Sealed) DataArray
       for iDim = 1:numel(dimvec)
         out.coords{dimvec(iDim)} = fillValFor(this.coords{dimvec(iDim)});
       end
+      out.valueName = maybeSprintf('sum(%s)', this.valueName);
     end
     
     function out = sortdims(this)
@@ -640,6 +653,56 @@ classdef (Sealed) DataArray
     
     function out = loc(this, coordss)
       out = subsetByCoords(this, coordss);
+    end
+    
+    function out = isel(this, ixs)
+      %ISEL Indexing by dimension name and numeric/logical indexes
+      %
+      % out = isel(this, ixs)
+      %
+      % ix is a struct, cellvec, or name/value pair cell array, where the
+      % names are dimension names, and the values are indexes to use along
+      % those dimensions.
+      ixsOut = repmat({':'}, [1 ndims(this)]);
+      ixs = jl.datastruct.cellrec(ixs);
+      for i = 1:size(ixs, 1)
+        [dim,ix] = ixs{i,:};
+        [tf,loc] = ismember(dim, this.dims);
+        if ~tf
+          name = inputname(1);
+          if isempty(name)
+            name = 'input';
+          end
+          error('No such dim in %s: %s', name, dim);
+        end
+        ixsOut{loc} = ix;
+      end
+      out = subsetByIndex(this, ixsOut);
+    end
+    
+    function out = sel(this, ixs)
+      %SEL Indexing by dimension name and coordinate values
+      %
+      % out = isel(this, ixs)
+      %
+      % ix is a struct, cellvec, or name/value pair cell array, where the
+      % names are dimension names, and the values are coordinates to look
+      % up along those dimensions.
+      coordsOut = repmat({':'}, [1 ndims(this)]);
+      ixs = jl.datastruct.cellrec(ixs);
+      for i = 1:size(ixs, 1)
+        [dim,ix] = ixs{i,:};
+        [tf,loc] = ismember(dim, this.dims);
+        if ~tf
+          name = inputname(1);
+          if isempty(name)
+            name = 'input';
+          end
+          error('No such dim in %s: %s', name, dim);
+        end
+        coordsOut{loc} = ix;
+      end
+      out = subsetByCoords(this, coordsOut);
     end
     
     function out = coords2subs(this, coordss)
@@ -914,4 +977,13 @@ if numel(strs) > n
   strs(end+1) = {'...'};
 end
 out = strjoin(strs, ', ');
+end
+
+function out = maybeSprintf(fmt, varargin)
+args = varargin;
+if any(cellfun(@(x) any(ismissing, 'any'), args))
+  out = string(missing);
+else
+  out = sprintf(fmt, args{:});
+end
 end
