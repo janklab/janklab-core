@@ -1,31 +1,33 @@
-classdef InsertOptions
+classdef ConformOptions
+  % ConformOptions Options controlling xarray's conform() behavior
+  
+  properties
+    mode (1,1) string = "union"
+    broadcast (1,1) logical = true
+    sortLabels (1,1) logical = false
+    excludeDims double = []
+  end
+  
+  methods
     
-    properties
-        % Whether column names in the generated SQL statement should be quoted
-        % This is off by default because using quoted column names can make
-        % the insert logic stricter and cause breakage with Postgres.
-        quoteColumnNames logical = false
-    end
-    
-    methods
-        function this = InsertOptions(arg)
-            % InsertOptions construct a new object
+        function this = ConformOptions(arg)
+            % ConformOptions construct a new object
             %
-            % obj = InsertOptions()
-            % obj = InsertOptions(arg)
+            % obj = ConformOptions()
+            % obj = ConformOptions(arg)
             %
             % arg may be one of:
             %   - a struct
             %   - a cellrec or cell vector of name/value pairs
             %   - empty
-            %   - an InsertOptions object
+            %   - a ConformOptions object
             % In the case of a struct or cell, the names or field names are
             % taken to be property names and their values are applied on top of
             % the default values.
             if nargin == 0
                 return
             end
-            if isa(arg, 'jl.sql.InsertOptions')
+            if isa(arg, 'jl.sql.ConformOptions')
                 this = arg;
                 return
             end
@@ -41,10 +43,18 @@ classdef InsertOptions
                     this.(fnames{i}) = arg.(fnames{i});
                 end
             else
-                error('jl:InvalidInput', ['Invalid input to InsertOptions(): '...
+                error('jl:InvalidInput', ['Invalid input to ConformOptions(): '...
                     'Expected struct or cell, got a %s'], class(arg));
             end
         end
 
-    end
+        function this = set.mode(this, val)
+          mustBeString(val);
+          mustBeScalar(val);
+          mustBeMember(val, ["union" "intersect"]);
+          this.mode = val;
+        end
+    
+  end
+  
 end

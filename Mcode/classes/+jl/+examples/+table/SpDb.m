@@ -5,7 +5,8 @@ function varargout = SpDb
 % [s, p, sp] = jl.examples.table.SpDb
 %
 % Constructs the classic C. J. Date Suppliers-Parts ("SP") example database
-% as tables.
+% as tables. This is the main example used in Date's "An Introduction to
+% Database Systems" textbook. (You can find it on the inside cover.)
 %
 % If one argout is captured, the tables are returned in the fields of a struct.
 % If multiple argouts are captured, the tables are returned as three argouts.
@@ -38,9 +39,21 @@ SP = cell2table ({
     'S4'  'P4'  300
     'S4'  'P5'  400
     }, 'VariableNames', {'SNum', 'PNum', 'Qty'});
+S = cellstrvars2string(S);
+P = cellstrvars2string(P);
+SP = cellstrvars2string(SP);
 if nargout == 1
     varargout = { struct('S', S, 'P', P, 'SP', SP) };
 else
     varargout = { S, P, SP };
+end
+end
+
+function t = cellstrvars2string(t)
+vars = t.Properties.VariableNames;
+for i = 1:numel(vars)
+  if iscellstr(t.(vars{i})) %#ok<ISCLSTR>
+    t.(vars{i}) = string(t.(vars{i}));
+  end
 end
 end
