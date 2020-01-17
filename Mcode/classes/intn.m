@@ -27,7 +27,7 @@ classdef (Abstract) intn < jl.util.Displayable
 	% See also:
 	% INT8N, UINT8N, INT16N, UINT16N, INT32N, UINT32N, INT64N, UINT64N
 
-	% TODO: Decide whether this should respond true to isinteger(obj)
+	% TODO: Decide whether this should respond true to isinteger() and isnumeric()
 	% TODO: Max, min, mean, median, diff
 	% TODO: cumprod, cumsum
 	
