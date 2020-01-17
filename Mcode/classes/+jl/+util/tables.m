@@ -237,6 +237,9 @@ classdef tables
           % strs = jl.util.tables.evalwith(p, expr)
           %
           % Returns the result of evaluating expr.
+          %
+          % See also:
+          % RESTRICTEXPR
           out = JL_EVALWITH__(tbl, expr);
         end
     end
