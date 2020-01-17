@@ -9,9 +9,10 @@ import net.janklab.mdbc.ParamBinder;
 import net.janklab.mdbc.colbuf.BufferedTimestampComponents;
 
 /**
- *
+ * A binder that takes timestamps (broken down into datenums and
+ * nanos of day) and binds them as SQL Timestamp values.
  */
-public class TimestampParamBinder  extends ParamBinder {
+public class TimestampParamBinder extends ParamBinder {
 
   BufferedTimestampComponents buf;
   boolean mapNaNsToNulls = true;

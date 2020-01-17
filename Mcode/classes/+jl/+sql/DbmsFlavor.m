@@ -10,6 +10,9 @@ classdef DbmsFlavor < handle
     % DbmsFlavor functionality is generally for MDBC's internal use, and not for
     % client code to use.
     
+    %#ok<*MANU>
+    %#ok<*INUSL>
+    
     methods
         
         function out = flavorDescription(this)
