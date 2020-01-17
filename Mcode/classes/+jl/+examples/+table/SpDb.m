@@ -5,7 +5,8 @@ function varargout = SpDb
 % [s, p, sp] = jl.examples.table.SpDb
 %
 % Constructs the classic C. J. Date Suppliers-Parts ("SP") example database
-% as tables.
+% as tables. This is the main example used in Date's "An Introduction to
+% Database Systems" textbook. (You can find it on the inside cover.)
 %
 % If one argout is captured, the tables are returned in the fields of a struct.
 % If multiple argouts are captured, the tables are returned as three argouts.
