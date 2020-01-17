@@ -191,6 +191,54 @@ classdef tables
             end
             [status,message] = xlswrite(file, A, args{:});
         end
+        
+        function out = restrictexpr(tbl, expr)
+          %RESTRICTEXPR Subset rows based on an expression
+          %
+          % out = restrictexpr(tbl, expr)
+          %
+          % tbl (table) is the table to subset rows on, and also is the context
+          % for evaluation of expr.
+          %
+          % expr (char) is a Matlab expression that returns a logical or numeric
+          % vector that indexes into the rows of tbl.
+          %
+          % Returns a subsetted copy of tbl.
+          %
+          % Example:
+          %
+          % [s,p,sp] = jl.examples.table.SpDb;
+          % p2 = jl.util.tables.restrictexpr(p, 'Weight > 12 & Weight <= 18 & City == "London"')
+          %
+          % See also:
+          % EVALWITH
+          ix = jl.util.tables.evalwith(tbl, expr);
+          out = tbl(ix,:);
+        end
+        
+        function out = evalwith(tbl, expr)
+          %EVALWITH Evaluate an expression in the context of a table's variables
+          %
+          % out = jl.util.evalwith(tbl, expr)
+          %
+          % Evaluates a given Matlab expression in the context of a table's
+          % variables. This means it is run inside a workspace where all of the
+          % given table's contained variables are available as regular Matlab
+          % workspace variables.
+          %
+          % tbl (table) is the table that provides the context
+          % for evaluation of expr.
+          %
+          % expr (char) is a Matlab expression written in terms of the variables
+          % inside tbl.
+          %
+          % [s,p,sp] = jl.examples.table.SpDb;
+          % expr = 'find(Weight > 12 & Color == "Red" | City == "London")';
+          % strs = jl.util.tables.evalwith(p, expr)
+          %
+          % Returns the result of evaluating expr.
+          out = JL_EVALWITH__(tbl, expr);
+        end
     end
     
     methods (Access = private)
@@ -198,4 +246,18 @@ classdef tables
             %TABLES Private constructor to suppress helptext
         end
     end
+end
+
+% All the funky variable names here are to avoid name collisions with
+% the user's variables.
+function JL_EVALWITH_out = JL_EVALWITH__(JL_EVALWITH_tbl__, JL_EVALWITH_expr__)
+  JL_EVALWITH_vars = JL_EVALWITH_tbl__.Properties.VariableNames;
+  for JL_EVALWITH_i = 1:numel(JL_EVALWITH_vars)
+    JL_EVALWITH_var = JL_EVALWITH_vars{JL_EVALWITH_i};
+    if isvarname(JL_EVALWITH_var)
+      JL_EVALWITH_assgn_expr = [JL_EVALWITH_var ' = JL_EVALWITH_tbl__.(''' JL_EVALWITH_var ''');'];
+      eval(JL_EVALWITH_assgn_expr);
+    end
+  end
+  JL_EVALWITH_out = eval(JL_EVALWITH_expr__);
 end
