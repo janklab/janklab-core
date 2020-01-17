@@ -1,10 +1,25 @@
-classdef xarray
+classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
+  
+  % TODO: subsref, subsasgn, with {} support for indexing by label
+  % TODO: conform1union
+  % TODO: sortrows, N-D generalization of sortrows
+  % TODO: more arithmetic wrappers
+  % TODO: isequal, isequaln, eq, ne, < > <= >= relops
+  % TODO: Promotion of plain arrays in arithmetic and relops
+  % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
+  % TODO: squeeze
+  % TODO: circshift, permute, ipermute, ctranspose, transpose
+  % TODO: shiftdims
+  % TODO: cat
   
   properties
     labels cell = {}
     dimNames string = string.empty
     vals = []
+  end
+  properties (Dependent = true)
+    valueType
   end
   
   methods (Static)
@@ -32,6 +47,10 @@ classdef xarray
       end
       this.dimNames = dimNames;
       validate(this);
+    end
+    
+    function out = get.valueType(this)
+      out = class(this.vals);
     end
     
     function validate(this)
@@ -67,6 +86,23 @@ classdef xarray
       end
     end
     
+    function out = dispstrs(this)
+      out = dispstrs(this.vals);
+    end
+    
+    function out = dispstr(this)
+      %DISPSTR Custom display string for array
+      
+      % TODO: Add dim names
+      out = sprintf('xarray (%s): %s', ...
+        this.valueType, size2str(size(this)));
+    end
+    
+    function out = mat2str(this)
+      out = sprintf('xarray(%s, %s, %s)', ...
+        mat2str(this.vals), mat2str(this.labels), mat2str(this.dimNames));
+    end
+    
     function out = ndims(this)
       out = ndims(this.vals);
     end
@@ -81,6 +117,46 @@ classdef xarray
     
     function out = length(this)
       out = length(this.vals);
+    end
+    
+    function out = isnan(this)
+      out = isnan(this.vals);
+    end
+    
+    function out = ismissing(this)
+      out = ismissing(this.vals);
+    end
+    
+    function out = isempty(this)
+      out = isempty(this.vals);
+    end
+    
+    function out = isfinite(this)
+      out = isfinite(this.vals);
+    end
+    
+    function out = isreal(this)
+      out = isreal(this.vals);
+    end
+    
+    function out = isrow(this)
+      out = isrow(this.vals);
+    end
+    
+    function out = ismatrix(this)
+      out = ismatrix(this.vals);
+    end
+    
+    function out = iscolumn(this)
+      out = iscolumn(this.vals);
+    end
+    
+    function out = isvector(this)
+      out = isvector(this.vals);
+    end
+    
+    function out = isscalar(this)
+      out = isscalar(this.vals);
     end
     
     function varargout = apply(fcn, a, b, mode)
@@ -117,7 +193,21 @@ classdef xarray
       if nargin < 3 || isempty(mode); mode = 'union'; end
       out = apply(@minus, a, b, mode);
     end
-        
+
+    function out = uminus(this)
+      out = this;
+      out.vals = uminus(this.vals);
+    end
+    
+    function out = sortdims(this)
+      %SORTDIMS Sort this based on its dimension labels
+      out = this;
+      for iDim = 1:ndims(this)
+        [~,ix] = sort(this.labels{iDim});
+        out = subsetAlongDim(out, iDim, ix);
+      end
+    end
+    
     function [a2, b2] = conform(a, b, varargin)
       %CONFORM Rearrange input xarrays to have the same dimensions
       mustBeA(a, 'xarray');
