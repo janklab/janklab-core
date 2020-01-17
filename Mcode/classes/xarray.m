@@ -577,7 +577,7 @@ classdef (Sealed) xarray
   methods (Static)
     
     function varargout = pivot(tbl, keyCols, valCols)
-      %PIVOT Pivot a table into a xarray(s)
+      %PIVOT Pivot a table into xarray(s)
       %
       % varargout = pivot(tbl, keyCols, valCols)
       %
