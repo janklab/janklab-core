@@ -1,7 +1,6 @@
 classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
   
-  % TODO: subsref, subsasgn, with {} support for indexing by label
   % TODO: conform1union
   % TODO: Broadcasting!
   % TODO: sortrows, N-D generalization of sortrows
@@ -111,8 +110,8 @@ classdef (Sealed) xarray
       out = ndims(this.vals);
     end
     
-    function out = size(this)
-      out = size(this.vals);
+    function out = size(this, varargin)
+      out = size(this.vals, varargin{:});
     end
     
     function out = numel(this)
@@ -312,6 +311,77 @@ classdef (Sealed) xarray
         otherwise
           error('jl:InvalidInput', 'Invalid mode argument: %s', mode);
       end
+    end
+    
+    function out = subsetByIndex(this, ixs)
+      out = this;
+      out.vals = this.vals(ixs{:});
+      for iDim = 1:numel(ixs)
+        ix = ixs{iDim};
+        if isequal(ix, ':') ...
+            || (islogical(ix) && all(ix, 'all')) ...
+            || (isnumeric(ix) && isequal(ix, 1:size(this, iDim)))
+          continue
+        end
+        out.labels{iDim} = this.labels{iDim}(ix);
+      end
+    end
+    
+    function out = subsetByLabel(this, labelss)
+      ixs = labels2subs(this, labelss);
+      out = subsetByIndex(this, ixs);
+    end
+    
+    function out = labels2subs(this, labelss)
+      mustBeA(labelss, 'cell');
+      ixs = cell(size(labelss));
+      for iDim = 1:numel(labelss)
+        wantLabels = labelss{iDim};
+        [tf,loc] = ismember(wantLabels, this.labels{iDim});
+        if ~all(tf)
+          error('Labels not found along dimension %d: %s', ...
+            iDim, jl.utils.ellipses(wantLabels(~tf)));
+        end
+        ixs{iDim} = loc;
+      end
+      out = ixs;
+    end
+    
+    function out = subsref(this, S)
+      s = S(1);
+      switch s.type
+        case '()'
+          out = subsetByIndex(this, s.subs);
+        case '{}'
+          out = subsetByLabel(this, s.subs);
+        case '.'
+          error('.-indexing is not supported by xarray');
+      end
+      if numel(S) > 1
+        out = subsref(out, S(2:end));
+      end
+    end
+    
+    function out = subsasgn(this, S, rhs)
+      if numel(S) > 1
+        % TODO: Add support
+        error('Chained subsasgn indexing is not supported by xarray');
+      end
+      s = S(1);
+      out = this;
+      switch s.type
+        case '()'
+          out.vals(s.subs{:}) = rhs;
+        case '{}'
+          ixs = labels2subs(this, s.subs);
+          out.vals(ixs{:}) = rhs;
+        case '.'
+          error('.-indexing for assignment is not supported by xarray');
+      end
+    end
+    
+    function out = numArgumentsFromSubscript(this, S, indexingContext)
+      out = 1;
     end
     
     function out = unpivot(this)
