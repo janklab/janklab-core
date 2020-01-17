@@ -1,14 +1,13 @@
 classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
   
+  % TODO: squeeze
   % TODO: Broadcasting!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
   % TODO: isequal, isequaln, eq, ne, < > <= >= relops
   % TODO: Promotion of plain arrays in arithmetic and relops
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
-  % TODO: squeeze
-  % TODO: circshift, permute, ipermute, ctranspose, transpose
   % TODO: shiftdims
   % TODO: DataUnits
   
@@ -159,6 +158,58 @@ classdef (Sealed) xarray
     
     function out = isscalar(this)
       out = isscalar(this.vals);
+    end
+    
+    function out = circshift(this, k, dim)
+      narginchk(2, 3);
+      out = this;
+      if nargin == 2
+        if isscalar(k)
+          sz = size(this);
+          ixDim = find(sz > 1, 1);
+          out = circshift(this, k, ixDim);
+        else
+          tmp = this;
+          for iDim = 1:numel(k)
+            tmp = circshift(tmp, k(iDim), iDim);
+          end
+          out = tmp;
+        end
+      else
+        out.vals = circshift(this.vals, k);
+        out.labels{dim} = circshift(this.labels{dim}, k);
+      end
+    end
+    
+    function out = permute(this, dimorder)
+      out = this;
+      out.labels = this.labels(dimorder);
+      out.dimNames = this.dimNames(dimorder);
+      out.vals = permute(this.vals, dimorder);
+    end
+    
+    function out = ipermute(this, dimorder)
+      UNIMPLEMENTED
+    end
+    
+    function out = ctranspose(this)
+      if ~ismatrix(this)
+        error('input for ctranspose must be a matrix; this is %d-d', ...
+          ndims(this));
+      end
+      out.vals = ctranspose(this);
+      out.labels = this.labels([2 1]);
+      out.dimNames = this.dimNames([2 1]);      
+    end
+    
+    function out = transpose(this)
+      if ~ismatrix(this)
+        error('input for transpose must be a matrix; this is %d-d', ...
+          ndims(this));
+      end
+      out.vals = transpose(this);
+      out.labels = this.labels([2 1]);
+      out.dimNames = this.dimNames([2 1]);      
     end
     
     function varargout = apply(fcn, a, b, varargin)
