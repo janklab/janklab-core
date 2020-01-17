@@ -30,6 +30,8 @@ classdef (Abstract) intn < jl.util.Displayable
 	% TODO: Decide whether this should respond true to isinteger() and isnumeric()
 	% TODO: Max, min, mean, median, diff
 	% TODO: cumprod, cumsum
+	% TODO: A widen() function that will widen the types to accomodate all
+	%       input arguments.
 	
 	% @planarprecedence(tfnan,ints)
 	
