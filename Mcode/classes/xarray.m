@@ -36,13 +36,16 @@ classdef (Sealed) xarray
   % it.
   %
   % xarray is a work in progress as of January 2020. Feedback is welcome.
+  % Also, I don't understand matrix math well enough to know how mldivide(),
+  % mrdivide(), and inv() should work here.
   
   % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
-  % TODO: more arithmetic wrappers
-  % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
-  % TODO: DataUnits
-  % TODO: Matrix math - mtimes, mldivide - will need to shuffle dim stuff
+  % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
+  % TODO: DataUnits?
+  % TODO: Matrix division (mldivide, mrdivide)
+  % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
+  % should be.
   
   properties
     vals = []
@@ -230,7 +233,7 @@ classdef (Sealed) xarray
       out.vals = permute(this.vals, dimorder);
     end
     
-    function out = ipermute(this, dimorder)
+    function out = ipermute(this, dimorder) %#ok<STOUT,INUSD>
       UNIMPLEMENTED
     end
     
@@ -408,6 +411,30 @@ classdef (Sealed) xarray
     
     function out = mod(a, b, varargin)
       out = apply(@mod, a, b, varargin{:});
+    end
+    
+    function out = mtimes(a, b, varargin)
+      [a,b] = promote(a, b);
+      if ~ismatrix(a) || ~ismatrix(b)
+        error('inputs to mtimes must be matrixes');
+      end
+      % Check conformance of inner dimensions
+      if size(a,2) ~= size(b,1)
+        error('inputs differ in length of their inner dimensions');
+      end
+      if ~ismissing(a.dimNames(2)) && ~ismissing(b.dimNames(1)) ...
+          && ~isequal(a.dimNames(2), b.dimNames(1))
+        error(['dimension mismatch: inner dimensions must be the same, but ' ...
+          'a dim 2 is "%s", and b dim 1 is "%s"'], a.dimNames(2), b.dimNames(1));
+      end
+      % TODO: Conform inner dimensions, instead of just checking?
+      if ~isequaln(a.labels{2}, b.labels{1})
+        error('dimension mismatch: labels for a dimension 2 and b dimension 1 differ');
+      end
+      out = a;
+      out.vals = mtimes(a.vals, b.vals);
+      out.labels{2} = b.labels{2};
+      out.dimNames(2) = b.dimNames(2);
     end
     
     function out = uminus(this)
@@ -629,7 +656,7 @@ classdef (Sealed) xarray
       end
     end
     
-    function out = numArgumentsFromSubscript(this, S, indexingContext)
+    function out = numArgumentsFromSubscript(this, S, indexingContext) %#ok<INUSD>
       out = 1;
     end
     
@@ -709,14 +736,14 @@ classdef (Sealed) xarray
       ixs = cell(1, numel(keyCols));
       for iKey = 1:numel(keyCols)
         keyVals = tbl.(keyCols{iKey});
-        [uKeys,Indx,Jndx] = unique(keyVals);
+        [uKeys,~,Jndx] = unique(keyVals);
         labels{iKey} = uKeys;
         ixs{iKey} = Jndx;
       end
       % Here's the magic
       sz = cellfun(@numel, labels);
       ix = sub2ind(sz, ixs{:});
-      [uIx,ix2,jx2] = unique(ix);
+      uIx = unique(ix);
       if numel(uIx) < numel(ix)
         error(['Value collision! Multiple rows in the input mapped ' ...
           'to the same element in the output']);
@@ -829,7 +856,7 @@ ixs{ixDim} = oldLength+1:newLength;
 out(ixs{:}) = fill;
 end
 
-function out = ellipsesOrMissing(x)
+function out = ellipsesOrMissing(x, n)
 if nargin < 2 || isempty(n); n = 40; end
 
 strs = string(dispstrs(x));
