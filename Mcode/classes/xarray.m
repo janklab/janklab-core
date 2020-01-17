@@ -379,6 +379,42 @@ classdef (Sealed) xarray
       out.vals = uminus(this.vals);
     end
     
+    function out = sum(this, varargin)
+      args = varargin;
+      includenan = true;
+      dimvec = 1;
+      while ~isempty(args)
+        if isequal(args{end}, 'all')
+        elseif isequal(args{end}, 'includenan')
+          includenan = true;
+        elseif isequal(args{end}, 'omitnan')
+          includenan = false;
+        elseif isnumeric(args{end})
+          dimvec = args{end};
+        else
+          error('jl:InvalidInput', 'Unrecognized input argument: %s', ...
+            dispstr(args{end}));
+        end
+        args(end) = [];
+      end
+      
+      out = this;
+      opArgs = {};
+      if ~includenan
+        opArgs{end+1} = 'omitnan';
+      end
+      out.vals = sum(this.vals, dimvec, opArgs{:});
+      
+      % TODO: Now, what should we use as the dimension name and labels for
+      % the collapsed dimensions? I don't think we want to rearrange the
+      % other dimensions. Or do we? Maybe we do; that seems like the only
+      % way to preserve the semantics of xarray and its dimensions?
+      % For now, let's just stick in placeholder values.
+      for iDim = 1:numel(dimvec)
+        out.labels{dimvec(iDim)} = fillValFor(this.labels{dimvec(iDim)});
+      end
+    end
+    
     function out = sortdims(this)
       %SORTDIMS Sort this based on its dimension labels
       out = this;
