@@ -1,5 +1,7 @@
 classdef ParamConversion
     
+    %#ok<*INUSL>
+    
     methods (Abstract)
         out = getBinder(this);
     end

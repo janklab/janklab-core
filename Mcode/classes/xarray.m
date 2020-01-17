@@ -1,11 +1,9 @@
 classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
   
-  % TODO: squeeze
-  % TODO: Broadcasting!
+  % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
-  % TODO: isequal, isequaln, eq, ne, < > <= >= relops
   % TODO: Promotion of plain arrays in arithmetic and relops
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
   % TODO: DataUnits
@@ -236,6 +234,75 @@ classdef (Sealed) xarray
       out.vals = shiftdim(this.vals, n);
       out.dimNames = circshift(this.dimNames, n);
       out.labels = circshift(this.labels, n);
+
+      function mustBeSameDimStructure(a, b)
+      if ~isequaln(a.labels, b.labels)
+        error(['a and b must have same dimension structure, but they ' ...
+          'differ in their dimension labels']);
+      end
+      if ~isequaln(a.dimNames, b.dimNames)
+        error(['a and b must have same dimension structure, but they ' ...
+          'differ in their dimension names']);
+      end
+    end
+    
+    function out = eq(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = eq(a.vals, b.vals);
+    end
+    
+    function out = ne(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = ne(a.vals, b.vals);
+    end
+    
+    function out = lt(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = lt(a.vals, b.vals);
+    end
+    
+    function out = le(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = le(a.vals, b.vals);
+    end
+    
+    function out = gt(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = gt(a.vals, b.vals);
+    end
+    
+    function out = ge(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = ge(a.vals, b.vals);
+    end
+    
+    function out = or(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = or(a.vals, b.vals);
+    end
+    
+    function out = and(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = and(a.vals, b.vals);
+    end
+    
+    function out = xor(a, b)
+      [a,b] = promote(a, b);
+      mustBeSameDimStructure(a, b);
+      out = xor(a.vals, b.vals);
+    end
+    
+    function out = not(this)
+      out = this;
+      out.vals = not(this.vals);
     end
     
     function varargout = apply(fcn, a, b, varargin)
@@ -328,7 +395,15 @@ classdef (Sealed) xarray
       out = cat(1, varargin{:});
     end
     
-    function promote(a, b)
+    function [a,b] = promote(a, b)
+      if ~isa(b, 'xarray')
+        b = xarray(b, a.labels, a.dimNames, a.valueName);
+        validate(b);
+      end
+      if ~isa(a, 'xarray')
+        a = xarray(a, b.labels, b.dimNames, b.valueName);
+        validate(a);
+      end
     end
     
     function [a2, b2] = conform(a, b, varargin)

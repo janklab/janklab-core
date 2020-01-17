@@ -8,7 +8,7 @@ classdef TimestampParamConversion < jl.sql.ParamConversion
             mustBeA(paramData, 'jl.time.timestamp');
             datenums = datenum(paramData.date);
             nanosOfDay = paramData.time.getNanosOfDay();
-            out = net.janklab.mdbc.colbuf.BufferedTimestampComponents( ...
+            out = net.janklab.mdbc.colbuf.BufferedTimestampComponents(...
                 datenums, nanosOfDay);
         end
         
