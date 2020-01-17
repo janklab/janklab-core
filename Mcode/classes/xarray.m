@@ -6,9 +6,7 @@ classdef (Sealed) xarray
   % TODO: more arithmetic wrappers
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
   % TODO: DataUnits
-  % TODO: 1- and 0-dim values: since we have labels and names along dims, a 2-D
-  % xarray is not the same as a vector or a 0-by-0 empty! Decide what the
-  % semantics of this are.
+  % TODO: Matrix math - mtimes, mldivide - will need to shuffle dim stuff
   
   properties
     vals = []
@@ -104,7 +102,15 @@ classdef (Sealed) xarray
     end
     
     function out = ndims(this)
-      out = ndims(this.vals);
+      %NDIMS Number of dimensions
+      %
+      % out = ndims(obj)
+      %
+      % Number of dimensions in obj.
+      %
+      % Unlike most Matlab arrays, ndims() on an xarray object may return 1
+      % or 0.
+      out = numel(this.labels);
     end
     
     function out = size(this, varargin)
@@ -351,6 +357,21 @@ classdef (Sealed) xarray
     function out = minus(a, b, mode)
       if nargin < 3 || isempty(mode); mode = 'union'; end
       out = apply(@minus, a, b, mode);
+    end
+    
+    function out = times(a, b, mode)
+      if nargin < 3 || isempty(mode); mode = 'union'; end
+      out = apply(@times, a, b, mode);
+    end
+    
+    function out = ldivide(a, b, mode)
+      if nargin < 3 || isempty(mode); mode = 'union'; end
+      out = apply(@ldivide, a, b, mode);
+    end
+    
+    function out = rdivide(a, b, mode)
+      if nargin < 3 || isempty(mode); mode = 'union'; end
+      out = apply(@rdivide, a, b, mode);
     end
     
     function out = uminus(this)
