@@ -4,6 +4,13 @@ classdef int32n < intn
 	% See also:
 	% INTN
 	
+	methods (Static)
+		function out = empty(sz)
+			if nargin < 1 || isempty(sz); sz = [0 0]; end
+			out = int32n(reshape([], sz));
+		end
+	end
+	
 	methods
 		
 		function this = int32n(ints, tfnan)

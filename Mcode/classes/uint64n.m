@@ -4,6 +4,13 @@ classdef uint64n < intn
 	% See also:
 	% INTN
 	
+	methods (Static)
+		function out = empty(sz)
+			if nargin < 1 || isempty(sz); sz = [0 0]; end
+			out = uint64n(reshape([], sz));
+		end
+	end
+	
 	methods
 		
 		function this = uint64n(ints, tfnan)

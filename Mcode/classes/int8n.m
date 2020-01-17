@@ -4,6 +4,13 @@ classdef int8n < intn
 	% See also:
 	% INTN
 	
+	methods (Static)
+		function out = empty(sz)
+			if nargin < 1 || isempty(sz); sz = [0 0]; end
+			out = int8n(reshape([], sz));
+		end
+	end
+	
 	methods
 		
 		function this = int8n(ints, tfnan)
