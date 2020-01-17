@@ -1,7 +1,6 @@
 classdef tables
     %TABLES Utilities for working with table objects
     
-    
     methods (Static = true)
         function out = tableFromVectors(varargin)
             %TABLEFROMVECTORS Construct a table from row or column vector inputs
@@ -241,6 +240,40 @@ classdef tables
           % See also:
           % RESTRICTEXPR
           out = JL_EVALWITH__(tbl, expr);
+        end
+        
+        function out = semijoin(a, b)
+          %SEMIJOIN Relational semijoin
+          %
+          % out = jl.util.tables.semijoin(a, b)
+          %
+          % a and b are the input tables.
+          %
+          % Returns the subset of a that matches rows in b.
+          mustBeA(a, 'table');
+          mustBeA(b, 'table');
+          keyCols = intersect(a.Properties.VariableNames, b.Properties.VariableNames);
+          keysA = a(:,keyCols);
+          keysB = b(:,keyCols);
+          tf = ismember(keysA, keysB);
+          out = a(tf,:);
+        end
+        
+        function out = antijoin(a, b)
+          %ANTIJOIN Relational antijoin (aka "semidifference")
+          %
+          % out = jl.util.tables.antijoin(a, b)
+          %
+          % a and b are tables.
+          %
+          % Returns the subset of a that does not match any rows in b.
+          mustBeA(a, 'table');
+          mustBeA(b, 'table');
+          keyCols = intersect(a.Properties.VariableNames, b.Properties.VariableNames);
+          keysA = a(:,keyCols);
+          keysB = b(:,keyCols);
+          tf = ismember(keysA, keysB);
+          out = a(~tf,:);
         end
     end
     
