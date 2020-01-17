@@ -4,7 +4,6 @@ classdef (Sealed) xarray
   % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
-  % TODO: Promotion of plain arrays in arithmetic
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
   % TODO: DataUnits
   % TODO: 1- and 0-dim values: since we have labels and names along dims, a 2-D
@@ -334,7 +333,8 @@ classdef (Sealed) xarray
       %
       % See also:
       % jl.xarray.ConformOptions
-      [a, b] = conform(a, b, varargin{:});
+      [a,b] = promote(a, b);
+      [a,b] = conform(a, b, varargin{:});
       outvals = cell(1, nargout);
       outvals{:} = fcn(a.vals, b.vals);
       varargout = cell(size(outvals));
