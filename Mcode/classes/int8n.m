@@ -5,6 +5,7 @@ classdef int8n < intn
 	% INTN
 	
 	methods
+		
 		function this = int8n(ints, tfnan)
 			if nargin < 2 || isempty(tfnan)
 				tfnan = isnan(ints);
@@ -14,4 +15,5 @@ classdef int8n < intn
 		end
 		
 	end
+	
 end

@@ -5,6 +5,7 @@ classdef uint16n < intn
 	% INTN
 	
 	methods
+		
 		function this = uint16n(ints, tfnan)
 			if nargin < 2 || isempty(tfnan)
 				tfnan = isnan(ints);
@@ -14,4 +15,5 @@ classdef uint16n < intn
 		end
 		
 	end
+	
 end
