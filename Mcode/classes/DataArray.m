@@ -317,45 +317,7 @@ classdef (Sealed) DataArray
       out = length(this.values);
     end
     
-    function out = isnan(this)
-      out = isnan(this.values);
-    end
-    
-    function out = ismissing(this)
-      out = ismissing(this.values);
-    end
-    
-    function out = isempty(this)
-      out = isempty(this.values);
-    end
-    
-    function out = isfinite(this)
-      out = isfinite(this.values);
-    end
-    
-    function out = isreal(this)
-      out = isreal(this.values);
-    end
-    
-    function out = isrow(this)
-      out = isrow(this.values);
-    end
-    
-    function out = ismatrix(this)
-      out = ismatrix(this.values);
-    end
-    
-    function out = iscolumn(this)
-      out = iscolumn(this.values);
-    end
-    
-    function out = isvector(this)
-      out = isvector(this.values);
-    end
-    
-    function out = isscalar(this)
-      out = isscalar(this.values);
-    end
+    % Structural operations
     
     function out = circshift(this, k, dim)
       narginchk(2, 3);
@@ -433,6 +395,56 @@ classdef (Sealed) DataArray
       out.coords = circshift(this.coords, n);
     end
     
+    function out = sortdims(this)
+      %SORTDIMS Sort this based on its dimension coords
+      %
+      % out = sortdims(obj)
+      %
+      % Sorts obj based on the natural ordering of the coord values along
+      % its dimensions. This means that the coords arrays are sorted, and
+      % the underlying values array is reordered along those dimensions to
+      % match.
+      %
+      % Returns an updated DataArray.
+      
+      % TODO: Add an option that allows you to select which dims to sort
+      % on.
+      out = this;
+      for iDim = 1:ndims(this)
+        [~,ix] = sort(this.coords{iDim});
+        out = subsetAlongDim(out, iDim, ix);
+      end
+    end
+    
+    function out = cat(dim, varargin)
+      args = varargin;
+      tmp = args{1};
+      mustBeA(tmp, 'DataArray', 'input 2');
+      % TODO: Check values name and dim name
+      for i = 2:numel(args)
+        mustBeA(args{i}, 'DataArray', sprintf('input %d', i+1));
+        [tmp,b] = align(tmp, args{i}, {'excludeDims',dim});
+        collisions = intersect(tmp.coords{dim}, b.coords{dim});
+        if ~isempty(collisions)
+          error('Duplicate coords in inputs for dimension %d: %s', ...
+            dim, jl.utils.ellipses(collisions));
+        end
+        newcoords = [tmp.coords{dim} b.coords{dim}];
+        newValues = cat(dim, tmp.values, b.values);
+        tmp.coords{dim} = newcoords;
+        tmp.values = newValues;
+      end
+      out = tmp;
+    end
+    
+    function out = horzcat(varargin)
+      out = cat(2, varargin{:});
+    end
+    
+    function out = vertcat(varargin)
+      out = cat(1, varargin{:});
+    end
+    
     function mustBeSameDimStructure(a, b)
       % Require that inputs have the same dimensional structure
       %
@@ -453,6 +465,50 @@ classdef (Sealed) DataArray
           'differ in their dimension names']);
       end
     end
+    
+    % Type tests
+    
+    function out = isnan(this)
+      out = isnan(this.values);
+    end
+    
+    function out = ismissing(this)
+      out = ismissing(this.values);
+    end
+    
+    function out = isempty(this)
+      out = isempty(this.values);
+    end
+    
+    function out = isfinite(this)
+      out = isfinite(this.values);
+    end
+    
+    function out = isreal(this)
+      out = isreal(this.values);
+    end
+    
+    function out = isrow(this)
+      out = isrow(this.values);
+    end
+    
+    function out = ismatrix(this)
+      out = ismatrix(this.values);
+    end
+    
+    function out = iscolumn(this)
+      out = iscolumn(this.values);
+    end
+    
+    function out = isvector(this)
+      out = isvector(this.values);
+    end
+    
+    function out = isscalar(this)
+      out = isscalar(this.values);
+    end
+    
+    % Relational operations (relops)
     
     function out = eq(a, b)
       [a,b] = promote(a, b);
@@ -560,6 +616,8 @@ classdef (Sealed) DataArray
       end
     end
     
+    % Arithmetic
+    
     function out = plus(a, b, varargin)
       out = apply(@plus, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s + %s)', a.valueName, b.valueName);
@@ -589,32 +647,7 @@ classdef (Sealed) DataArray
       out = apply(@mod, a, b, varargin{:});
       out.valueName = maybeSprintf('mod(%s, %s)', a.valueName, b.valueName);
     end
-    
-    function out = mtimes(a, b, varargin)
-      [a,b] = promote(a, b);
-      if ~ismatrix(a) || ~ismatrix(b)
-        error('inputs to mtimes must be matrixes');
-      end
-      % Check alignance of inner dimensions
-      if size(a,2) ~= size(b,1)
-        error('inputs differ in length of their inner dimensions');
-      end
-      if ~ismissing(a.dims(2)) && ~ismissing(b.dims(1)) ...
-          && ~isequal(a.dims(2), b.dims(1))
-        error(['dimension mismatch: inner dimensions must be the same, but ' ...
-          'a dim 2 is "%s", and b dim 1 is "%s"'], a.dims(2), b.dims(1));
-      end
-      % TODO: Align inner dimensions, instead of just checking?
-      if ~isequaln(a.coords{2}, b.coords{1})
-        error('dimension mismatch: coords for a dimension 2 and b dimension 1 differ');
-      end
-      out = a;
-      out.values = mtimes(a.values, b.values);
-      out.coords{2} = b.coords{2};
-      out.dims(2) = b.dims(2);
-      out.valueName = maybeSprintf('(%s * %s)', a.valueName, b.valueName);
-    end
-    
+        
     function out = uminus(this)
       out = this;
       out.values = uminus(this.values);
@@ -658,54 +691,31 @@ classdef (Sealed) DataArray
       out.valueName = maybeSprintf('sum(%s)', this.valueName);
     end
     
-    function out = sortdims(this)
-      %SORTDIMS Sort this based on its dimension coords
-      %
-      % out = sortdims(obj)
-      %
-      % Sorts obj based on the natural ordering of the coord values along
-      % its dimensions. This means that the coords arrays are sorted, and
-      % the underlying values array is reordered along those dimensions to
-      % match.
-      %
-      % Returns an updated DataArray.
-      
-      % TODO: Add an option that allows you to select which dims to sort
-      % on.
-      out = this;
-      for iDim = 1:ndims(this)
-        [~,ix] = sort(this.coords{iDim});
-        out = subsetAlongDim(out, iDim, ix);
+    % Matrix math
+    
+    function out = mtimes(a, b, varargin)
+      [a,b] = promote(a, b);
+      if ~ismatrix(a) || ~ismatrix(b)
+        error('inputs to mtimes must be matrixes');
       end
-    end
-    
-    function out = cat(dim, varargin)
-      args = varargin;
-      tmp = args{1};
-      mustBeA(tmp, 'DataArray', 'input 2');
-      % TODO: Check values name and dim name
-      for i = 2:numel(args)
-        mustBeA(args{i}, 'DataArray', sprintf('input %d', i+1));
-        [tmp,b] = align(tmp, args{i}, {'excludeDims',dim});
-        collisions = intersect(tmp.coords{dim}, b.coords{dim});
-        if ~isempty(collisions)
-          error('Duplicate coords in inputs for dimension %d: %s', ...
-            dim, jl.utils.ellipses(collisions));
-        end
-        newcoords = [tmp.coords{dim} b.coords{dim}];
-        newValues = cat(dim, tmp.values, b.values);
-        tmp.coords{dim} = newcoords;
-        tmp.values = newValues;
+      % Check alignance of inner dimensions
+      if size(a,2) ~= size(b,1)
+        error('inputs differ in length of their inner dimensions');
       end
-      out = tmp;
-    end
-    
-    function out = horzcat(varargin)
-      out = cat(2, varargin{:});
-    end
-    
-    function out = vertcat(varargin)
-      out = cat(1, varargin{:});
+      if ~ismissing(a.dims(2)) && ~ismissing(b.dims(1)) ...
+          && ~isequal(a.dims(2), b.dims(1))
+        error(['dimension mismatch: inner dimensions must be the same, but ' ...
+          'a dim 2 is "%s", and b dim 1 is "%s"'], a.dims(2), b.dims(1));
+      end
+      % TODO: Align inner dimensions, instead of just checking?
+      if ~isequaln(a.coords{2}, b.coords{1})
+        error('dimension mismatch: coords for a dimension 2 and b dimension 1 differ');
+      end
+      out = a;
+      out.values = mtimes(a.values, b.values);
+      out.coords{2} = b.coords{2};
+      out.dims(2) = b.dims(2);
+      out.valueName = maybeSprintf('(%s * %s)', a.valueName, b.valueName);
     end
     
     function [a,b] = promote(a, b)
