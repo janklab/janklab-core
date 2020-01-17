@@ -76,6 +76,16 @@ classdef (Abstract) intn < jl.util.Displayable
 			dispMaybeMatrix(this);
 		end
 		
+		function out = double(this)
+			out = double(this.ints);
+			out(this.tfnan) = NaN;
+		end
+		
+		function out = single(this)
+			out = single(this.ints);
+			out(this.tfnan) = NaN;
+		end
+		
 		function out = int8(this)
 			if any(this.tfnan, 'all')
 				error('Cannot convert input to integer because NaNs are present');
