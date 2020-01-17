@@ -10,6 +10,9 @@ classdef (Sealed) xarray
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
   % TODO: shiftdims
   % TODO: DataUnits
+  % TODO: 1- and 0-dim values: since we have labels and names along dims, a 2-D
+  % xarray is not the same as a vector or a 0-by-0 empty! Decide what the
+  % semantics of this are.
   
   properties
     vals = []
@@ -210,6 +213,19 @@ classdef (Sealed) xarray
       out.vals = transpose(this);
       out.labels = this.labels([2 1]);
       out.dimNames = this.dimNames([2 1]);      
+    end
+    
+    function out = squeeze(this)
+      %SQUEEZE Remove singleton dimensions
+      %
+      % Note: Unlike squeeze() on regular arrays, squeeze() on an xarray is a
+      % lossy operation! It discards the labels and dimNames for the squeezed
+      % dimensions. This affects the semantics of the object!
+      ixScalar = find(size(this) == 1);
+      out = this;
+      out.vals = squeeze(this.vals);
+      out.labels(ixScalar) = [];
+      out.dimNames(ixScalar) = [];
     end
     
     function varargout = apply(fcn, a, b, varargin)
