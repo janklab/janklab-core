@@ -29,7 +29,8 @@ classdef Displayable
     function out = dispstrs(this)
       out = cell(size(this));
       for i = 1:numel(this)
-        out{i} = dispstr_scalar(this(i));
+        out{i} = dispstr_scalar(subsref(this, ...
+					struct('type','()', 'subs',{{i}})));
       end
     end
   end

@@ -56,13 +56,6 @@ classdef (Abstract) intn < jl.util.Displayable
 			dispMaybeMatrix(this);
 		end
 		
-    function out = dispstrs(this)
-      out = cell(size(this));
-      for i = 1:numel(this)
-        out{i} = dispstr_scalar(subset(this,i));
-      end
-		end
-		
 		% Relational operations
 		
 		function out = isequal(a, b)
