@@ -1,5 +1,5 @@
-classdef ConformOptions
-  % ConformOptions Options controlling xarray's conform() behavior
+classdef AlignOptions
+  % AlignOptions Options controlling xarray's align() behavior
   
   properties
     mode (1,1) string = "union"
@@ -10,24 +10,24 @@ classdef ConformOptions
   
   methods
     
-        function this = ConformOptions(arg)
-            % ConformOptions construct a new object
+        function this = AlignOptions(arg)
+            % AlignOptions construct a new object
             %
-            % obj = ConformOptions()
-            % obj = ConformOptions(arg)
+            % obj = AlignOptions()
+            % obj = AlignOptions(arg)
             %
             % arg may be one of:
             %   - a struct
             %   - a cellrec or cell vector of name/value pairs
             %   - empty
-            %   - a ConformOptions object
+            %   - a AlignOptions object
             % In the case of a struct or cell, the names or field names are
             % taken to be property names and their values are applied on top of
             % the default values.
             if nargin == 0
                 return
             end
-            if isa(arg, 'jl.xmarray.ConformOptions')
+            if isa(arg, 'jl.xmarray.AlignOptions')
                 this = arg;
                 return
             end
@@ -43,7 +43,7 @@ classdef ConformOptions
                     this.(fnames{i}) = arg.(fnames{i});
                 end
             else
-                error('jl:InvalidInput', ['Invalid input to ConformOptions(): '...
+                error('jl:InvalidInput', ['Invalid input to AlignOptions(): '...
                     'Expected struct or cell, got a %s'], class(arg));
             end
         end

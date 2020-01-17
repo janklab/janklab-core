@@ -51,7 +51,7 @@ classdef (Sealed) DataArray
   % TODO: Broadcasting and scalar expansion! Broadcasting should operate by
   %       dimension name, not position.
   % TODO: groupby()
-  % TODO: Rename conform() to align() to be like Python xarray?
+  % TODO: Rename align() to align() to be like Python xarray?
   % TODO: Label-based indexing where you name a dimension instead of
   %       passing it in to a positional parameter in {}-indexing. (sel()
   %       and isel())
@@ -59,15 +59,17 @@ classdef (Sealed) DataArray
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: Update valuesName based on function application
   % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
-  % TODO: Statistics (mean, median, std)
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
   %       should be.
+  % TODO: Statistics (mean, median, std, etc.)
+  % TODO: Trig (sin, cos, acos, tan, etc.)
   % TODO: Multi-DataArray structure like xarray's Dataset
   % TODO: NetCDF and HDF5 I/O
   % TODO: DataUnits?
   % TODO: Plotting
   % TODO: Attributes?
+  % TODO: Have squeeze() accept a list of dims
   
   properties
     values = []
@@ -391,28 +393,28 @@ classdef (Sealed) DataArray
       % varargout = apply(fcn, , ..., 'broadcast')
       % varargout = apply(fcn, , ..., opts)
       %
-      % This conforms the DataArray arguments, and then applies the given function
+      % This aligns the DataArray arguments, and then applies the given function
       % to their values.
       %
       % fcn (function handle) is the function to apply to a and b's values once
-      % conformed. It must return one or more arrays of the same size as its
+      % aligned. It must return one or more arrays of the same size as its
       % input.
       %
       % mode (char) may be 'union' or 'intersect'. It controls the mode used
-      % when the conform is done.
+      % when the align is done.
       %
       % If 'broadcast' is passed, it enables broadcasting. This expands the
       % input arrays along dimensions which are absent, but present in the other
       % argument. Presence is detected based on dimension name.
       %
-      % opts (struct, jl.DataArray.ConformOptions) is an options argument that
-      % controls various aspects of conform's behavior. See its helptext for
+      % opts (struct, jl.DataArray.AlignOptions) is an options argument that
+      % controls various aspects of align's behavior. See its helptext for
       % details.
       %
       % See also:
-      % jl.DataArray.ConformOptions
+      % jl.DataArray.AlignOptions
       [a,b] = promote(a, b);
-      [a,b] = conform(a, b, varargin{:});
+      [a,b] = align(a, b, varargin{:});
       outvalues = cell(1, nargout);
       outvalues{:} = fcn(a.values, b.values);
       varargout = cell(size(outvalues));
@@ -450,7 +452,7 @@ classdef (Sealed) DataArray
       if ~ismatrix(a) || ~ismatrix(b)
         error('inputs to mtimes must be matrixes');
       end
-      % Check conformance of inner dimensions
+      % Check alignance of inner dimensions
       if size(a,2) ~= size(b,1)
         error('inputs differ in length of their inner dimensions');
       end
@@ -459,7 +461,7 @@ classdef (Sealed) DataArray
         error(['dimension mismatch: inner dimensions must be the same, but ' ...
           'a dim 2 is "%s", and b dim 1 is "%s"'], a.dims(2), b.dims(1));
       end
-      % TODO: Conform inner dimensions, instead of just checking?
+      % TODO: Align inner dimensions, instead of just checking?
       if ~isequaln(a.coords{2}, b.coords{1})
         error('dimension mismatch: coords for a dimension 2 and b dimension 1 differ');
       end
@@ -526,7 +528,7 @@ classdef (Sealed) DataArray
       % TODO: Check values name and dim name
       for i = 2:numel(args)
         mustBeA(args{i}, 'DataArray', sprintf('input %d', i+1));
-        [tmp,b] = conform(tmp, args{i}, {'excludeDims',dim});
+        [tmp,b] = align(tmp, args{i}, {'excludeDims',dim});
         collisions = intersect(tmp.coords{dim}, b.coords{dim});
         if ~isempty(collisions)
           error('Duplicate coords in inputs for dimension %d: %s', ...
@@ -559,15 +561,15 @@ classdef (Sealed) DataArray
       end
     end
     
-    function [a2, b2] = conform(a, b, varargin)
+    function [a2, b2] = align(a, b, varargin)
       %CONFORM Rearrange input DataArrays to have the same dimensions
       mustBeA(a, 'DataArray');
       mustBeA(b, 'DataArray');
       args = varargin;
       
-      opts = jl.DataArray.ConformOptions;
+      opts = jl.DataArray.AlignOptions;
       while ischar(args{end}) || isstring(args{end}) || isstruct(args{end}) ...
-          || isa(args{end}, 'jl.xmarray.ConformOptions')
+          || isa(args{end}, 'jl.xmarray.AlignOptions')
         arg = args{end};
         args(end) = [];
         if ischar(arg) || isstring(arg)
@@ -582,7 +584,7 @@ classdef (Sealed) DataArray
               error('jl:InvalidInput', 'Invalid string option: %s', arg);
           end
         else
-          opts = jl.xmarray.ConformOptions(arg);
+          opts = jl.xmarray.AlignOptions(arg);
         end
       end
       
@@ -605,13 +607,13 @@ classdef (Sealed) DataArray
         end
       end
       
-      % Do the conform
+      % Do the align
       
       switch mode
         case 'union'
-          [a2,b2] = conform1union(a, b, opts);
+          [a2,b2] = align1union(a, b, opts);
         case 'intersect'
-          [a2,b2] = conform1intersect(a, b, opts);
+          [a2,b2] = align1intersect(a, b, opts);
         otherwise
           error('jl:InvalidInput', 'Invalid mode argument: %s', mode);
       end
@@ -814,8 +816,8 @@ classdef (Sealed) DataArray
   
   methods (Access = private)
     
-    function [a2,b2] = conform1intersect(a, b, opts)
-      mustBeA(opts, 'jl.xmarray.ConformOptions');
+    function [a2,b2] = align1intersect(a, b, opts)
+      mustBeA(opts, 'jl.xmarray.AlignOptions');
       for iDim = 1:ndims(a)
         if ismember(iDim, opts.excludeDims)
           continue
@@ -828,9 +830,9 @@ classdef (Sealed) DataArray
       end
     end
     
-    function [a,b] = conform1union(a, b, opts)
+    function [a,b] = align1union(a, b, opts)
       [aIn,bIn] = deal(a, b); %#ok<ASGLU> This is just for debugging
-      mustBeA(opts, 'jl.xmarray.ConformOptions');
+      mustBeA(opts, 'jl.xmarray.AlignOptions');
       for iDim = 1:ndims(a)
         if ismember(iDim, opts.excludeDims)
           continue
