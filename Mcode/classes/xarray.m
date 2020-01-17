@@ -116,7 +116,7 @@ classdef (Sealed) xarray
             ellipsesOrMissing(this.labels{i}));
         end
       end
-      if numel(this) < 100
+      if numel(this) < 1000
         disp(this.vals);
       end
     end
