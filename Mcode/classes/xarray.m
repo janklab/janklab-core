@@ -4,7 +4,7 @@ classdef (Sealed) xarray
   % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
-  % TODO: Promotion of plain arrays in arithmetic and relops
+  % TODO: Promotion of plain arrays in arithmetic
   % TODO: Aggregate arithmetic (sum, prod) with dim collapsing
   % TODO: DataUnits
   % TODO: 1- and 0-dim values: since we have labels and names along dims, a 2-D
@@ -199,7 +199,7 @@ classdef (Sealed) xarray
       end
       out.vals = ctranspose(this);
       out.labels = this.labels([2 1]);
-      out.dimNames = this.dimNames([2 1]);      
+      out.dimNames = this.dimNames([2 1]);
     end
     
     function out = transpose(this)
@@ -209,7 +209,7 @@ classdef (Sealed) xarray
       end
       out.vals = transpose(this);
       out.labels = this.labels([2 1]);
-      out.dimNames = this.dimNames([2 1]);      
+      out.dimNames = this.dimNames([2 1]);
     end
     
     function out = squeeze(this)
@@ -234,8 +234,9 @@ classdef (Sealed) xarray
       out.vals = shiftdim(this.vals, n);
       out.dimNames = circshift(this.dimNames, n);
       out.labels = circshift(this.labels, n);
-
-      function mustBeSameDimStructure(a, b)
+    end
+    
+    function mustBeSameDimStructure(a, b)
       if ~isequaln(a.labels, b.labels)
         error(['a and b must have same dimension structure, but they ' ...
           'differ in their dimension labels']);
@@ -351,7 +352,7 @@ classdef (Sealed) xarray
       if nargin < 3 || isempty(mode); mode = 'union'; end
       out = apply(@minus, a, b, mode);
     end
-
+    
     function out = uminus(this)
       out = this;
       out.vals = uminus(this.vals);
@@ -432,7 +433,7 @@ classdef (Sealed) xarray
           opts = jl.xarray.ConformOptions(arg);
         end
       end
-
+      
       if ~isempty(args)
         error('jl:InvalidInput', 'Too many arguments');
       end
