@@ -1,7 +1,6 @@
 classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
   
-  % TODO: conform1union
   % TODO: Broadcasting!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
