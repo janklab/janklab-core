@@ -350,29 +350,28 @@ classdef (Sealed) xarray
       end
     end
     
-    function out = plus(a, b, mode)
-      if nargin < 3 || isempty(mode); mode = 'union'; end
-      out = apply(@plus, a, b, mode);
+    function out = plus(a, b, varargin)
+      out = apply(@plus, a, b, varargin{:});
     end
     
-    function out = minus(a, b, mode)
-      if nargin < 3 || isempty(mode); mode = 'union'; end
-      out = apply(@minus, a, b, mode);
+    function out = minus(a, b, varargin)
+      out = apply(@minus, a, b, varargin{:});
     end
     
-    function out = times(a, b, mode)
-      if nargin < 3 || isempty(mode); mode = 'union'; end
-      out = apply(@times, a, b, mode);
+    function out = times(a, b, varargin)
+      out = apply(@times, a, b, varargin{:});
     end
     
-    function out = ldivide(a, b, mode)
-      if nargin < 3 || isempty(mode); mode = 'union'; end
-      out = apply(@ldivide, a, b, mode);
+    function out = ldivide(a, b, varargin)
+      out = apply(@ldivide, a, b, varargin{:});
     end
     
-    function out = rdivide(a, b, mode)
-      if nargin < 3 || isempty(mode); mode = 'union'; end
-      out = apply(@rdivide, a, b, mode);
+    function out = rdivide(a, b, varargin)
+      out = apply(@rdivide, a, b, varargin{:});
+    end
+    
+    function out = mod(a, b, varargin)
+      out = apply(@mod, a, b, varargin{:});
     end
     
     function out = uminus(this)
