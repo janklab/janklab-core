@@ -1,6 +1,37 @@
 classdef (Sealed) xarray
   %XARRAY A multidimensional array with labeled indexes along its dims
+  %
+  % An xarray is a multidimensional array that has labels along its
+  % dimensions. This allows you to label the positions along each dimension
+  % with significant domain/business values, instead of just using numeric
+  % indexes. You can then index into the array using either numeric/logical
+  % indexing like a normal Matlab array, or with the dimension labels.
+  %
+  % To index into an xarray using the dimension labels, index using {}
+  % instead of (). The () indexing does normal numeric/logical indexing;
+  % the {} operator does indexing against the labels for each dimension.
+  %
+  % xarray is inspired by the Python xarray library
+  % (http://xarray.pydata.org/en/stable/). It works in a similar manner.
+  %
+  % Semantically, an xarray is similar to a Matlab table array or an SQL
+  % table, where a set of variables/columns constitutes the primary key,
+  % and there is a single dependent non-key value column. In an xarray, the
+  % key columns are laid out along the dimensions, and the value column is
+  % contained in the main N-D array. This is a lot like an OLAP cube from
+  % the database world. This layout provides for fast indexing, lookup, and
+  % subsetting operations, and compact storage for the case when you have
+  % many key columns and a relatively dense "fill factor".
+  %
+  % Most of the aggregate arithmetic operations (like PROD, DIFF, CUMSUM,
+  % and so on) are not implemented yet, because I haven't settled on how to
+  % handle the dimension-collapsing behavior that they entail. SUM is
+  % currently implemented as an example of what I'm currently thinking for
+  % it.
+  %
+  % xarray is a work in progress as of January 2020. Feedback is welcome.
   
+  % TODO: Special-case ':' for label indexing
   % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
