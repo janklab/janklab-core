@@ -7,6 +7,8 @@ classdef (Sealed) xarray
   % indexes. You can then index into the array using either numeric/logical
   % indexing like a normal Matlab array, or with the dimension labels.
   %
+  % Xarray is designed for dealing with multidimensional scientific data.
+  %
   % To index into an xarray using the dimension labels, index using {}
   % instead of (). The () indexing does normal numeric/logical indexing;
   % the {} operator does indexing against the labels for each dimension.
@@ -17,9 +19,6 @@ classdef (Sealed) xarray
   % Matlab represents indexes for the special magic colon operator. This
   % effectively means you cannot use ':' as a label.
   %
-  % xarray is inspired by the Python xarray library
-  % (http://xarray.pydata.org/en/stable/). It works in a similar manner.
-  %
   % Semantically, an xarray is similar to a Matlab table array or an SQL
   % table, where a set of variables/columns constitutes the primary key,
   % and there is a single dependent non-key value column. In an xarray, the
@@ -28,6 +27,12 @@ classdef (Sealed) xarray
   % the database world. This layout provides for fast indexing, lookup, and
   % subsetting operations, and compact storage for the case when you have
   % many key columns and a relatively dense "fill factor".
+  %
+  % xarray is inspired by the Python xarray library
+  % (http://xarray.pydata.org/en/stable/). It works in a similar manner.
+  % See: Hoyer, S. & Hamman, J., (2017). xarray: N-D labeled Arrays and 
+  % Datasets in Python. Journal of Open Research Software. 5(1), p.10.
+  % DOI: http://doi.org/10.5334/jors.148
   %
   % Most of the aggregate arithmetic operations (like PROD, DIFF, CUMSUM,
   % and so on) are not implemented yet, because I haven't settled on how to
@@ -46,13 +51,25 @@ classdef (Sealed) xarray
   % TODO: Rename to DataArray or dataarray, since that's the class name
   %       that Python xarray uses?
   % TODO: sortrows, N-D generalization of sortrows
+  % TODO: Update valuesName based on function application
   % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
+  % TODO: Statistics (mean, median, std)
   % TODO: DataUnits?
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
   %       should be.
   % TODO: Multi-xarray structure like xarray's Dataset
   % TODO: Rename module to "xmarray" so I'm not stealing xarray's name?
+  % TODO: NetCDF and HDF5 I/O
+  % TODO: Plotting
+  % TODO: Attributes?
+  % TODO: Rename dimNames and labels to dims and coords to match Python
+  %       xarray?
+  % TODO: Label-based indexing where you name a dimension instead of
+  %       passing it in to a positional parameter in {}-indexing. (sel()
+  %       and isel())
+  % TODO: loc() as an alias for subsetByLabels()
+  % TODO: Support dimensions without coordinates?
   
   properties
     vals = []
