@@ -50,20 +50,20 @@ classdef (Sealed) DataArray
   
   % TODO: Broadcasting and scalar expansion! Broadcasting should operate by
   %       dimension name, not position.
-  % TODO: groupby()
+  % TODO: groupby
   % TODO: Support dimensions without coordinates?
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
+  % TODO: Statistics (mean, median, std, etc.)
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
   %       should be.
-  % TODO: Statistics (mean, median, std, etc.)
   % TODO: Multi-DataArray structure like xarray's Dataset
   % TODO: NetCDF and HDF5 I/O
   % TODO: DataUnits?
   % TODO: Plotting
   % TODO: Attributes?
-  % TODO: Have squeeze() accept a list of dims
+  % TODO: Have squeeze accept a list of dims
   
   properties
     % The main N-dimensional array of values. May be any type.
