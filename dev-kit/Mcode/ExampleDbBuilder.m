@@ -12,7 +12,7 @@ classdef ExampleDbBuilder
         password = 'honk'
         databaseName = 'village'
         
-        exampleTables = { 'S' 'P' 'SP' 'AThousand' };
+        exampleTables = { 'S' 'P' 'SP' 'ADozen' 'AThousand' };
     end
     
     methods
@@ -70,12 +70,32 @@ classdef ExampleDbBuilder
             db.exec(sql);
             
             % Thousand/Million tables
-            
-            i = [1:1000]';
-            x = [1.11] * [1:1000]';
-            chr = repmat("x", [1000 1]);
+
+            n = 12;
+            i = [1:n]';
+            x = [1.11] * [1:n]';
+            chr = repmat("x", [n 1]);
             flagDay = datenum(jl.time.flagday);
-            dt = datetime(flagDay+[0:999]', 'ConvertFrom','datenum');
+            dt = datetime(flagDay+[1:n]'-1, 'ConvertFrom','datenum');
+            tbl = table(i, x, chr, dt);
+            
+            sql = sprintf(strjoin({
+                'CREATE TABLE ADozen ('
+                '    i     numeric(16),'
+                '    x     numeric(18,6),'
+                '    chr   char(1),'
+                '    dt    timestamp'
+                ')'
+                }, '\n'));
+            db.exec(sql);
+            db.insert('ADozen', tbl);
+                        
+            n = 1000;
+            i = [1:n]';
+            x = [1.11] * [1:n]';
+            chr = repmat("x", [n 1]);
+            flagDay = datenum(jl.time.flagday);
+            dt = datetime(flagDay+[1:n]'-1, 'ConvertFrom','datenum');
             tbl = table(i, x, chr, dt);
             
             sql = sprintf(strjoin({
