@@ -89,6 +89,8 @@ function genPlanarClass(file)
 %    generate the definitions, the boilerplate code will end up in the wrong
 %    place. Just cut and paste it to its proper place, and it'll stick there on
 %    future regenerations.
+%  - TODO: @planarrelops for < > <= >= == ~= that respects planar
+%    precedence.
 %  - TODO: Decide whether subclasses should be allowed to do relops (==, <=,
 %    etc) against superclasses. It's probably not legit.
 %  - TODO: Detect user-defined versions of generatable methods and skip
@@ -112,7 +114,10 @@ function genPlanarClass(file)
 %
 % Examples:
 %
-% jl.code.genPlanarClass('MyPlanarClass.m')
+% % Pass the package-qualified name of the class you want
+% % to generate code for
+%
+% jl.code.genPlanarClass('foo.bar.MyPlanarClass')
 
 generator = jl.code.internal.PlanarClassGenerator;
 
