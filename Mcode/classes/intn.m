@@ -1,7 +1,15 @@
-classdef intn < jl.util.Displayable
+classdef (Abstract) intn < jl.util.Displayable
 	%INTN A NaN-able integer array
 	%
-	% TODO: isequaln()
+	% An INTN is an integer array that supports NaN values.
+	%
+	% INTN is the abstract base type for all the various [u]int*n
+	% classes. Each size of integer has its own concrete subclass.
+	%
+	% See also:
+	% INT8N, UINT8N, INT16N, UINT16N, INT32N, UINT32N, INT64N, UINT64N
+
+	% TODO: Array display
 	
 	% @planarprecedence(tfnan,ints)
 	
@@ -42,6 +50,17 @@ classdef intn < jl.util.Displayable
 				end
 			end
 			varargout = args;
+		end
+		
+		function disp(this)
+			dispMaybeMatrix(this);
+		end
+		
+    function out = dispstrs(this)
+      out = cell(size(this));
+      for i = 1:numel(this)
+        out{i} = dispstr_scalar(subset(this,i));
+      end
 		end
 		
 		% Relational operations

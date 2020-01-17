@@ -39,6 +39,33 @@ classdef Displayable
       error('jl:Unimplemented', ['Subclasses of Displayable must override ' ...
         'dispstr_scalar; %s does not'], ...
         class(this));
-    end
+		end
+		
+		function dispMaybeMatrix(this)
+			if ~ismatrix(this)
+				disp(dispstr(this));
+				return
+			elseif isempty(this)
+				if isequal(size(this), [0 0])
+					fprintf('[] (%s)\n', class(this));
+				else
+					fprintf('Empty %s %s array\n', size2str(size(this)), ...
+						class(this));
+				end
+			else
+				strs = dispstrs(this);
+				nCols = size(strs, 2);
+				colWidths = NaN(1, nCols);
+				for i = 1:nCols
+					colWidths(i) = max(strlen(strs(:,i)));
+				end
+				fmt = [strjoin(repmat({'%*s'}, [1 nCols]), '  ') '\n'];
+				for iRow = 1:size(strs, 1)
+					args = [num2cell(colWidths); strs(iRow,:)];
+					args = args(:);
+					fprintf(fmt, args{:});
+				end
+			end
+		end
   end
 end
