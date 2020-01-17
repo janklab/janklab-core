@@ -39,13 +39,20 @@ classdef (Sealed) xarray
   % Also, I don't understand matrix math well enough to know how mldivide(),
   % mrdivide(), and inv() should work here.
   
-  % TODO: Broadcasting and scalar expansion!
+  % TODO: Broadcasting and scalar expansion! Broadcasting should operate by
+  %       dimension name, not position.
+  % TODO: groupby()
+  % TODO: Rename conform() to align() to be like Python xarray?
+  % TODO: Rename to DataArray or dataarray, since that's the class name
+  %       that Python xarray uses?
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
   % TODO: DataUnits?
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
-  % should be.
+  %       should be.
+  % TODO: Multi-xarray structure like xarray's Dataset
+  % TODO: Rename module to "xmarray" so I'm not stealing xarray's name?
   
   properties
     vals = []
