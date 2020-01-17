@@ -4,7 +4,7 @@ classdef ConformOptions
   properties
     mode (1,1) string = "union"
     broadcast (1,1) logical = true
-    sortLabels (1,1) logical = false
+    sortCoords (1,1) logical = false
     excludeDims double = []
   end
   
@@ -27,7 +27,7 @@ classdef ConformOptions
             if nargin == 0
                 return
             end
-            if isa(arg, 'jl.sql.ConformOptions')
+            if isa(arg, 'jl.xmarray.ConformOptions')
                 this = arg;
                 return
             end
