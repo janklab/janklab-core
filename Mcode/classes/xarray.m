@@ -3,6 +3,7 @@ classdef (Sealed) xarray
   
   % TODO: subsref, subsasgn, with {} support for indexing by label
   % TODO: conform1union
+  % TODO: Broadcasting!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
   % TODO: isequal, isequaln, eq, ne, < > <= >= relops
@@ -11,12 +12,13 @@ classdef (Sealed) xarray
   % TODO: squeeze
   % TODO: circshift, permute, ipermute, ctranspose, transpose
   % TODO: shiftdims
-  % TODO: cat
+  % TODO: DataUnits
   
   properties
+    vals = []
     labels cell = {}
     dimNames string = string.empty
-    vals = []
+    valueName (1,1) string = string(missing)
   end
   properties (Dependent = true)
     valueType
@@ -30,8 +32,9 @@ classdef (Sealed) xarray
   
   methods
     
-    function this = xarray(vals, labels, dimNames)
+    function this = xarray(vals, labels, dimNames, valueName)
       if nargin < 3 || isempty(dimNames); dimNames = string.empty; end
+      if nargin < 4 || isempty(valueName); valueName = string.empty; end
       if nargin == 0
         return
       end
@@ -46,6 +49,7 @@ classdef (Sealed) xarray
         dimNames = repmat(string(missing), [1 ndims(vals)]);
       end
       this.dimNames = dimNames;
+      this.valueName = valueName;
       validate(this);
     end
     
@@ -159,11 +163,13 @@ classdef (Sealed) xarray
       out = isscalar(this.vals);
     end
     
-    function varargout = apply(fcn, a, b, mode)
+    function varargout = apply(fcn, a, b, varargin)
       %APPLY Apply a two-arg function to input xarrays
       %
       % varargout = apply(fcn, a, b)
-      % varargout = apply(fcn, a, b)
+      % varargout = apply(fcn, , ..., mode)
+      % varargout = apply(fcn, , ..., 'broadcast')
+      % varargout = apply(fcn, , ..., opts)
       %
       % This conforms the xarray arguments, and then applies the given function
       % to their values.
@@ -174,8 +180,18 @@ classdef (Sealed) xarray
       %
       % mode (char) may be 'union' or 'intersect'. It controls the mode used
       % when the conform is done.
-      if nargin < 4 || isempty(mode); mode = 'union'; end
-      [a, b] = conform(a, b, mode);
+      %
+      % If 'broadcast' is passed, it enables broadcasting. This expands the
+      % input arrays along dimensions which are absent, but present in the other
+      % argument. Presence is detected based on dimension name.
+      %
+      % opts (struct, jl.xarray.ConformOptions) is an options argument that
+      % controls various aspects of conform's behavior. See its helptext for
+      % details.
+      %
+      % See also:
+      % jl.xarray.ConformOptions
+      [a, b] = conform(a, b, varargin{:});
       outvals = cell(1, nargout);
       outvals{:} = fcn(a.vals, b.vals);
       varargout = cell(size(outvals));
@@ -208,16 +224,63 @@ classdef (Sealed) xarray
       end
     end
     
+    function out = cat(dim, varargin)
+      args = varargin;
+      tmp = args{1};
+      mustBeA(tmp, 'xarray', 'input 2');
+      % TODO: Check values name and dim name
+      for i = 2:numel(args)
+        mustBeA(args{i}, 'xarray', sprintf('input %d', i+1));
+        [tmp,b] = conform(tmp, args{i}, {'excludeDims',dim});
+        collisions = intersect(tmp.labels{dim}, b.labels{dim});
+        if ~isempty(collisions)
+          error('Duplicate labels in inputs for dimension %d: %s', ...
+            dim, jl.utils.ellipses(collisions));
+        end
+        newLabels = [tmp.labels{dim} b.labels{dim}];
+        newValues = cat(dim, tmp.values, b.values);
+        tmp.labels{dim} = newLabels;
+        tmp.values = newValues;
+      end
+      out = tmp;
+    end
+    
+    function out = horzcat(varargin)
+      out = cat(2, varargin{:});
+    end
+    
+    function out = vertcat(varargin)
+      out = cat(1, varargin{:});
+    end
+    
+    function promote(a, b)
+    end
+    
     function [a2, b2] = conform(a, b, varargin)
       %CONFORM Rearrange input xarrays to have the same dimensions
       mustBeA(a, 'xarray');
       mustBeA(b, 'xarray');
       args = varargin;
-      if ischar(args{end}) || isstring(args{end})
-        mode = args{end};
+      
+      opts = jl.xarray.ConformOptions;
+      while ischar(args{end}) || isstring(args{end}) || isstruct(args{end}) ...
+          || isa(args{end}, 'jl.xarray.ConformOptions')
+        arg = args{end};
         args(end) = [];
-      else
-        mode = 'union';
+        if ischar(arg) || isstring(arg)
+          switch arg
+            case ["union" "intersect"]
+              opts.mode = arg;
+            case "broadcast"
+              opts.broadcast = true;
+            case "sort"
+              opts.sortLabels = true;
+            otherwise
+              error('jl:InvalidInput', 'Invalid string option: %s', arg);
+          end
+        else
+          opts = jl.xarray.ConformOptions(arg);
+        end
       end
 
       if ~isempty(args)
@@ -243,9 +306,9 @@ classdef (Sealed) xarray
       
       switch mode
         case 'union'
-          [a2,b2] = conform1union(a, b);
+          [a2,b2] = conform1union(a, b, opts);
         case 'intersect'
-          [a2,b2] = conform1intersect(a, b);
+          [a2,b2] = conform1intersect(a, b, opts);
         otherwise
           error('jl:InvalidInput', 'Invalid mode argument: %s', mode);
       end
@@ -277,7 +340,13 @@ classdef (Sealed) xarray
       outVals = this.vals(:);
       
       colVals = [keyss outVals];
-      colNames = [keyCols 'Value']; % Eww; think of something better
+      if ismissing(this.valueName)
+        % TODO: Uniqueify this
+        valueCol = 'Value';
+      else
+        valueCol = this.valueName;
+      end
+      colNames = [keyCols valueCol];
       out = table(colVals{:}, 'VariableNames',colNames);
     end
     
@@ -341,6 +410,7 @@ classdef (Sealed) xarray
         valsOut = repmat(fillValFor(valsIn), sz);
         valsOut(ix) = valsIn;
         xarr.vals = valsOut;
+        xarr.valueName = valCols{iOut};
         varargout{iOut} = xarr;
       end
     end
@@ -349,8 +419,12 @@ classdef (Sealed) xarray
   
   methods (Access = private)
     
-    function [a2,b2] = conform1intersect(a, b)
+    function [a2,b2] = conform1intersect(a, b, opts)
+      mustBeA(opts, 'jl.xarray.ConformOptions');
       for iDim = 1:ndims(a)
+        if ismember(iDim, opts.excludeDims)
+          continue
+        end
         aLabels = a.labels{iDim};
         bLabels = b.labels{iDim};
         [tf,loc] = ismember(aLabels, bLabels);
@@ -359,18 +433,38 @@ classdef (Sealed) xarray
       end
     end
     
-    function [a2,b2] = conform1union(a, b)
+    function [a,b] = conform1union(a, b, opts)
+      [aIn,bIn] = deal(a, b); %#ok<ASGLU> This is just for debugging
+      mustBeA(opts, 'jl.xarray.ConformOptions');
       for iDim = 1:ndims(a)
+        if ismember(iDim, opts.excludeDims)
+          continue
+        end
         aLabels = a.labels{iDim};
         bLabels = b.labels{iDim};
-        [tf,loc] = ismember(aLabels, bLabels);
-        % Pull up the things in b that are already in a
+        tf = ismember(aLabels, bLabels);
+        tf2 = ismember(bLabels, aLabels);
+        addLabelsA = bLabels(~tf2);
+        addLabelsB = aLabels(~tf);
+        newLabelsA = [aLabels addLabelsA];
+        newLabelsB = [bLabels addLabelsB];
+        newLabels = newLabelsA;
+        if opts.sortLabels
+          newLabels = sort(newLabels);
+        end
+        newLength = numel(newLabels);
+        newValsA = expandValsAlong(a.vals, iDim, newLength);
+        newValsB = expandValsAlong(b.vals, iDim, newLength);
         
-        % Expand b to have the things not in a
+        a.vals = newValsA;
+        a.labels{iDim} = newLabelsA;
+        b.vals = newValsB;
+        b.labels{iDim} = newLabelsB;
         
-        % Expand a to have the things not in b
-        
-        UNIMPLEMENTED
+        [~,loc] = ismember(newLabels, newLabelsA);
+        a = subsetAlongDim(a, iDim, loc);
+        [~,loc] = ismember(newLabels, newLabelsB);
+        b = subsetAlongDim(b, iDim, loc);
       end
     end
     
@@ -401,4 +495,13 @@ end
 tmp = x(1);
 tmp(3) = x(1);
 out = tmp(2);
+end
+
+function out = expandValsAlong(vals, ixDim, newLength)
+fill = fillValFor(vals);
+out = vals;
+ixs = repmat({':'}, [1 ndims(vals)]);
+oldLength = size(vals, ixDim);
+ixs{ixDim} = oldLength+1:newLength;
+out(ixs{:}) = fill;
 end
