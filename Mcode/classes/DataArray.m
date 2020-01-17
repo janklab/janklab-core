@@ -58,7 +58,6 @@ classdef (Sealed) DataArray
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
   %       should be.
   % TODO: Statistics (mean, median, std, etc.)
-  % TODO: Trig (sin, cos, acos, tan, etc.)
   % TODO: Multi-DataArray structure like xarray's Dataset
   % TODO: NetCDF and HDF5 I/O
   % TODO: DataUnits?
@@ -576,13 +575,35 @@ classdef (Sealed) DataArray
       out.valueName = maybeSprintf('~%s', this.valueName);
     end
     
-    function varargout = apply(fcn, a, b, varargin)
-      %APPLY Apply a two-arg function to input DataArrays
+    function out = apply(fcn, this)
+      %APPLY Apply a unary function to an input DataArray
       %
-      % varargout = apply(fcn, a, b)
-      % varargout = apply(fcn, , ..., mode)
-      % varargout = apply(fcn, , ..., 'broadcast')
-      % varargout = apply(fcn, , ..., opts)
+      % out = apply(fcn, obj)
+      %
+      % This applies a given function to the values in obj, producing a new
+      % DataArray of the same dimensional structure.
+      %
+      % fcn (function handle) is the function to apply to a and b's values once
+      % aligned. It must return an array of the same size as its
+      % input, whose output elements correspond to the input arguments in
+      % the same position.
+      %
+      % Returns a DataArray.
+      mustBeA(this, 'DataArray');
+      out = this;
+      out.values = feval(fcn, this.values);
+      out.valueName = maybeSprintf('%s(%s)', ...
+        func2str(fcn), this.valueName);
+      validate(out);
+    end
+    
+    function varargout = apply2(fcn, a, b, varargin)
+      %APPLY2 Apply a two-arg function to input DataArrays
+      %
+      % varargout = apply2(fcn, a, b)
+      % varargout = apply2(fcn, , ..., mode)
+      % varargout = apply2(fcn, , ..., 'broadcast')
+      % varargout = apply2(fcn, , ..., opts)
       %
       % This aligns the DataArray arguments, and then applies the given function
       % to their values.
@@ -619,32 +640,32 @@ classdef (Sealed) DataArray
     % Arithmetic
     
     function out = plus(a, b, varargin)
-      out = apply(@plus, a, b, varargin{:});
+      out = apply2(@plus, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s + %s)', a.valueName, b.valueName);
     end
     
     function out = minus(a, b, varargin)
-      out = apply(@minus, a, b, varargin{:});
+      out = apply2(@minus, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s - %s)', a.valueName, b.valueName);
     end
     
     function out = times(a, b, varargin)
-      out = apply(@times, a, b, varargin{:});
+      out = apply2(@times, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s .* %s)', a.valueName, b.valueName);
     end
     
     function out = ldivide(a, b, varargin)
-      out = apply(@ldivide, a, b, varargin{:});
+      out = apply2(@ldivide, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s .\ %s)', a.valueName, b.valueName);
     end
     
     function out = rdivide(a, b, varargin)
-      out = apply(@rdivide, a, b, varargin{:});
+      out = apply2(@rdivide, a, b, varargin{:});
       out.valueName = maybeSprintf('(%s ./ %s)', a.valueName, b.valueName);
     end
     
     function out = mod(a, b, varargin)
-      out = apply(@mod, a, b, varargin{:});
+      out = apply2(@mod, a, b, varargin{:});
       out.valueName = maybeSprintf('mod(%s, %s)', a.valueName, b.valueName);
     end
         
@@ -717,6 +738,76 @@ classdef (Sealed) DataArray
       out.dims(2) = b.dims(2);
       out.valueName = maybeSprintf('(%s * %s)', a.valueName, b.valueName);
     end
+    
+    % Trigonometry
+    
+    function out = sin(this)
+      out = this;
+      out.values = sin(this.values);
+      out.valueName = maybeSprintf('sin(%s)', this.valueName);
+    end
+    
+    function out = sind(this)
+      out = this;
+      out.values = sind(this.values);
+      out.valueName = maybeSprintf('sind(%s)', this.valueName);
+    end
+    
+    function out = asin(this)
+      out = this;
+      out.values = asin(this.values);
+      out.valueName = maybeSprintf('asin(%s)', this.valueName);
+    end
+    
+    function out = asind(this)
+      out = this;
+      out.values = asind(this.values);
+      out.valueName = maybeSprintf('asind(%s)', this.valueName);
+    end
+    
+    function out = cos(this)
+      out = this;
+      out.values = cos(this.values);
+      out.valueName = maybeSprintf('cos(%s)', this.valueName);
+    end
+    
+    function out = acos(this)
+      out = this;
+      out.values = acos(this.values);
+      out.valueName = maybeSprintf('acos(%s)', this.valueName);
+    end
+    
+    function out = cosd(this)
+      out = this;
+      out.values = cosd(this.values);
+      out.valueName = maybeSprintf('cosd(%s)', this.valueName);
+    end
+    
+    function out = acosd(this)
+      out = this;
+      out.values = acosd(this.values);
+      out.valueName = maybeSprintf('acosd(%s)', this.valueName);
+    end
+    
+    function out = tan(this)
+      out = this;
+      out.values = tan(this.values);
+      out.valueName = maybeSprintf('tan(%s)', this.valueName);
+    end
+    
+    function out = atan(this)
+      out = this;
+      out.values = atan(this.values);
+      out.valueName = maybeSprintf('atan(%s)', this.valueName);
+    end
+    
+    function out = atan2(this)
+      out = this;
+      out.values = atan2(this.values);
+      out.valueName = maybeSprintf('atan2(%s)', this.valueName);
+    end
+    
+    % Other stuff
     
     function [a,b] = promote(a, b)
       %PROMOTE Promote inputs to be DataArrays
