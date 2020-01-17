@@ -38,9 +38,21 @@ SP = cell2table ({
     'S4'  'P4'  300
     'S4'  'P5'  400
     }, 'VariableNames', {'SNum', 'PNum', 'Qty'});
+S = cellstrvars2string(S);
+P = cellstrvars2string(P);
+SP = cellstrvars2string(SP);
 if nargout == 1
     varargout = { struct('S', S, 'P', P, 'SP', SP) };
 else
     varargout = { S, P, SP };
+end
+end
+
+function t = cellstrvars2string(t)
+vars = t.Properties.VariableNames;
+for i = 1:numel(vars)
+  if iscellstr(t.(vars{i})) %#ok<ISCLSTR>
+    t.(vars{i}) = string(t.(vars{i}));
+  end
 end
 end
