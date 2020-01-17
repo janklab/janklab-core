@@ -97,6 +97,16 @@ classdef (Sealed) xarray
       out = class(this.vals);
     end
     
+    function out = values(this)
+      %VALUES Get the underlying values array
+      %
+      % out = values(obj)
+      %
+      % This is an alias for obj.vals, provided so you can use it in inline
+      % expressions.
+      out = this.vals;
+    end
+    
     function validate(this)
       mustBeA(this.labels, 'cell');
       if ~isequal(numel(this.labels), ndims(this.vals))
