@@ -9,7 +9,7 @@ classdef FileHandle < handle
 	% and adds additional convenience methods.
 	
 	properties
-		% The underlying Matlab fID (like that returned by fopen()
+		% The underlying Matlab fID (like that returned by fopen())
 		fid         double
 		% Filename of the opened file
 		filename    char

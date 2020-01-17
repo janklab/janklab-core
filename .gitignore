@@ -1,9 +1,9 @@
 !/dist
 /src/java/janklab-java/target/
-/dist/lib/java-ext/*
-!/dist/lib/java-ext/.dummy
-!/dist/lib/java-ext/README.md
-/dist/lib/java-ext-static/*
-!/dist/lib/java-ext-static/.dummy
-!/dist/lib/java-ext-static/README.md
+/lib/java-ext/*
+!/lib/java-ext/.dummy
+!/lib/java-ext/README.md
+/lib/java-ext-static/*
+!/lib/java-ext-static/.dummy
+!/lib/java-ext-static/README.md
 src/java/janklab-java/.idea/workspace.xml

@@ -14,10 +14,10 @@ classdef janklab
             % Initialize logging
             % No need to call initSLF4M, since we've loaded Dispstr ourselves
             % Just configure the console logging.
-            logm.Log4jConfigurator.configureBasicConsoleLogging();
+            logger.Log4jConfigurator.configureBasicConsoleLogging();
             
             % Initialize MDBC
-            jl.mdbc.Mdbc.initMdbc();
+            jl.sql.Mdbc.initMdbc();
             
             % Add common synchronized folders, as a developer convenience
             addSynchronizedFoldersToPath();
