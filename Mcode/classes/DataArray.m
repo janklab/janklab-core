@@ -67,17 +67,32 @@ classdef (Sealed) DataArray
   % TODO: Have squeeze() accept a list of dims
   
   properties
+    % The main N-dimensional array of values. May be any type.
     values = []
+    % The list of coordinates for the dimensions of values.
     coords cell = {}
+    % Names of the dimensions.
     dims string = string.empty
+    % Name for the values.
     valueName (1,1) string = string(missing)
   end
   properties (Dependent = true)
+    % Type of underlying values array. This will be the class name of
+    % values.
     valueType
   end
   
   methods (Static)
     function out = empty()
+      %EMPTY Construct a new empty DataArray
+      %
+      % out = DataArray.empty()
+      %
+      % Only the zero-arg version of empty() is supported, because empty
+      % DataArrays that are non-zero-long along any dimension require
+      % additional information to construct.
+      %
+      % Returns a 0-D DataArray.
       out = DataArray;
     end
   end
@@ -85,6 +100,35 @@ classdef (Sealed) DataArray
   methods
     
     function this = DataArray(values, coords, dims, valueName)
+      %DATAARRAY Construct a new object
+      %
+      % obj = DataArray()
+      % obj = DataArray(dataArray)
+      % obj = DataArray(values, coords)
+      % obj = DataArray(values, coords, dims)
+      % obj = DataArray(values, coords, dims, valueName)
+      %
+      % values is the underlying N-dimensional array you wish to wrap in a
+      % data array. It may be of any type that supports normal Matlab array
+      % operations. (Which means pretty much any type.)
+      %
+      % coords (cell) is a list of coordinates to label the dimensions of
+      % the DataArray with. It is a cell vector where coords{i} is the
+      % coordinates list for dimension i. It must have as many elements as
+      % values has dimensions. Each coords{i} must be a vector that is the
+      % same length as values is long along that dimension. The individual
+      % coords{i} may be of any type that supports normal Matlab array
+      % operations.
+      %
+      % dims (string) is an optional list of dimension names. If supplied,
+      % it must be a vector whose length is equal to the number of
+      % dimensions in values. It is okay to have missing values for any of
+      % the names. If omitted, the dimension names all default to missing.
+      %
+      % valueName (scalar string) is an optional name for the values array.
+      %
+      % For the special calling form DataArray(dataArray), when you pass in
+      % an existing DataArray, it just returns the input unmodified.
       if nargin < 3 || isempty(dims); dims = string.empty; end
       if nargin < 4 || isempty(valueName); valueName = string.empty; end
       if nargin == 0
@@ -116,10 +160,23 @@ classdef (Sealed) DataArray
       %
       % This is an alias for obj.values, provided so you can use it in inline
       % expressions.
+      %
+      % Returns an array of whatever type obj.values is.
       out = this.values;
     end
     
     function validate(this)
+      %VALIDATE Validate the object
+      %
+      % validate(obj)
+      %
+      % Checks obj's properties for validity and internal consistency.
+      % Raises an error if obj is not valid.
+      %
+      % This is defined as an explicit method instead of being done on any
+      % property mutation both for efficiency, and because some
+      % modifications to a DataArray require multiple properties to be
+      % modified in a manner that cannot be done atomically.
       mustBeA(this.coords, 'cell');
       if ~isequal(numel(this.coords), ndims(this.values))
         error('Inconsistent dimensions: %d dims in values, but %d label lists', ...
@@ -138,6 +195,13 @@ classdef (Sealed) DataArray
     end
     
     function disp(this)
+      %DISP Custom display
+      %
+      % disp(obj)
+      %
+      % Displays obj to the Matlab console. The output will include the
+      % underlying values if that array is not too large, for some
+      % arbitrary value of "too large".
       fprintf('xmarray DataArray: %d-D %s (%s)\n', ndims(this), size2str(size(this)), ...
         this.valueType);
       for i = 1:ndims(this)
@@ -148,17 +212,36 @@ classdef (Sealed) DataArray
             ellipsesOrMissing(this.coords{i}));
         end
       end
-      if numel(this) < 1000
+      % If Matlab supported static class properties, that's where I'd put
+      % this, so users could configure it. But oh well. I don't want to
+      % bother making a persistent method wrapper for it.
+      maxDisplaySize = 1000;
+      if numel(this) < maxDisplaySize
         disp(this.values);
       end
     end
     
     function out = dispstrs(this)
+      %DISPSTRS Display strings for this' underlying values
+      %
+      % out = dispstrs(obj)
+      %
+      % Gets display strings for the individual elements of obj's values.
+      % Dimension names, coordinates, and valueNames are not included.
+      %
+      % Returns a cellstr array the same size as this.
       out = dispstrs(this.values);
     end
     
     function out = dispstr(this)
       %DISPSTR Custom display string for array
+      %
+      % out = dispstr(obj)
+      %
+      % Gets a display string representing this entire array. This is
+      % suitable for debugging output.
+      %
+      % Returns a charvec.
       
       % TODO: Add dim names
       out = sprintf('DataArray (%s): %s', ...
@@ -166,8 +249,21 @@ classdef (Sealed) DataArray
     end
     
     function out = mat2str(this)
-      out = sprintf('DataArray(%s, %s, %s)', ...
-        mat2str(this.values), mat2str(this.coords), mat2str(this.dims));
+      %MAT2STR Generate Matlab code that will reconstruct this object
+      %
+      % out = mat2str(obj)
+      %
+      % Generates a Matlab code expression that can be used to reconstruct
+      % the value of obj.
+      %
+      % If any of the values or coords in obj are handle objects, the
+      % resulting code will not work right. Requires all coords and values
+      % in obj to also support mat2str.
+      %
+      % Returns a charvec.
+      out = sprintf('DataArray(%s, %s, %s, %s)', ...
+        mat2str(this.values), mat2str(this.coords), mat2str(this.dims), ...
+        mat2str(this.valueName));
     end
     
     function out = ndims(this)
@@ -183,14 +279,41 @@ classdef (Sealed) DataArray
     end
     
     function out = size(this, varargin)
+      %SIZE Array size
+      %
+      % out = size(obj)
+      % out = size(obj, dim)
+      %
+      % Get the size of this array. This is the same as the size of the
+      % underlying values, or the lengths of all the coords arrays.
+      %
+      % NOTE: Conceptually, unlike normal Matlab objects, DataArray objects
+      % may be 1-D or 0-D. It is TBD how that will be reflected by the size
+      % method. For now, it always returns a vector at least 2 elements
+      % long.
+      %
+      % Returns a double vector.
       out = size(this.values, varargin{:});
     end
     
     function out = numel(this)
+      %NUMEL Number of elements
+      %
+      % out = numel(obj)
+      %
+      % Gets the number of elements in this array. This is the same as the
+      % number of elements in the underlying values array.
       out = numel(this.values);
     end
     
     function out = length(this)
+      %LENGTH Length along longest dimension
+      %
+      % out = length(obj)
+      %
+      % Gets the length along the longest dimension of obj.
+      %
+      % Don't use this. Use numel or size instead.
       out = length(this.values);
     end
     
@@ -311,6 +434,16 @@ classdef (Sealed) DataArray
     end
     
     function mustBeSameDimStructure(a, b)
+      % Require that inputs have the same dimensional structure
+      %
+      % mustBeSameDimStructure(a, b)
+      %
+      % Requires that a and b have the same dimensional structure. This
+      % means that they have the same values for dims and coords, except
+      % for where there are missing values (missing values are allowed to
+      % match against anything).
+      %
+      % Raises an error if the requirement is not met.
       if ~isequaln(a.coords, b.coords)
         error(['a and b must have same dimension structure, but they ' ...
           'differ in their dimension coords']);
@@ -527,6 +660,18 @@ classdef (Sealed) DataArray
     
     function out = sortdims(this)
       %SORTDIMS Sort this based on its dimension coords
+      %
+      % out = sortdims(obj)
+      %
+      % Sorts obj based on the natural ordering of the coord values along
+      % its dimensions. This means that the coords arrays are sorted, and
+      % the underlying values array is reordered along those dimensions to
+      % match.
+      %
+      % Returns an updated DataArray.
+      
+      % TODO: Add an option that allows you to select which dims to sort
+      % on.
       out = this;
       for iDim = 1:ndims(this)
         [~,ix] = sort(this.coords{iDim});
@@ -564,6 +709,20 @@ classdef (Sealed) DataArray
     end
     
     function [a,b] = promote(a, b)
+      %PROMOTE Promote inputs to be DataArrays
+      %
+      % [a,b] = promote(a, b)
+      %
+      % Promotes inputs to be DataArrays. Inputs which are not already
+      % DataArrays are wrapped in DataArrays with the same dimensional
+      % structure as the inputs which are DataArrays. This means that the
+      % szie of the non-DataArray inputs must be the same size as the
+      % DataArray inputs; no expansion or broadcasting is done/
+      %
+      % TODO: Maybe enable broadcasting/scalar expansion.
+      %
+      % Returns two DataArray objects. Errors if any input could not be
+      % converted to a DataArray.
       if ~isa(b, 'DataArray')
         b = DataArray(b, a.coords, a.dims, a.valueName);
         validate(b);
@@ -575,7 +734,35 @@ classdef (Sealed) DataArray
     end
     
     function [a2, b2] = align(a, b, varargin)
-      %CONFORM Rearrange input DataArrays to have the same dimensions
+      %ALIGN Rearrange input DataArrays to have the same dimensions
+      %
+      % [a2, b2] = align(a, b)
+      % [a2, b2] = align(..., 'union'|'intersect')
+      % [a2, b2] = align(..., 'broadcast')
+      % [a2, b2] = align(..., 'sort')
+      % [a2, b2] = align(..., opts)
+      %
+      % Rearranges and expands or subsets the input arguments so that they
+      % have the same dimensional structure or arrangement. The returned
+      % DataArrays will have the same dims and coords, and their values
+      % arrays will be the same size.
+      %
+      % If 'union' or 'intersect' is specified, it controls what happens
+      % when the inputs do not have the same set of coords along a
+      % dimension. If 'union', then both arrays are expanded so their
+      % coords are the union of the input coords. If 'intersect', then they
+      % are subsetted so their coords are the intersection of the input
+      % coords.
+      %
+      % If 'sort' is specified, then the resulting coords are sorted.
+      %
+      % opts is a jl.xmarray.AlignOptions argument or a struct that can be
+      % converted to one. It controls various aspects of align's behavior.
+      %
+      % Returns two DataArrays.
+      %
+      % See also:
+      % jl.xmarray.AlignOptions
       mustBeA(a, 'DataArray');
       mustBeA(b, 'DataArray');
       args = varargin;
@@ -633,6 +820,22 @@ classdef (Sealed) DataArray
     end
     
     function out = subsetByIndex(this, ixs)
+      %SUBSETBYINDEX Subset using indexes
+      %
+      % out = subsetByIndex(obj, ixs)
+      %
+      % Subsets and reorders obj by the supplied indexes.
+      %
+      % ixs is a cell vector containing the indexes to select along each
+      % dimension. Note that these are regular array indexes, not coord
+      % values.
+      %
+      % This is the function form of "out = obj(ixs{:})".
+      %
+      % Returns a dataarray.
+      %
+      % See also:
+      % sel, isel, subsetByCoords, subsref
       out = this;
       out.values = this.values(ixs{:});
       for iDim = 1:numel(ixs)
@@ -647,11 +850,31 @@ classdef (Sealed) DataArray
     end
     
     function out = subsetByCoords(this, coordss)
+      %SUBSETBYCOORDS Subset using coord values
+      %
+      % out = subsetByCoords(obj, coordss)
+      %
+      % Subsets obj by matching its coords values against supplied lists of
+      % coords.
+      %
+      % coordss is a cell vector containing vectors of coord values to use
+      % to subset obj by along each dimension.
+      %
+      % This is the function form of "out = obj{ixs{:}}".
       ixs = coords2subs(this, coordss);
       out = subsetByIndex(this, ixs);
     end
     
     function out = loc(this, coordss)
+      %LOC Subset using coord values
+      %
+      % out = loc(obj, coordss)
+      %
+      % loc is an alias for subsetByCoords, provided for Python xarray
+      % compatibility, or if you just want to do less typing.
+      %
+      % See also:
+      % SUBSETBYCOORDS
       out = subsetByCoords(this, coordss);
     end
     
