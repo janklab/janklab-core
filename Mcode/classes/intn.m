@@ -72,7 +72,64 @@ classdef (Abstract) intn < jl.util.Displayable
 		end
 		
 		function disp(this)
+			fprintf('  %s\n', class(this));
 			dispMaybeMatrix(this);
+		end
+		
+		function out = int8(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = int8(this.ints);
+		end
+		
+		function out = uint8(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = uint8(this.ints);
+		end
+		
+		function out = int16(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = int16(this.ints);
+		end
+		
+		function out = uint16(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = uint16(this.ints);
+		end
+		
+		function out = int32(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = int32(this.ints);
+		end
+		
+		function out = uint32(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = uint32(this.ints);
+		end
+		
+		function out = int64(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = int64(this.ints);
+		end
+		
+		function out = uint64(this)
+			if any(this.tfnan, 'all')
+				error('Cannot convert input to integer because NaNs are present');
+			end
+			out = uint64(this.ints);
 		end
 		
 		% Relational operations
