@@ -70,13 +70,14 @@ classdef (Sealed) xarray
     end
     
     function disp(this)
-      fprintf('xarray: %s\n', size2str(size(this)));
+      fprintf('xarray: %d-D %s (%s)\n', ndims(this), size2str(size(this)), ...
+        this.valueType);
       for i = 1:ndims(this)
         if ismissing(this.dimNames(i))
-          fprintf('  dim %d: %s\n', i, jl.util.ellipses(this.labels{i}));
+          fprintf('  dim %d: %s\n', i, ellipsesOrMissing(this.labels{i}));
         else
           fprintf('  dim %d ("%s"): %s\n', i, this.dimNames(i), ...
-            jl.util.ellipses(this.labels{i}));
+            ellipsesOrMissing(this.labels{i}));
         end
       end
       if numel(this) < 100
@@ -751,4 +752,17 @@ ixs = repmat({':'}, [1 ndims(vals)]);
 oldLength = size(vals, ixDim);
 ixs{ixDim} = oldLength+1:newLength;
 out(ixs{:}) = fill;
+end
+
+function out = ellipsesOrMissing(x)
+if nargin < 2 || isempty(n); n = 40; end
+
+strs = string(dispstrs(x));
+strs(ismissing(x)) = "<missing>";
+strs = strs(:)';
+if numel(strs) > n
+  strs(n+1:end) = [];
+  strs(end+1) = {'...'};
+end
+out = strjoin(strs, ', ');
 end
