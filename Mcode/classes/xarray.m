@@ -160,6 +160,37 @@ classdef xarray
           error('jl:InvalidInput', 'Invalid mode argument: %s', mode);
       end
     end
+    
+    function out = unpivot(this)
+      %UNPIVOT Unpivot an xarray into a table
+      %
+      % out = unpivot(obj)
+      %
+      % Converts the xarray obj into a table by unpivoting its dimensions.
+      
+      % TODO: DropMissing option
+      % TODO: Expand to take multiple xarrays as inputs, to be the inverse of
+      % the multi-value-column pivot().
+      
+      sz = size(this);
+      keyss = cell(1, ndims(this));
+      keyCols = this.dimNames;
+      % TODO: Fill in empty dimNames with default values
+      for iDim = 1:ndims(this)
+        sz2 = sz;
+        sz2(iDim) = 1;
+        sz2b = ones(1, ndims(this));
+        sz2b(iDim) = sz(iDim);
+        keys = repmat(reshape(this.labels{iDim}, sz2b), sz2);
+        keyss{iDim} = keys(:);
+      end
+      outVals = this.vals(:);
+      
+      colVals = [keyss outVals];
+      colNames = [keyCols 'Value']; % Eww; think of something better
+      out = table(colVals{:}, 'VariableNames',colNames);
+    end
+    
   end
   
   methods (Static)
@@ -264,6 +295,16 @@ classdef xarray
 end
 
 function out = fillValFor(x)
+%FILLVALFOR Determine the fill value for a type
+
+try
+  out = feval(class(x), missing);
+  return
+catch err %#ok<NASGU>
+  % Oh well. Not everything supports missing. Fall through and do it through
+  % implicit expansion.
+end
+
 if isempty(x)
   x = feval(class(x)); % Hope this produces a valid scalar object
 end
