@@ -1,15 +1,15 @@
-classdef int8n < intn
-	%INT8N NaN-able signed 8-bit integer array
+classdef uint16n < intn
+	%UINT16N NaN-able unsigned 16-bit integer array
 	%
 	% See also:
 	% INTN
 	
 	methods
-		function this = int8n(ints, tfnan)
+		function this = uint16n(ints, tfnan)
 			if nargin < 2 || isempty(tfnan)
 				tfnan = isnan(ints);
 			end
-			ints = int8(ints);
+			ints = uint16(ints);
 			this = this@intn(ints, tfnan);
 		end
 		
