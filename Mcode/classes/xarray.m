@@ -11,6 +11,12 @@ classdef (Sealed) xarray
   % instead of (). The () indexing does normal numeric/logical indexing;
   % the {} operator does indexing against the labels for each dimension.
   %
+  % Note: As a special case, the value ':', when used for label indexing,
+  % always refers to "all elements" along that dimension, instead of those
+  % exactly matching a literal ':'. This is for compatibility with how
+  % Matlab represents indexes for the special magic colon operator. This
+  % effectively means you cannot use ':' as a label.
+  %
   % xarray is inspired by the Python xarray library
   % (http://xarray.pydata.org/en/stable/). It works in a similar manner.
   %
@@ -31,7 +37,6 @@ classdef (Sealed) xarray
   %
   % xarray is a work in progress as of January 2020. Feedback is welcome.
   
-  % TODO: Special-case ':' for label indexing
   % TODO: Broadcasting and scalar expansion!
   % TODO: sortrows, N-D generalization of sortrows
   % TODO: more arithmetic wrappers
@@ -577,12 +582,16 @@ classdef (Sealed) xarray
       ixs = cell(size(labelss));
       for iDim = 1:numel(labelss)
         wantLabels = labelss{iDim};
-        [tf,loc] = ismember(wantLabels, this.labels{iDim});
-        if ~all(tf)
-          error('Labels not found along dimension %d: %s', ...
-            iDim, jl.utils.ellipses(wantLabels(~tf)));
+        if isequal(wantLabels, ':')
+          ixs{iDim} = true(1, size(this, iDim));
+        else
+          [tf,loc] = ismember(wantLabels, this.labels{iDim});
+          if ~all(tf)
+            error('Labels not found along dimension %d: %s', ...
+              iDim, jl.utils.ellipses(wantLabels(~tf)));
+          end
+          ixs{iDim} = loc;
         end
-        ixs{iDim} = loc;
       end
       out = ixs;
     end
