@@ -12,6 +12,11 @@ classdef (Abstract) intn < jl.util.Displayable
 	% To use INTN, create an array using one of its numeric-type-specific
 	% subclasses, and then work with that.
 	%
+	% This is still a work in progress. Many of the arithmetic operations are
+	% not implemented yet, including MIN, MAX, MEAN, CUMSUM, CUMPROD,
+	% and DIFF. But SUM and PROD are working, along with + - ./ .* == ~=
+	% and set operations like UNIQUE, ISMEMBER, and SORT.
+	%
 	% Examples:
 	%
 	% x = int32n([1 2 NaN 4])
@@ -22,7 +27,7 @@ classdef (Abstract) intn < jl.util.Displayable
 	% See also:
 	% INT8N, UINT8N, INT16N, UINT16N, INT32N, UINT32N, INT64N, UINT64N
 
-	% TODO: Max, min, mean, median, sum, prod, diff
+	% TODO: Max, min, mean, median, diff
 	% TODO: cumprod, cumsum
 	
 	% @planarprecedence(tfnan,ints)
@@ -188,6 +193,20 @@ classdef (Abstract) intn < jl.util.Displayable
 			out = a;
 			out.ints = rdivide(a.ints, b.ints);
 			out.tfnan = a.tfnan | b.tfnan;
+		end
+		
+		function out = sum(this, arg)
+			if nargin < 2 || isempty(arg); arg = 1; end
+			out = this;
+			out.ints = sum(this.ints, arg);
+			out.tfnan = any(this.tfnan, arg);
+		end
+		
+		function out = prod(this, arg)
+			if nargin < 2 || isempty(arg); arg = 1; end
+			out = this;
+			out.ints = prod(this.ints, arg);
+			out.tfnan = any(this.tfnan, arg);
 		end
 		
 	end
