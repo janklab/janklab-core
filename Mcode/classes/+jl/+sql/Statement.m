@@ -178,7 +178,7 @@ classdef Statement < handle
                 end
             end
             columnNames = rsMeta.columnLabels();
-            out = relation(columnNames, colData);
+            out = table(colData{:}, 'VariableNames', columnNames);
         end
         
         function out = convertFetchedChunkToMatlab(this, jRSFetchResult, rsMeta, nCols, colFetchers)
