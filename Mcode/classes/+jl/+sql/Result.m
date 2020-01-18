@@ -3,8 +3,8 @@ classdef Result
     
     properties
         type = 'Undefined' % Type of result ('ResultSet' or 'UpdateCount' or 'Undefined')
-        resultSet  % The result set as relation, if this is a ResultSet
-        updateCount double = NaN % Update count, if this is an UpdateCount
+        resultSet  % The result set as table or relation, if this is a ResultSet
+        updateCount (1,1) double = NaN % Update count, if this is an UpdateCount
     end
     
     methods
@@ -64,6 +64,12 @@ classdef Result
                     out = '<invalid type>';
             end
         end
+        
+        function this = set.type(this, type)
+          mustBeMember(type, {'ResultSet','UpdateCount','Undefined'});
+          this.type = type;
+        end
+        
     end
     
 end
