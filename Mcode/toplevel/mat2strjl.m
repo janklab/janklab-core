@@ -18,7 +18,7 @@ function out = mat2strjl(x)
 % mat2strjl(c)
 %
 % % And structs!
-% s = struct('x',magic(3), 'a_cell', { 1 2 "foo" categorical({'x'}) })
+% s = struct('x',magic(3), 'a_cell', { 1 2 "foo" categorical({'x' 'y' 'z'}) });
 % mat2strjl(s)
 %
 % % And categoricals, which get represented compactly.
@@ -36,7 +36,8 @@ function out = mat2strjl(x)
 %
 % % And you can mash together heterogeneous nested data structures!
 % mat2strjl({ 42 datetime dt "foobar" {'foobar'} ...
-%   struct('foo', 42, 'bar', struct('qux', [32 1 2]), 'c', { 1 "foo" 'bar'}) })
+%   struct('foo', 42, 'bar', struct('qux', [32 1 2]), ...
+%   'c', { 1 "foo" 'bar'}, 'ctg', categorical({'a','b','a','c','a','d'})) })
 %
 % See also:
 % MAT2STR
