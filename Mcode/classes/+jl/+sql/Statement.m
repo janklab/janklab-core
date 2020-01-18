@@ -173,6 +173,9 @@ classdef Statement < handle
             colData = cell(1, nCols);
             for iCol = 1:nCols
                 colData{iCol} = cat(1, data{:,iCol});
+                if iscellstr(colData{iCol})
+                  colData{iCol} = string(colData{iCol});
+                end
             end
             columnNames = rsMeta.columnLabels();
             out = relation(columnNames, colData);
