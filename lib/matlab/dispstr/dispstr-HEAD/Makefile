@@ -2,9 +2,9 @@
 # It's not needed for just building or running the program.
 
 
-PROGRAM=SLF4M
+PROGRAM=dispstr
 VERSION=$(shell cat VERSION)
-FILES=Mcode Mcode-examples LICENSE README.md doc
+FILES=Mcode Mcode-examples LICENSE README.md doc VERSION
 
 .PHONY: dist
 dist:

@@ -26,7 +26,8 @@ function out = dispstr(x, options)
 % Examples:
 %   dispstr(magic(3))
 %
-% See also: DISPSTRS
+% See also:
+% DISPSTRS, SPRINTFDS
 
 if nargin < 2;  options = [];  end
 options = parseOpts(options, {'QuoteStrings',false});

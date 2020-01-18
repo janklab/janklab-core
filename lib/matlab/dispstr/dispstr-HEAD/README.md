@@ -1,5 +1,7 @@
 # dispstr
 
+[![View dispstr on File Exchange](https://www.mathworks.com/matlabcentral/images/matlab-file-exchange.svg)](https://www.mathworks.com/matlabcentral/fileexchange/73960-dispstr)
+
 The Dispstr API is a Matlab API for extensible, polymorphic custom object display. This means it's an API you can code against to support generic display of user-defined objects and their data. It also supports using those custom displays when the objects are contained inside a complex type such as a `struct` or `table`.
 
 ## Motivation
@@ -42,6 +44,10 @@ There's not a whole lot of code in this library. I think the major value in it i
 `dispstr` produces a single string that describes an entire array.
 
 `dispstr` produces a string for each element in an array, that describes that particular element's value or contents.
+
+###  `sprintfds` and `fprintfds`
+
+`sprintfds` and `fprintfds` are variants of `sprintf` and `fprintf` that respect dispstr() methods defined on their arguments, so you can pass objects to '%s' conversion specifiers and get nice output.
 
 ###  `prettyprint` and `pp`
 
