@@ -53,8 +53,11 @@ classdef (Sealed) DataArray
   % TODO: groupby
   % TODO: Support dimensions without coordinates?
   % TODO: sortrows, N-D generalization of sortrows
-  % TODO: Aggregate arithmetic (prod, cumsum, cumprod, diff) with dim collapsing
+  % TODO: Aggregate arithmetic (prod, min, max) with dim collapsing
   % TODO: Statistics (mean, median, std, etc.)
+  %       Note: both agg arith and statistics are probably just special
+  %       cases of groupby
+  % TODO: Window arithmetic/statistics (cumsum, cumprod, diff)
   % TODO: Matrix division (mldivide, mrdivide)
   % TODO: Matrix inverse (inv). I don't know what the resulting dimensions
   %       should be.
