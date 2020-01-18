@@ -246,7 +246,7 @@ classdef relation < jl.util.Displayable
         this.colData{ixCol} = data;
         end
         
-        %% Relational operations
+        % Relational operations
         
         function out = orderby(this, columns)
         %ORDERBY Sort the rows in this based on column values.
@@ -535,7 +535,7 @@ classdef relation < jl.util.Displayable
         out = outerjoinImpl(A, B, false, true);
         end
         
-        %% Matlab type support
+        % Matlab type support
         function out = outerjoinFillRecord(this)
         outColNames = this.colNames;
         outColData = cell(size(outColNames));
