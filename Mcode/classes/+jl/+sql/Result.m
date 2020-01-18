@@ -3,7 +3,7 @@ classdef Result
     
     properties
         type = 'Undefined' % Type of result ('ResultSet' or 'UpdateCount' or 'Undefined')
-        resultSet  % The result set as table or relation, if this is a ResultSet
+        resultSet  % The result set as table, if this is a ResultSet
         updateCount (1,1) double = NaN % Update count, if this is an UpdateCount
     end
     
@@ -17,9 +17,6 @@ classdef Result
                 mustBeScalar(in);
                 this.type = 'UpdateCount';
                 this.updateCount = in;
-            elseif isa(in, 'relation')
-                this.type = 'ResultSet';
-                this.resultSet = in;
             elseif isa(in, 'table')
                 this.type = 'ResultSet';
                 this.resultSet = in;

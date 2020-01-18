@@ -38,5 +38,5 @@
  * Yes, I use `i` and `j` as loop indexes even though they mask the `i` and `j` functions. Imaginary values can still be constructed with the `1i` syntax.
 * `iFoo` - an index into `foo`, usually used in iteration
 * `ixFoo` - an array of indexes into `foo`
-* `r` - a relation held in a local variable
+* `t` or `tbl` – a temporary or generic table array
 * `RAII` - a struct holding cleanup objects used for RAII style ("Resource Acquisition Is Initialization") cleanup

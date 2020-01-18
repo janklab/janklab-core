@@ -9,16 +9,13 @@ function dumbView(x)
 % and removed.
 
 % Input conversions
-if isa(x, 'table')
-    x = relation(x);
-end
 if isnumeric(x)
     if ~ismatrix(x)
         error('jl:InvaldInput', 'Can''t display numerics with ndims > 2');
     end
     c = num2cell(x, 1);
     colNames = sprintfv('Col %d', 1:numel(c));
-    x = relation(colNames, c);
+    x = cell2table(c, 'VariableNames', colNames);
 end
 tabNames = [];
 if isscalar(x)
@@ -29,23 +26,19 @@ end
 
 
 % View logic
-if isa(x, 'relation')
-    dumbViewRelation(x, tabNames);
+if isa(x, 'table')
+    dumbViewTable(x, tabNames);
 else
     error('I don''t know how to display a %s. Sorry', class(x));
 end
 end
 
-function dumbViewRelation(r, tabNames)
+function dumbViewTable(t, tabNames)
 tabbedPane = javax.swing.JTabbedPane();
 
-if isempty(tabNames)
-    tabNames = sprintfv('%d', 1:numel(r));
-end
-for i = 1:numel(r)
-    view = dumbViewRelation1(r(i));
-    tabbedPane.addTab(tabNames{i}, view);
-end
+tabNames = {'1'};
+view = dumbViewTable1(t);
+tabbedPane.addTab(tabNames{1}, view);
 
 % Show it in a new window
 frame = javax.swing.JFrame;
@@ -58,9 +51,8 @@ frame.setVisible(true);
 
 end
 
-function component = dumbViewRelation1(r)
-%DUMBVIEWRELATION1 Implementation that uses addColumn()
-mustBeScalar(r);
+function component = dumbViewTable1(r)
+%DUMBVIEWTABLE1 Implementation that uses addColumn()
 
 % Convert it to a DefaultTableModel
 nRows = nrows(r);

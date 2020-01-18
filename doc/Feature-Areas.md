@@ -44,13 +44,6 @@ MDBC is an extension to the Database Toolbox, not a replacement for it. But you 
 
 ## Data Structures
 
-### Relation
-
-The `relation` class is a container data type much like Matlab’s `table`, but supports:
-
-* Arbitrary column names (instead of just valid Matlab variable names)
-* Arrays of relation objects (compared to how `table` itself is an array)
-
 ### Symbol
 
 The `symbol` type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It is similar to Matlab's `categorical` type, but uses a global symbol space, and is integrated with Janklab I/O features.

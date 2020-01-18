@@ -337,7 +337,7 @@ classdef Connection < handle
             % Table (char) is the name of the SQL table to insert to. It may be
             % qualified by database and schema if the database driver supports it.
             %
-            % Data (table,relation) is the set of data to be inserted to table. The
+            % Data (table,) is the set of data to be inserted to table. The
             % column/variable names in data must match columns in the target table.
             %
             % Options is a jl.sql.InsertOptions object that controls the
@@ -351,10 +351,7 @@ classdef Connection < handle
             options = jl.sql.InsertOptions(options);
             
             % Check inputes
-            if isa(data, 'table')
-                data = relation(data);
-            end
-            mustBeA(data, 'relation');
+            mustBeA(data, 'table');
             mustBeA(table, 'char');
             mustBeValidSqlTableName(table);
             % Can we do some validation of the column names to prevent SQL injection

@@ -168,7 +168,6 @@ classdef Statement < handle
                     nCols, colFetchers); %#ok<AGROW>
             end
             % Build Matlab result from fetched chunks
-            % Returning as @table for now; should be converted to @relation
             data = cat(1, chunks{:});
             colData = cell(1, nCols);
             for iCol = 1:nCols

@@ -2,8 +2,6 @@ classdef QueryOptions
     % Options for the behavior of SQL queries that return results
     
     properties
-        % Format to return result sets in. May be 'table' or 'relation'.
-        returnFormat = 'table'
         % Format to return text (char/varchar) columns in. May be 'string',
         % 'cellstr', 'categorical', or 'symbol'.
         textReturnFormat = 'string'
