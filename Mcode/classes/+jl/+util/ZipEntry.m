@@ -2,6 +2,10 @@ classdef ZipEntry < jl.util.DisplayableHandle
   
   %#ok<*PROP>
   
+  properties (Constant, Hidden)
+    UnixEpoch = datenum('1/1/1970');
+  end
+  
   properties (SetAccess = private)
     % The underlying java.util.zip.ZipEntry object
     j
@@ -57,7 +61,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
     
     function out = get.creationTime(this)
-      out = this.j.getCreationTime;
+      out = filetimeToDatetime(this.j.getCreationTime);
     end
 
     function set.creationTime(this, val)
@@ -65,7 +69,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
     
     function out = get.lastAccessTime(this)
-      out = this.j.getLastAccessTime;
+      out = filetimeToDatetime(this.j.getLastAccessTime);
     end
     
     function set.lastAccessTime(this, val)
@@ -73,7 +77,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
     
     function out = get.lastModifiedTime(this)
-      out = this.j.getLastModifiedTime;
+      out = filetimeToDatetime(this.j.getLastModifiedTime);
     end
     
     function set.lastModifiedTime(this, val)
@@ -84,9 +88,9 @@ classdef ZipEntry < jl.util.DisplayableHandle
       jCode = this.j.getMethod;
       switch jCode
         case java.util.zip.ZipEntry.DEFLATED
-          out = 'DEFLATE';
+          out = "DEFLATE";
         case java.util.zip.ZipEntry.STORED
-          out = 'STORE';
+          out = "STORE";
         otherwise
           out = sprintf('<UNKNOWN (code=%d)>', jCode);
       end
@@ -95,9 +99,9 @@ classdef ZipEntry < jl.util.DisplayableHandle
     function set.method(this, val)
       if ischar(val) || isstring(val)
         switch upper(val)
-          case 'DEFLATE'
+          case "DEFLATE"
             jCode = java.util.zip.ZipEntry.DEFLATED;
-          case 'STORE'
+          case "STORE"
             jCode = java.util.zip.ZipEntry.STORED;
           otherwise
             error('jl:InvalidInput', 'Invalid value for method: %s', val)
@@ -156,4 +160,14 @@ classdef ZipEntry < jl.util.DisplayableHandle
     
   end
   
+end
+
+function out = filetimeToDatetime(jTime)
+if isempty(jTime)
+  out = datetime(missing);
+  return
+end
+millis = double(jTime.toMillis);
+dnum = jl.util.ZipEntry.UnixEpoch + (millis / (1000 * 60 * 60 * 24));
+out = datetime(dnum, 'ConvertFrom','datenum');
 end

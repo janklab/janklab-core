@@ -43,6 +43,32 @@ classdef ZipFile < jl.util.DisplayableHandle
       end
     end
     
+    function out = listEntries(this)
+      % Get info about the Zip entries, in table format
+      tb = jl.util.TableBuffer(["Name" "IsDir" "CTime" "MTime" "ATime" ...
+        "Method" "Size" "CompressedSize" ...
+        "Comment" "CRC" "ExtraSize"]);
+      entries = this.getEntries;
+      for z = entries
+        extra = z.getExtra;
+        extraSize = numel(extra);
+        tb = tb.addRow({z.name z.isDirectory z.creationTime z.lastModifiedTime z.lastAccessTime ...
+          z.method z.uncompressedSize z.compressedSize ...
+          z.comment z.crc extraSize});
+      end
+      t = table(tb);
+      if nargout == 0
+        fprintf('Zip file: %s\n', this.getName);
+        if ~ismissing(this.getComment)
+          fprintf('File comment: %s\n', this.getComment);
+        end
+        fprintf('%d entries:\n', this.nEntries);
+        prettyprint(t);
+      else
+        out = t;
+      end
+    end
+    
     function out = getName(this)
       out = string(this.j.getName);
     end
@@ -70,4 +96,9 @@ classdef ZipFile < jl.util.DisplayableHandle
     
   end
   
+  methods (Access = protected)
+    function out = dispstr_scalar(this)
+      out = sprintf('[ZipFile: %s]', this.getName);
+    end
+  end
 end

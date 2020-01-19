@@ -184,6 +184,7 @@ classdef Workbook < handle
         if ~isempty(extra)
           zEntryOut.setExtra(extra);
         end
+        % TODO: Propagate CTime and ATime
         zOut.writeEntry(zEntryOut, bytes);
       end
       zIn.close;
