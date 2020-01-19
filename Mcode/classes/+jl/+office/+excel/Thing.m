@@ -28,4 +28,11 @@ classdef Thing < jl.util.DisplayableHandle
     
   end
   
+  methods (Access = protected)
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('[Thing: ]');
+    end
+    
+  end    
 end

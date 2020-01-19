@@ -5,11 +5,19 @@ classdef Sheet < jl.util.DisplayableHandle
     j
     % The parent workbook
     workbook
+    % A FriendlyCellView into this sheet, which lets you view the sheet's
+    % cells as a Matlab array
+    cells
   end
   
   properties (Dependent)
     activeCellAddress
     autobreaks
+    firstRowNum
+    lastRowNum
+    name
+    nRows
+    nCols
   end
   
   methods
@@ -23,10 +31,7 @@ classdef Sheet < jl.util.DisplayableHandle
         this.workbook = workbook;
         this.j = jObj;
       end
-    end
-    
-    function out = dispstr_scalar(this)
-      out = sprintf('[Sheet: ]');
+      this.cells = jl.office.excel.FriendlyCellView(this);
     end
     
     function out = get.activeCellAddress(this)
@@ -46,7 +51,52 @@ classdef Sheet < jl.util.DisplayableHandle
       this.j.setAutobreaks(val);
     end
     
+    function out = get.lastRowNum(this)
+      out = this.j.getLastRowNum;
+    end
+    
+    function out = get.firstRowNum(this)
+      out = this.j.getFirstRowNum + 1;
+    end
+    
+    function out = get.name(this)
+      out = string(this.j.getSheetName);
+    end
+    
+    function out = get.nRows(this)
+      out = this.j.getLastRowNum;
+    end
+    
+    function out = get.nCols(this)
+      out = 0;
+      for iRow = 1:this.nRows
+        row = this.getRow(iRow);
+        out = max(out, row.nCols);
+      end
+    end
+    
+    function out = getRow(this, rowNum)
+      jRow = this.j.getRow(rowNum - 1);
+      if isempty(jRow)
+        out = [];
+        return
+      end
+      out = jl.office.excel.Row(this, jRow);
+    end
+    
+    function out = createRow(this, rowNum)
+      jRow = this.j.createRow(rowNum - 1);
+      out = jl.office.excel.Row(this, jRow);
+    end
     
   end
-  
+
+  methods (Access = protected)
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('[Sheet: name=''%s'']', ...
+        this.name);
+    end
+    
+  end
 end

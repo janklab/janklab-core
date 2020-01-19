@@ -43,7 +43,7 @@ classdef Workbook < handle
       %
       % If no arguments are given, constructs a new in-memory Workbook.
       if nargin == 0
-        this.j = org.apache.poi.xssf.usermodel.HSSFWorkbook();
+        this.j = org.apache.poi.xssf.usermodel.XSSFWorkbook();
         return
       end
       if nargin == 1 && isa(varargin{1}, 'org.apache.poi.ss.usermodel.Workbook')
@@ -137,7 +137,7 @@ classdef Workbook < handle
       else
         jSheet = this.j.createSheet(name);
       end
-      out = jl.office.excel.Sheet(jSheet);
+      out = jl.office.excel.Sheet(this, jSheet);
     end
     
     function write(this, file)

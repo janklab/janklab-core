@@ -3,6 +3,8 @@ classdef Cell < jl.util.DisplayableHandle
   properties
     % The underlying POI Cell object
     j
+    % The parent Row
+    row
   end
   
   properties (Dependent)
@@ -19,23 +21,17 @@ classdef Cell < jl.util.DisplayableHandle
   
   methods
     
-    function this = Cell(varargin)
+    function this = Cell(row, jObj)
       if nargin == 0
         return
-      elseif nargin == 1 && isa(varargin{1}, 'org.apache.poi.ss.usermodel.Cell')
-        % Wrap Java object
-        this.j = varargin{1};
-        return
       else
-        error('jl:InvalidInput', 'Invalid inputs');
+        mustBeA(row, 'jl.office.excel.Row');
+        mustBeA(jObj, 'org.apache.poi.ss.usermodel.Cell');
+        this.row = row;
+        this.j = jObj;        
       end
     end
-    
-    function out = dispstr_scalar(this)
-      out = sprintf('[Cell: r=%d c=%d type=%s val=%s]', ...
-        this.rowIndex, this.columnIndex, this.cellType, dispstr(this.value));
-    end
-    
+        
     function out = get.address(this)
       out = jl.office.excel.CellAddress(this.j.getAddress);
     end
@@ -64,7 +60,7 @@ classdef Cell < jl.util.DisplayableHandle
       elseif isa(val, 'jl.office.excel.Comment')
         this.setCellComment(val.j);
       else
-        error('jl:InvalidInput', 'Invalid type for comment: %s', class(val)
+        error('jl:InvalidInput', 'Invalid type for comment: %s', class(val));
       end
     end
     
@@ -148,6 +144,15 @@ classdef Cell < jl.util.DisplayableHandle
       this.j.setAsActiveCell;
     end
     
+  end
+  
+  methods (Access = protected)
+
+    function out = dispstr_scalar(this)
+      out = sprintf('[Cell: r=%d c=%d type=%s val=%s]', ...
+        this.rowIndex, this.columnIndex, this.cellType, dispstr(this.value));
+    end
+
   end
   
 end
