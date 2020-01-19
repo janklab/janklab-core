@@ -65,7 +65,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
 
     function set.creationTime(this, val)
-      this.j.setCreationTime(val);
+      this.j.setCreationTime(datetimeToFiletime(val));
     end
     
     function out = get.lastAccessTime(this)
@@ -73,7 +73,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
     
     function set.lastAccessTime(this, val)
-      this.j.setLastAccessTime(val);
+      this.j.setLastAccessTime(datetimeToFiletime(val));
     end
     
     function out = get.lastModifiedTime(this)
@@ -81,7 +81,7 @@ classdef ZipEntry < jl.util.DisplayableHandle
     end
     
     function set.lastModifiedTime(this, val)
-      this.j.setLastModifiedTime(val);
+      this.j.setLastModifiedTime(datetimeToFiletime(val));
     end
     
     function out = get.method(this)
@@ -164,10 +164,21 @@ end
 
 function out = filetimeToDatetime(jTime)
 if isempty(jTime)
-  out = datetime(missing);
+  out = NaT;
   return
 end
 millis = double(jTime.toMillis);
 dnum = jl.util.ZipEntry.UnixEpoch + (millis / (1000 * 60 * 60 * 24));
 out = datetime(dnum, 'ConvertFrom','datenum');
+end
+
+function out = datetimeToFiletime(dt)
+if isempty(dt) || ismissing(dt)
+  out = [];
+  return
+end
+dnum = datenum(dt);
+daysAfterEpoch = dnum - jl.util.ZipEntry.UnixEpoch;
+millis = int64(daysAfterEpoch * (1000 * 60 * 60 * 24));
+out = java.nio.file.attribute.FileTime.from(millis);
 end

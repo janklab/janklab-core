@@ -184,7 +184,12 @@ classdef Workbook < handle
         if ~isempty(extra)
           zEntryOut.setExtra(extra);
         end
-        % TODO: Propagate CTime and ATime
+        if ~isnat(zEntry.creationTime)
+          zEntryOut.creationTime = zEntry.creationTime;
+        end
+        if ~isnat(zEntry.lastAccessTime)
+          zEntryOut.lastAccessTime = zEntry.lastAccessTime;
+        end
         zOut.writeEntry(zEntryOut, bytes);
       end
       zIn.close;
