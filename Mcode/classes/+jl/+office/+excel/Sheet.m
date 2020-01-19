@@ -1,4 +1,4 @@
-classdef Sheet < jl.util.DisplayableHandle
+classdef (Abstract) Sheet < jl.util.DisplayableHandle
   
   properties
     % The underlying POI XSSFSheet object
@@ -21,19 +21,7 @@ classdef Sheet < jl.util.DisplayableHandle
   end
   
   methods
-    
-    function this = Sheet(workbook, jObj)
-      if nargin == 0
-        return
-      else
-        mustBeA(workbook, 'jl.office.excel.Workbook');
-        mustBeA(jObj, 'org.apache.poi.ss.usermodel.Sheet');
-        this.workbook = workbook;
-        this.j = jObj;
-      end
-      this.cells = jl.office.excel.FriendlyCellView(this);
-    end
-    
+        
     function out = get.activeCellAddress(this)
       out = jl.office.excel.CellAddress(this.j.getActiveCell);
     end
@@ -81,12 +69,12 @@ classdef Sheet < jl.util.DisplayableHandle
         out = [];
         return
       end
-      out = jl.office.excel.Row(this, jRow);
+      out = this.wrapRowObject(this, jRow);
     end
     
     function out = createRow(this, rowNum)
       jRow = this.j.createRow(rowNum - 1);
-      out = jl.office.excel.Row(this, jRow);
+      out = this.wrapRowObject(this, jRow);
     end
     
   end
@@ -99,4 +87,11 @@ classdef Sheet < jl.util.DisplayableHandle
     end
     
   end
+  
+  methods (Abstract, Access = protected)
+    
+    out = wrapRowObject(this, jRow)
+    
+  end
+  
 end

@@ -1,4 +1,4 @@
-classdef Row < jl.util.DisplayableHandle
+classdef (Abstract) Row < jl.util.DisplayableHandle
   
   properties
     % The underlying POI Row object
@@ -21,18 +21,7 @@ classdef Row < jl.util.DisplayableHandle
   end
   
   methods
-    
-    function this = Row(sheet, jObj)
-      if nargin == 0
-        return
-      else
-        mustBeA(sheet, 'jl.office.excel.Sheet');
-        mustBeA(jObj, 'org.apache.poi.ss.usermodel.Row');
-        this.sheet = sheet;
-        this.j = jObj;        
-      end
-    end
-    
+        
     function out = get.firstCellNum(this)
       out = this.j.getFirstCellNum;
       if out >= 0
@@ -104,12 +93,12 @@ classdef Row < jl.util.DisplayableHandle
         out = [];
         return
       end
-      out = jl.office.excel.Cell(this, jCell);
+      out = this.wrapCellObject(this, jCell);
     end
     
     function out = createCell(this, ixCol)
       jCell = this.j.createCell(ixCol - 1);
-      out = jl.office.excel.Cell(this, jCell);
+      out = this.wrapCellObject(this, jCell);
     end
     
   end
@@ -122,4 +111,11 @@ classdef Row < jl.util.DisplayableHandle
     end
     
   end
+  
+  methods (Abstract, Access = protected)
+    
+    out = wrapCellObject(this, jCell)
+    
+  end
+  
 end

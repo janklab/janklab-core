@@ -1,4 +1,4 @@
-classdef Workbook < handle
+classdef (Abstract) Workbook < jl.util.DisplayableHandle
   % An Excel workbook
   %
   
@@ -30,10 +30,43 @@ classdef Workbook < handle
   
   methods (Static)
     function out = fromFile(file)
+      [~,~,extn] = fileparts(file);
       jFile = java.io.File(file);
-      jWkbk = org.apache.xssf.usermodel.XSSFWorkbook(jFile);
-      out = jl.office.excel.Workbook(jWkbk);
+      switch lower(extn)
+        case '.xls'
+          jWkbk = org.apache.xssf.usermodel.HSSFWorkbook(jFile);
+          out = jl.office.excel.hssf.Workbook(jWkbk);
+        case '.xlsx'
+          jWkbk = org.apache.xssf.usermodel.XSSFWorkbook(jFile);
+          out = jl.office.excel.xssf.Workbook(jWkbk);
+        otherwise
+          error('jl:InvalidInput', ['Invalid file extension: ''%s''. ' ...
+            'Must be ''.xls'' or ''.xlsx'''], ...
+            extn);
+      end
     end
+    
+    function out = create(format)
+      switch lower(format)
+        case 'xls'
+          jWkbk = org.apache.xssf.usermodel.HSSFWorkbook();
+          out = jl.office.excel.hssf.Workbook(jWkbk);
+        case 'xlsx'
+          jWkbk = org.apache.xssf.usermodel.XSSFWorkbook();
+          out = jl.office.excel.xssf.Workbook(jWkbk);
+        otherwise
+          error('jl:InvalidInput', 'Invalid format: ''%s''. Must be ''xls'' or ''xlsx''', ...
+            format);
+      end
+    end
+  end
+  
+  methods (Abstract)
+    write(this, file)
+  end
+  
+  methods (Abstract, Access = protected)
+    out = this.wrapSheetObject(jSheet)
   end
   
   methods
@@ -42,18 +75,6 @@ classdef Workbook < handle
       %WORKBOOK Construct a new object
       %
       % obj = jl.office.excel.Workbook()
-      %
-      % If no arguments are given, constructs a new in-memory Workbook.
-      if nargin == 0
-        this.j = org.apache.poi.xssf.usermodel.XSSFWorkbook();
-        return
-      end
-      if nargin == 1 && isa(varargin{1}, 'org.apache.poi.ss.usermodel.Workbook')
-        % Wrap Java object
-        this.j = varargin{1};
-        return
-      end
-      error('Invalid input for constructor');
     end
     
     function out = get.activeSheetIndex(this)
@@ -119,7 +140,7 @@ classdef Workbook < handle
       else
         error('Invalid input. Expecting numeric or string; got a %s', class(ref));
       end
-      out = jl.office.excel.Sheet(jSheet);
+      out = this.createSheetObject(this, jSheet);
     end
     
     function out = createSheet(this, name)
@@ -139,63 +160,45 @@ classdef Workbook < handle
       else
         jSheet = this.j.createSheet(name);
       end
-      out = jl.office.excel.Sheet(this, jSheet);
+      out = this.createSheetObject(this, jSheet);
     end
     
-    function write(this, file)
-      %WRITE Write this workbook out to a file in .xlsx format
+    function out = cloneSheet(this, sheetNum)
+      out = this.createSheetObject(this.j.cloneSheet(sheetNum));
+    end
+    
+    function out = addPicture(this, pictureData, format)
+      % Adds a picture to the workbook
       %
-      % write(obj, file)
+      % pictureData (uint8) is the bytes of picture data.
       %
-      % file (char, str) is the path to the file to write out to. Overwrites any
-      % existing file.
+      % format (char) is the format the picture data is in. Valid values: 'DIB',
+      % 'EMF', 'JPEG', 'PICT', 'PNG', 'WMF'.
       %
-      % Throws an error if the write operation fails for any reason.
-      
-      pid = feature('getpid');
-      tmpFile1 = sprintf('%s.%d.orig.tmp', file, pid);
-      tmpFile2 = sprintf('%s.%d.fixed.tmp', file, pid);
-      
-      jOutStream = java.io.FileOutputStream(tmpFile1);
-      this.j.write(jOutStream);
-      jOutStream.close();
-      
-      % When running under matlab, POI produces bad files with the "xmlns="
-      % attribute missing on some elements. (I have no idea why.) Fix them up.
-      zIn = jl.util.ZipFile(tmpFile1);
-      zOut = jl.util.ZipWriter.forFile(tmpFile2);
-      zEntries = zIn.getEntries;
-      for iEntry = 1:numel(zEntries)
-        zEntry = zEntries(iEntry);
-        bytes = zIn.getContents(zEntry);
-        needToEdit = {'[Content_Types].xml', '_rels/.rels', 'docProps/core.xml' ...
-          'xl/_rels/workbook.xml.rels'};
-        if ismember(zEntry.name, needToEdit)
-          str = native2unicode(bytes, 'UTF-8')';
-          str = strrep(str, '<Types>', '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">');
-          str = strrep(str, '<Relationships>', '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">');
-          bytes = unicode2native(str, 'UTF-8');
-        end
-        zEntryOut = jl.util.ZipEntry(zEntry.name);
-        if ~ismissing(zEntry.comment)
-          zEntryOut.comment = zEntry.comment;
-        end
-        extra = zEntry.getExtra;
-        if ~isempty(extra)
-          zEntryOut.setExtra(extra);
-        end
-        if ~isnat(zEntry.creationTime)
-          zEntryOut.creationTime = zEntry.creationTime;
-        end
-        if ~isnat(zEntry.lastAccessTime)
-          zEntryOut.lastAccessTime = zEntry.lastAccessTime;
-        end
-        zOut.writeEntry(zEntryOut, bytes);
+      % Returns the index to this picture.
+      mustBeA(pictureData, 'uint8');
+      mustBeMember(upper(format), ["DIB" "EMF" "JPEG" "PICT" "PNG" "WMF"]);
+      switch upper(format)
+        case 'DIB'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_DIB;
+        case 'EMF'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_EMF;
+        case 'JPEG'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_JPEB;
+        case 'PICT'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PICT;
+        case 'PNG'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PNG;
+        case 'WMF'
+          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_WMF;
+        otherwise
+          BADSWITCH
       end
-      zIn.close;
-      zOut.close;
-      delete(tmpFile1);
-      movefile(tmpFile2, file);
+      out = this.j.addPicture(pictureData, jFormat);
+    end
+    
+    function close(this)
+      this.j.close;
     end
     
   end
