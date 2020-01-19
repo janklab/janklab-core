@@ -65,10 +65,6 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     write(this, file)
   end
   
-  methods (Abstract, Access = protected)
-    out = this.wrapSheetObject(jSheet)
-  end
-  
   methods
     
     function this = Workbook(varargin)
@@ -201,6 +197,11 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       this.j.close;
     end
     
+  end
+  
+  methods (Abstract, Access = protected)
+    out = this.wrapSheetObject(this, jObj)
+    out = this.wrapCellStyleObject(this, jObj)
   end
   
 end
