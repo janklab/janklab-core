@@ -6,6 +6,12 @@ function out = mat2strjl(x)
 % MAT2STRJL is just like mat2str, except it works on more types, including
 % cells, structs, datetimes, and categoricals.
 %
+% WARNING: The datetime conversion here is lossy! The datetime values are
+% rounded or truncated to the nearest nanosecond, but datetime's internal
+% representation is higher precision than that. Datetime values reconstructed
+% from the strings that mat2strjl produces may not compare equal to the original
+% values.
+%
 % Does not support values that are handles, because they can't be correctly
 % reconstructed from a serialized representation.
 %
@@ -108,14 +114,15 @@ function out = mat2strjlMatrix(x)
   if isa(x, 'datetime')
     tz = x.TimeZone;
     fmt = x.Format;
-    defaultFormat = 'dd-MMM-uuuu HH:mm:ss';
+    defaultFormat = 'dd-MMM-uuuu HH:mm:ss.SSSSSSSSS';
     % I _wish_ we could use human-readable string format instead of datenum
     % format here, but that conversion is lossy, since (I think) datetime's
     % underlying representation is a double datenum, and not some type that
     % is exact to the millisecond or whatever.
-    dnums = datenum(datetime);
-    out = sprintf('datetime(%s, ''ConvertFrom'',''datenum''', ...
-      mat2str(dnums));
+    dt2 = x;
+    dt2.Format = defaultFormat;
+    out = sprintf('datetime(%s', ...
+      mat2str(string(dt2)));
     if ~isempty(tz)
       out = sprintf('%s, ''TimeZone'',''%s''', out, tz);
     end
