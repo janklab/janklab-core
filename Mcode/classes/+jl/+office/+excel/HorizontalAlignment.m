@@ -7,7 +7,9 @@ classdef HorizontalAlignment
   methods (Static)
     
     function out = ofJava(jObj)
-      if jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER)
+      if isempty(jObj)
+        out = [];
+      elseif jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER)
         out = jl.office.excel.HorizontalAlignment.Center;
       elseif jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER_SELECTION)
         out = jl.office.excel.HorizontalAlignment.CenterSelection;
@@ -24,7 +26,8 @@ classdef HorizontalAlignment
       elseif jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.RIGHT)
         out = jl.office.excel.HorizontalAlignment.Right;
       else
-        error('jl:InvalidInput', 'Unrecognized HorizontalAlignment value');
+        error('jl:InvalidInput', 'Unrecognized HorizontalAlignment value: %s', ...
+          string(jObj.toString));
       end
     end
     
