@@ -11,6 +11,10 @@ classdef TableBuffer
   %
   % This class is a lot like Java's ArrayList class.
   %
+  % Currently has the limitation that all variables must be single-column arrays
+  % (column vectors).
+  % TODO: Support multi-column array variables
+  %
   % Example:
   %
   % tb = jl.util.TableBuffer({'x','str'})
@@ -18,6 +22,7 @@ classdef TableBuffer
   % tb = tb.addRow({2, "bar"});
   % tb = tb.addRow({3, "baz"});
   % t = table(tb)
+  
   
   properties
     initialCapacity (1,1) double = 256

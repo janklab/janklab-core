@@ -1,4 +1,4 @@
-classdef (Abstract) Color
+classdef (Abstract) Color < jl.util.DisplayableHandle
   % A Color in an Excel workbook
   %
   % This is the base class for XLS and XLSX colors. Because colors are done so
