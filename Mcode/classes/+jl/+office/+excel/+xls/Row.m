@@ -18,7 +18,7 @@ classdef Row < jl.office.excel.Row
   methods (Access = protected)
     
     function out = wrapCellObject(this, jCell)
-      out = jl.office.excel.hssf.Cell(this, jCell);
+      out = jl.office.excel.xls.Cell(this, jCell);
     end
     
   end

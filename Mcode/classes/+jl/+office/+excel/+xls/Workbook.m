@@ -28,11 +28,11 @@ classdef Workbook < jl.office.excel.Workbook
   methods (Access = protected)
     
     function out = wrapSheetObject(this, jObj)
-      out = jl.office.excel.hssf.Sheet(this, jObj);
+      out = jl.office.excel.xls.Sheet(this, jObj);
     end
     
     function out = wrapCellStyleObject(this, jObj)
-      out = jl.office.excel.hssf.CellStyle(this, jObj);
+      out = jl.office.excel.xls.CellStyle(this, jObj);
     end
     
   end

@@ -35,10 +35,10 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       switch lower(extn)
         case '.xls'
           jWkbk = org.apache.xssf.usermodel.HSSFWorkbook(jFile);
-          out = jl.office.excel.hssf.Workbook(jWkbk);
+          out = jl.office.excel.xls.Workbook(jWkbk);
         case '.xlsx'
           jWkbk = org.apache.xssf.usermodel.XSSFWorkbook(jFile);
-          out = jl.office.excel.xssf.Workbook(jWkbk);
+          out = jl.office.excel.xlsx.Workbook(jWkbk);
         otherwise
           error('jl:InvalidInput', ['Invalid file extension: ''%s''. ' ...
             'Must be ''.xls'' or ''.xlsx'''], ...
@@ -50,10 +50,10 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       switch lower(format)
         case 'xls'
           jWkbk = org.apache.xssf.usermodel.HSSFWorkbook();
-          out = jl.office.excel.hssf.Workbook(jWkbk);
+          out = jl.office.excel.xls.Workbook(jWkbk);
         case 'xlsx'
           jWkbk = org.apache.xssf.usermodel.XSSFWorkbook();
-          out = jl.office.excel.xssf.Workbook(jWkbk);
+          out = jl.office.excel.xlsx.Workbook(jWkbk);
         otherwise
           error('jl:InvalidInput', 'Invalid format: ''%s''. Must be ''xls'' or ''xlsx''', ...
             format);

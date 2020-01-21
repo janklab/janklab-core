@@ -1,7 +1,14 @@
 classdef HorizontalAlignment
   
   enumeration
-    Center, CenterSelection, Distributed, Fill, General, Justify, Left, Right
+    Center
+    CenterSelection
+    Distributed
+    Fill
+    General
+    Justify
+    Left
+    Right
   end
 
   methods (Static)

@@ -19,7 +19,7 @@ classdef Sheet < jl.office.excel.Sheet
   methods (Access = protected)
     
     function out = wrapRowObject(this, jRow)
-      out = jl.office.excel.hssf.Row(this, jRow);
+      out = jl.office.excel.xls.Row(this, jRow);
     end
     
   end
