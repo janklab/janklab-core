@@ -89,6 +89,14 @@ classdef Workbook < jl.office.excel.Workbook
       out = jl.office.excel.xlsx.Name(this.j.createName);
     end
     
+    function out = getAllPictures(this)
+      list = this.j.getAllPictures;
+      out = repmat(jl.office.excel.xlsx.PictureData, [1 list.size]);
+      for i = 1:list.size
+        out(i) = jl.office.excel.xlsx.PictureData(list.get(i-1));
+      end
+    end
+    
   end
   
   methods (Access = protected)
@@ -97,6 +105,22 @@ classdef Workbook < jl.office.excel.Workbook
       out = 'xlsx';
     end
         
+    function out = wrapSheetObject(this, jObj)
+      out = jl.office.excel.xlsx.Sheet(this, jObj);
+    end
+    
+    function out = wrapCellStyleObject(this, jObj)
+      out = jl.office.excel.xlsx.CellStyle(this, jObj);
+    end
+    
+    function out = wrapPictureDataObject(this, jObj) %#ok<INUSL>
+      out = jl.office.excel.xlsx.PictureData(jObj);
+    end
+    
+    function out = wrapFontObject(this, jObj) %#ok<INUSL>
+      out = jl.office.excel.xlsx.Font(jObj);
+    end
+    
   end
   
 end

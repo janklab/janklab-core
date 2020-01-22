@@ -1,6 +1,31 @@
 classdef (Abstract) Workbook < jl.util.DisplayableHandle
   % An Excel workbook
   %
+  % A Workbook object represents an Excel workbook, of either XLS (Office 97) or
+  % XLSX (Office 2007) format. There are format-specific subclasses for each
+  % format, but you can generally get by with just coding against the interface
+  % of this generic superclass.
+  %
+  % This class also contains the methods for reading or creating Workbooks of
+  % either format.
+  %
+  % Examples:
+  %
+  % % Open an existing Excel workbook file for reading
+  % wkbk = jl.office.excel.Workbook.openFile('MyExcelFile.xlsx')
+  %
+  % % Create a new in-memory workbook in Excel 2007 format
+  % wkbk = jl.office.excel.Workbook.createNew()
+  % % You can also 
+  %
+  % % Create a new in-memory workbook in the legacy Excel 97 format
+  % wkbk = jl.office.excel.Workbook.createNew('xls')
+  %
+  % See also:
+  % jl.office.excel.xls.Workbook
+  % jl.office.excel.xlsx.Workbook
+  
+  % TODO: missingCellPolicy
   
   properties
     % The underlying Java POI XSSFWorkbook object
@@ -67,9 +92,11 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       %
       % Format (string) is the workbook/file format to use. May be "xls" for
       % Excel 97 (".xls") format, or "xlsx" for Excel 2007 (".xlsx") format.
+      % Format is optional; the default is "xlsx" (Excel 2007).
       %
       % Returns a new Workbook object of the appropriate subclass.
-      narginchk(1, 1);
+      if nargin < 1 || isempty(format); format = "xlsx"; end
+      
       switch lower(format)
         case 'xls'
           jWkbk = org.apache.poi.hssf.usermodel.HSSFWorkbook();
@@ -113,6 +140,11 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     %
     % Returns a Font object.
     out = createFont(this)
+    
+    % Get all pictures defined in this workbook
+    %
+    % Returns an array of PictureData objects.
+    out = getAllPictures(this)
     
   end
   
@@ -166,7 +198,7 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     
     function out = getFontAt(this, idx)
       %GETFONTAT Get font at the given index
-      out = jl.office.excel.Font(this.j.getFontAt(idx));
+      out = this.wrapFontObject(this.j.getFontAt(idx));
     end
     
     function out = getSheet(this, ref)
@@ -235,7 +267,7 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
         otherwise
           BADSWITCH
       end
-      out = this.j.addPicture(pictureData, jFormat);
+      out = this.wrapPictureDataObject(this.j.addPicture(pictureData, jFormat));
     end
     
     % Create a new (uninitialized) defined name in this workbook
@@ -255,6 +287,15 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     
     function close(this)
       this.j.close;
+    end
+    
+    function out = getCellStyleAt(this, index)
+      % Get the CellStyle object for a given index
+      %
+      % out = getCellStyleAt(this, index)
+      %
+      % Returns a CellStyle object.
+      out = this.wrapCellStyleObject(this.j.getCellStyleAt(index));
     end
     
   end
@@ -279,6 +320,8 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   methods (Abstract, Access = protected)
     out = wrapSheetObject(this, jObj)
     out = wrapCellStyleObject(this, jObj)
+    out = wrapPictureDataObject(this, jObj)
+    out = wrapFontObject(this, jObj)
     out = fileFormat(this)
   end
   
