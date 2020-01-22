@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="utf-8"?>
 
 <toc version="2.0">
-    <tocitem target="janklab_product_page.html">Janklab Toolbox
+    <tocitem target="janklab_product_page.html">Janklab
         <!-- Nest tocitems to create hierarchical entries in  Contents-->
         <!-- To include icons, use the following syntax for tocitems: -->
         <!-- <tocitem target="foo.html" image="HelpIcon.NAME"> -->
