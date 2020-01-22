@@ -1,4 +1,5 @@
 classdef (Abstract) Sheet < jl.util.DisplayableHandle
+  % A sheet (worksheet) in an Excel workbook
   
   properties
     % The underlying POI XSSFSheet object
@@ -63,8 +64,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       end
     end
     
-    function out = getRow(this, rowNum)
-      jRow = this.j.getRow(rowNum - 1);
+    function out = getRow(this, index)
+      jRow = this.j.getRow(index - 1);
       if isempty(jRow)
         out = [];
         return
@@ -72,8 +73,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       out = this.wrapRowObject(this, jRow);
     end
     
-    function out = createRow(this, rowNum)
-      jRow = this.j.createRow(rowNum - 1);
+    function out = createRow(this, index)
+      jRow = this.j.createRow(index - 1);
       out = this.wrapRowObject(this, jRow);
     end
     
@@ -89,9 +90,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   end
   
   methods (Abstract, Access = protected)
-    
-    out = wrapRowObject(this, jRow)
-    
+    out = wrapRowObject(this, jObj)
   end
   
 end
