@@ -7,3 +7,5 @@
 !/lib/java-ext-static/.dummy
 !/lib/java-ext-static/README.md
 src/java/janklab-java/.idea/workspace.xml
+doc/_site
+doc/.jekyll-cache

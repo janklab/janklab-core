@@ -1,0 +1,158 @@
+<deployment-project plugin="plugin.toolbox" plugin-version="1.0">
+  <configuration file="/Users/janke/local/repos/janklab/Janklab.prj" location="/Users/janke/local/repos/janklab" name="Janklab" target="target.toolbox" target-name="Package Toolbox">
+    <param.appname>Janklab</param.appname>
+    <param.authnamewatermark>Andrew Janke</param.authnamewatermark>
+    <param.email>floss@apjanke.net</param.email>
+    <param.company>Trinary Star, LLC</param.company>
+    <param.summary>A general-purpose Matlab programming and utility library</param.summary>
+    <param.description>Janklab provides new functions and data structures, an enhanced Database Toolbox API, programmatic Microsoft Excel I/O, and a lot of miscellaneous stuff.</param.description>
+    <param.screenshot />
+    <param.version>0.1.0</param.version>
+    <param.output>${PROJECT_ROOT}/Janklab.mltbx</param.output>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms />
+    <param.guid>722f019f-a5ea-4b66-bede-34bbe3e3de30</param.guid>
+    <param.exclude.filters>.git
+.github
+scratch
+.DS_Store
+.gitignore
+.gitmodules</param.exclude.filters>
+    <param.exclude.pcodedmfiles>true</param.exclude.pcodedmfiles>
+    <param.examples />
+    <param.demosxml />
+    <param.apps />
+    <param.registered.apps />
+    <param.docs>${PROJECT_ROOT}/info.xml</param.docs>
+    <param.getting.started.guide>${PROJECT_ROOT}/doc/GettingStarted.mlx</param.getting.started.guide>
+    <param.matlabpath.excludes>
+      <item>/</item>
+      <item>/tests/Mcode</item>
+      <item>/dev-kit/Mcode</item>
+      <item>/lib/matlab/matlab-jarext-inspector/matlab-jarext-inspector-1.0.1/Mcode</item>
+      <item>/lib/matlab/dispstr/dispstr-HEAD/Mcode</item>
+      <item>/lib/matlab/SLF4M/SLF4M-HEAD/Mcode</item>
+      <item>/Mcode/validators</item>
+      <item>/Mcode/monkeypatch</item>
+      <item>/Mcode/commands</item>
+      <item>/Mcode/classes</item>
+    </param.matlabpath.excludes>
+    <param.javaclasspath.excludes>
+      <item>/lib/java-ext-static/postgresql-42.2.9.jar</item>
+      <item>/lib/java/commons-csv-1.4.jar</item>
+      <item>/lib/java/janklab-java-0.1-SNAPSHOT.jar</item>
+      <item>/lib/java/swingexplorer-1.6.0/swexpl.jar</item>
+      <item>/lib/java/swingexplorer-1.6.0/swag.jar</item>
+      <item>/lib/java/poi-3.16/poi-3.16.jar</item>
+      <item>/lib/java/poi-3.16/poi-scratchpad-3.16.jar</item>
+      <item>/lib/java/poi-3.16/poi-ooxml-schemas-3.16.jar</item>
+      <item>/lib/java/poi-3.16/poi-ooxml-3.16.jar</item>
+      <item>/lib/java/poi-3.16/poi-excelant-3.16.jar</item>
+      <item>/lib/java/poi-3.16/poi-examples-3.16.jar</item>
+      <item>/lib/java/poi-3.16-dependencies/xmlbeans-2.6.0.jar</item>
+      <item>/lib/java/poi-3.16-dependencies/commons-logging-1.2.jar</item>
+      <item>/lib/java/poi-3.16-dependencies/commons-collections4-4.1.jar</item>
+      <item>/lib/java/poi-3.16-dependencies/commons-codec-1.10.jar</item>
+      <item>/lib/java/poi-3.16-dependencies/curvesapi-1.04.jar</item>
+      <item>/lib/java/fastutil-8.1.1.jar</item>
+      <item>/lib/java/commons-primitives-1.0.jar</item>
+      <item>/lib/java-ext/postgresql-42.2.9.jar</item>
+      <item>/lib/matlab/SLF4M/SLF4M-HEAD/lib/java/log4j1-config-gui/log4j1-config-gui-0.1.1.jar</item>
+    </param.javaclasspath.excludes>
+    <param.exported.on.package>false</param.exported.on.package>
+    <param.required.addons />
+    <param.matlab.project.id />
+    <param.matlab.project.name />
+    <param.release.start>R2017b</param.release.start>
+    <param.release.end>latest</param.release.end>
+    <param.release.current.only>false</param.release.current.only>
+    <param.compatiblity.windows>true</param.compatiblity.windows>
+    <param.compatiblity.macos>true</param.compatiblity.macos>
+    <param.compatiblity.linux>true</param.compatiblity.linux>
+    <param.compatiblity.matlabonline>true</param.compatiblity.matlabonline>
+    <param.installation.map />
+    <param.additional.sw.names />
+    <param.additional.sw.licenses />
+    <param.additional.sw.win.url />
+    <param.additional.sw.mac.url />
+    <param.additional.sw.linux.url />
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.screenshot />
+      <param.output />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.platforms />
+      <param.exclude.pcodedmfiles />
+      <param.examples />
+      <param.demosxml />
+      <param.apps />
+      <param.registered.apps />
+      <param.exported.on.package />
+      <param.required.addons />
+      <param.matlab.project.id />
+      <param.matlab.project.name />
+      <param.release.current.only />
+      <param.compatiblity.windows />
+      <param.compatiblity.macos />
+      <param.compatiblity.linux />
+      <param.compatiblity.matlabonline />
+      <param.installation.map />
+      <param.additional.sw.names />
+      <param.additional.sw.licenses />
+      <param.additional.sw.win.url />
+      <param.additional.sw.mac.url />
+      <param.additional.sw.linux.url />
+    </unset>
+    <fileset.rootdir>
+      <file>${PROJECT_ROOT}</file>
+    </fileset.rootdir>
+    <fileset.rootfiles>
+      <file>${PROJECT_ROOT}/.editorconfig</file>
+      <file>${PROJECT_ROOT}/LICENSE-Apache.txt</file>
+      <file>${PROJECT_ROOT}/LICENSE.txt</file>
+      <file>${PROJECT_ROOT}/M-doc</file>
+      <file>${PROJECT_ROOT}/Mcode</file>
+      <file>${PROJECT_ROOT}/NOTICE.txt</file>
+      <file>${PROJECT_ROOT}/README.md</file>
+      <file>${PROJECT_ROOT}/dev-kit</file>
+      <file>${PROJECT_ROOT}/doc</file>
+      <file>${PROJECT_ROOT}/examples</file>
+      <file>${PROJECT_ROOT}/info.xml</file>
+      <file>${PROJECT_ROOT}/lib</file>
+      <file>${PROJECT_ROOT}/src</file>
+      <file>${PROJECT_ROOT}/tests</file>
+    </fileset.rootfiles>
+    <fileset.depfun.included />
+    <fileset.depfun.excluded />
+    <fileset.package />
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}" name="Janklab.mltbx" optional="false">/Users/janke/local/repos/janklab/Janklab.mltbx</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2019b.app</root>
+      <toolboxes />
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.14.6</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>

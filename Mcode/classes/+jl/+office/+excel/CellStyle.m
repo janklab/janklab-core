@@ -114,7 +114,7 @@ classdef CellStyle < handle
     end
     
     function set.dataFormatIndex(this, val)
-      this.setDataFormat(val);
+      this.j.setDataFormat(val);
     end
     
     function out = get.dataFormatIndex(this)

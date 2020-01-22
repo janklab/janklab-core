@@ -1,0 +1,7 @@
+# Build settings
+markdown: kramdown
+input: GFM
+markdown_ext: "md"
+# Permalinks
+permalink:        pretty
+encoding:         UTF-8
