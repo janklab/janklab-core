@@ -7,7 +7,7 @@
     <param.summary>A general-purpose Matlab programming and utility library</param.summary>
     <param.description>Janklab provides new functions and data structures, an enhanced Database Toolbox API, programmatic Microsoft Excel I/O, and a lot of miscellaneous stuff.</param.description>
     <param.screenshot />
-    <param.version>0.1.1-SNAPSHOT</param.version>
+    <param.version>0.1.1</param.version>
     <param.output>${PROJECT_ROOT}/Janklab.mltbx</param.output>
     <param.products.name />
     <param.products.id />
