@@ -127,10 +127,10 @@ scratch
       <file>${PROJECT_ROOT}/dist</file>
       <file>${PROJECT_ROOT}/doc</file>
       <file>${PROJECT_ROOT}/examples</file>
+      <file>${PROJECT_ROOT}/info.xml</file>
       <file>${PROJECT_ROOT}/lib</file>
       <file>${PROJECT_ROOT}/src</file>
       <file>${PROJECT_ROOT}/tests</file>
-      <file>${PROJECT_ROOT}/info.xml</file>
     </fileset.rootfiles>
     <fileset.depfun.included />
     <fileset.depfun.excluded />
