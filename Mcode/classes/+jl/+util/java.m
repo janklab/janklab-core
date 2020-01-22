@@ -6,6 +6,7 @@ classdef java
   % them.
   
   methods (Static)
+    
     function out = classForName(name)
       % Get the java.lang.Class metaclass for a named Java class
       %
@@ -167,6 +168,7 @@ classdef java
     end
     
     function out = callStaticMethod(klass, methodName, args, argTypes)
+      % Call a static method on a given class
       if nargin < 3; args = {}; end
       if nargin < 4; argTypes = {}; end
       
@@ -180,6 +182,46 @@ classdef java
       methodArgs = boxArgsInJava(args);
       out = method.invoke([], methodArgs);
     end
+    
+    function out = convertStringsToMatlab(jObj)
+      % Convert Java strings or string arrays to Matlab strings
+      %
+      % Be aware that java.lang.String objects lose their identity in this
+      % conversion; only their values are preserved.
+      %
+      % Returns a string array.
+      if isa(jObj, 'java.lang.String')
+        out = string(jObj);
+      elseif isa(jObj, 'java.lang.String[]')
+        out = string(jObj);
+      elseif isa(jObj, 'java.lang.Iterable')
+        if isa(jObj, 'java.lang.Collection')
+          out = repmat(string(missing), [1 jObj.size]);
+        else
+          out = string.empty;
+        end
+        it = jObj.iterator;
+        i = 0;
+        while it.hasNext
+          i = i + 1;
+          jOb = it.next;
+          if isa(jOb, 'java.lang.String')
+            out(i) = string(jOb);
+          elseif isnumeric(jOb) && isempty(jOb)
+            % Leave that element as missing
+          elseif ischar(jOb) || isstring(jOb)
+            out(i) = jOb;
+          else
+            error('jl:InvalidInput', ['Element %d of input Iterable was not ' ...
+              'a java.lang.String; got a %s'], i, class(jOb));
+          end
+        end
+      else
+        error('jl:InvalidInput', "Don't know how to convert a %s to Matlab string array", ...
+          class(jObj));
+      end
+    end
+    
   end
   
   methods (Access = private)

@@ -59,6 +59,16 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     end
     
     function out = createNew(format)
+      % Create a new workbook
+      %
+      % out = jl.office.excel.Workbook.createNew(format)
+      %
+      % Creates a new in-memory workbook in the specified format.
+      %
+      % Format (string) is the workbook/file format to use. May be "xls" for
+      % Excel 97 (".xls") format, or "xlsx" for Excel 2007 (".xlsx") format.
+      %
+      % Returns a new Workbook object of the appropriate subclass.
       narginchk(1, 1);
       switch lower(format)
         case 'xls'
@@ -94,17 +104,14 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     % Returns a jl.office.excel.CellStyle object.
     out = createCellStyle(this)
     
-    
+    % Get the table of data formats used in this workbook.
+    %
+    % Returns a DataFormatTable object.
+    out = getDataFormatTable(this)
   end
   
   methods
-    
-    function this = Workbook(varargin)
-      %WORKBOOK Construct a new object
-      %
-      % obj = jl.office.excel.Workbook()
-    end
-    
+        
     function out = get.activeSheetIndex(this)
       out = this.j.getActiveSheetIndex;
     end
@@ -225,10 +232,6 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       out = this.j.addPicture(pictureData, jFormat);
     end
     
-    function out = getDataFormats(this)
-      out = this.createDataFormat;
-    end
-    
     function close(this)
       this.j.close;
     end
@@ -236,6 +239,14 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   end
   
   methods (Access = protected)
+    
+    function this = Workbook()
+      %WORKBOOK Construct a new object
+      %
+      % obj = jl.office.excel.Workbook()
+      
+      % Nothing to do in the superclass; everything is done by the subclass.
+    end
     
     function out = dispstr_scalar(this)
       out = sprintf('[Workbook: format=%s, %d sheets]', ...

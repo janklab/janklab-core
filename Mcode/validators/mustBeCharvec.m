@@ -8,6 +8,7 @@ function mustBeCharvec(x)
 %
 % See also:
 % mustBeString
+% mustBeStringy
 % mustBeScalarString
 
 mustBeA(x, 'char');

@@ -27,6 +27,10 @@ classdef Workbook < jl.office.excel.Workbook
       out = jl.office.excel.xls.CellStyle(this.j.createCellStyle);
     end
     
+    function out = getDataFormatTable(this)
+      out = jl.office.excel.xls.DataFormatTable(this.j.createDataFormat);
+    end
+    
   end
   
   methods (Access = protected)
