@@ -22,6 +22,10 @@ classdef Sheet < jl.office.excel.Sheet
       out = jl.office.excel.xlsx.Row(this, jRow);
     end
     
+    function out = wrapCellStyleObject(this, jObj) %#ok<INUSL>
+      out = jl.office.excel.xlsx.CellStyle(jObj);
+    end
+  
   end
   
 end

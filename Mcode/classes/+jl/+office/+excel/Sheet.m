@@ -1,7 +1,15 @@
 classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
-  properties
+  % TODO: Format-specific stuff
+  % TODO: DataValidation
+  % TODO: Header and Footer
+  % TODO: Hyperlinks
+  % TODO: PaneInformation
+  % TODO: PrintSetup, repeatingColumns/Rows
+  % TODO: ConditionalFormatting
+  
+  properties (SetAccess = protected)
     % The underlying POI XSSFSheet object
     j
     % The parent workbook
@@ -15,10 +23,30 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     activeCellAddress
     autobreaks
     firstRowNum
+    fitToPage
     lastRowNum
     name
     nRows
     nCols
+    forceFormulaRecalculation
+    displayFormulas
+    displayGridlines
+    displayRowColHeadings
+    displayZeros
+    printGridlines
+    printRowColHeadings
+    displayGuts
+    horizontallyCenter
+    verticallyCenter
+    leftCol
+    topRow
+    margin
+    physicalNumberOfRows
+    isProtected
+    isRightToLeft
+    rowSumsBelow
+    rowSumsRight
+    scenarioProtect
   end
   
   methods
@@ -78,6 +106,307 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       out = this.wrapRowObject(this, jRow);
     end
     
+    function out = addMergedRegion(this, region)
+      % Add a merged region of cells
+      %
+      % out = addMergedRegion(this, region)
+      %
+      % Region is a CellRangeAddress object or something that can be converted
+      % to one, like a numeric [up, left, down, right] numeric cell range
+      % specification or a string "A1:Z99" cell range specification.
+      %
+      % Returns a scalar numeric that is the index of the merged region.
+      region = jl.office.excel.CellRangeAddress(region);
+      out = this.j.addMergedRegion(region.j);
+    end
+    
+    function out = getMergedRegion(this, index)
+      out = jl.office.excel.CellRangeAddress(this.j.getMergedRegion(index - 1));
+    end
+    
+    function out = getMergedRegions(this)
+      list = this.j.getMergedRegions;
+      out = repmat(jl.office.excel.CellRangeAddress, [1 list.size]);
+      for i = 1:list.size
+        out(i) = list.get(i - 1);
+      end
+    end
+    
+    function out = getNumMergedRegions(this)
+      out = this.j.getNumMergedRegions;
+    end
+    
+    function autoSizeColumn(this, index, useMergedCells)
+      narginchk(2, 3);
+      if nargin == 2
+        this.j.autoSizeColumn(index - 1);
+      else
+        this.j.autoSizeColumn(index - 1, useMergedCells);
+      end
+    end
+    
+    function createFreezePanes(this, colSplit, rowSplit, leftmostColumn, topRow)
+      narginchk(3, 5);
+      if nargin == 3
+        this.j.createFreezePanes(colSplit - 1, rowSplit - 1);
+      else
+        this.j.createFreezePanes(colSplit - 1, rowSplit - 1, ...
+          leftmostColumn - 1, topRow - 1);
+      end
+    end
+    
+    function createSplitPane(this, xSplitPos, ySplitPos, leftmostColumn, topRow, activePane)
+      % Creates a split pane, removing any existing freezepane or splitpane
+      %
+      % createSplitPane(obj, xSplitPos, ySplitPos, leftmostColumn, topRow, activePane)
+      %
+      % xSplitPos (numeric) is the horizontal position of the split, in 1/20th
+      % of a point.
+      %
+      % ySplitPos (numeric) is the vertical position of the split, in 1/20th
+      % of a point.
+      %
+      % leftmostColumn is the leftmost column visible in the right pane.
+      %
+      % topRow is the index of the top row visible in the bottom pane.
+      %
+      % activePane is a SplitPanePosition object which indicates which pane is
+      % to become active.
+      mustBeA(activePane, 'jl.office.excel.SplitPanePosition');
+      this.j.createSplitPane(xSplitPos, ySplitPos, leftmostColumn - 1, ...
+        topRow - 1, activePane.toJava);
+    end
+    
+    function out = getCellComment(this, address)
+      address = jl.office.excel.CellAddress(address);
+      out = this.j.getCellComment(address.j);
+    end
+    
+    function out = getCellComments(this)
+      UNIMPLEMENTED
+    end
+    
+    function out = getColumnBreaks(this)
+      out = this.j.getColumnBreaks;
+    end
+    
+    function out = getColumnOutlineLevel(this, index)
+      out = this.j.getColumnOutlineLevel(index - 1);
+    end
+    
+    function out = getColumnStyle(this, colIndex)
+      out = this.wrapCellStyleObject(this.j.getColumnStyle(colIndex - 1));
+    end
+    
+    function out = getColumnWidth(this, colIndex)
+      out = this.j.getColumnWidth(colIndex - 1);
+    end
+    
+    function out = getColumnWidthInPixels(this, colIndex)
+      out = this.j.getColumnWidthInPixels(colIndex - 1);
+    end
+    
+    function out = getDefaultColumnWidth(this)
+      out = this.j.getDefaultColumnWidth;
+    end
+    
+    function out = getDefaultRowHeight(this)
+      out = this.j.getDefaultRowHeight;
+    end
+    
+    function out = getDefaultRowHeightInPoints(this)
+      out = this.j.getDefaultRowHeightInPoints;
+    end
+    
+    function out = get.displayGuts(this)
+      out = this.j.getDisplayGuts;
+    end
+    
+    function set.displayGuts(this, val)
+      this.j.setDisplayGuts(val);
+    end
+    
+    function out = get.fitToPage(this)
+      out = this.j.getFitToPage;
+    end
+    
+    function set.fitToPage(this, val)
+      this.j.setFitToPage(val);
+    end
+    
+    function out = get.forceFormulaRecalculation(this)
+      out = this.j.getForceFormulaRecalculation;
+    end
+    
+    function set.forceFormulaRecalculation(this, val)
+      this.j.setForceFormulaRecalculation(val);
+    end
+    
+    function out = get.horizontallyCenter(this)
+      out = this.j.getHorizontallyCenter;
+    end
+    
+    function set.horizontallyCenter(this, val)
+      this.j.setHorizontallyCenter(val);
+    end
+    
+    function out = get.leftCol(this)
+      out = this.j.getLeftCol;
+    end
+    
+    function set.leftCol(this, val)
+      this.j.setLeftCol(val);
+    end
+    
+    function out = get.margin(this)
+      out = this.j.getMargin;
+    end
+    
+    function set.margin(this, val)
+      this.j.setMargin(val);
+    end
+    
+    function out = get.physicalNumberOfRows(this)
+      out = this.j.getPhysicalNumberOfRows;
+    end
+    
+    function out = get.isProtected(this)
+      out = this.j.getProtect;
+    end
+    
+    function set.isProtected(this, val)
+      this.j.setProtect(val);
+    end
+    
+    function out = getRowBreaks(this)
+      out = this.j.getRowBreaks;
+    end
+    
+    function out = get.rowSumsBelow(this)
+      out = this.j.getRowSumsBelow;
+    end
+
+    function set.rowSumsBelow(this, val)
+      this.j.setRowSumsBelow(val);
+    end
+    
+    function out = get.rowSumsRight(this)
+      out = this.j.getRowSumsRight;
+    end
+    
+    function set.rowSumsRight(this, val)
+      this.j.setRowSumsRight(val);
+    end
+    
+    function out = get.scenarioProtect(this)
+      out = this.j.getScenarioProtect;
+    end
+    
+    function set.scenarioProtect(this, val)
+      this.j.setScenarioProtect(val);
+    end
+    
+    function out = get.topRow(this)
+      out = this.j.getTopRow;
+    end
+    
+    function set.topRow(this, val)
+      this.j.setTopRow(val);
+    end
+    
+    function out = get.verticallyCenter(this)
+      out = this.j.getVerticallyCenter;
+    end
+    
+    function set.verticallyCenter(this, val)
+      this.j.setVerticallyCenter(val);
+    end
+    
+    function groupColumn(this, fromColIndex, toColIndex)
+      this.j.groupColumn(fromColIndex - 1, toColIndex - 1);
+    end
+    
+    function groupRow(this, fromRowIndex, toRowIndex)
+      this.j.groupRow(fromRowIndex - 1, toRowIndex - 1);
+    end
+    
+    function out = isColumnBroken(this, index)
+      out = this.j.isColumnBroken(index - 1);
+    end
+    
+    function out = isRowBroken(this, index)
+      out = this.j.isRowBroken(index - 1);
+    end
+    
+    function out = isColumnHidden(this, index)
+      out = this.j.isColumnHidden(index - 1);
+    end
+    
+    function out = get.displayFormulas(this)
+      out = this.j.getDisplayFormulas;
+    end
+    
+    function set.displayFormulas(this, val)
+      this.j.setDisplayFormulas(val);
+    end
+    
+    function out = get.displayGridlines(this)
+      out = this.j.getDisplayGridlines;
+    end
+    
+    function set.displayGridlines(this, val)
+      this.j.setDisplayGridlines(val);
+    end
+    
+    function out = get.displayRowColHeadings(this)
+      out = this.j.getDisplayRowColHeadings;
+    end
+    
+    function set.displayRowColHeadings(this, val)
+      this.j.setDisplayRowColHeadings(val);
+    end
+    
+    function out = get.printRowColHeadings(this)
+      out = this.j.getPrintRowColHeadings;
+    end
+    
+    function set.printRowColHeadings(this, val)
+      this.j.setPrintRowColHeadings(val);
+    end
+    
+    function out = get.displayZeros(this)
+      out = this.j.getDisplayZeros;
+    end
+    
+    function set.displayZeros(this, val)
+      this.j.setDisplayZeros(val);
+    end
+    
+    function out = get.printGridlines(this)
+      out = this.j.getPrintGridlines;
+    end
+    
+    function set.printGridlines(this, val)
+      this.j.setPrintGridlines(val);
+    end
+    
+    function out = get.isRightToLeft(this)
+      out = this.j.isRightToLeft;
+    end
+    
+    function set.isRightToLeft(this, val)
+      this.j.setRightToLeft(val);
+    end
+    
+    function out = isSelected(this)
+      out = this.j.isSelected;
+    end
+    
+    function protectSheet(this, password)
+      this.j.protectSheet(password);
+    end
+    
+    
   end
 
   methods (Access = protected)
@@ -91,6 +420,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   
   methods (Abstract, Access = protected)
     out = wrapRowObject(this, jObj)
+    out = wrapCellStyleObject(this, jObj)
   end
   
 end
