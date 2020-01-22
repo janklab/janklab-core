@@ -31,7 +31,6 @@ classdef Color < jl.office.excel.Color
       %
       % Returns an array of j.office.excel.xls.Color objects.
       jColors = org.apache.poi.hssf.util.HSSFColor.getIndexHash;
-      %out = containers.Map('KeyType','double', 'ValueType','jl.office.excel.xls.Color');
       out = repmat(jl.office.excel.xls.Color, [1 64]);
       it = jColors.entrySet.iterator;
       while it.hasNext

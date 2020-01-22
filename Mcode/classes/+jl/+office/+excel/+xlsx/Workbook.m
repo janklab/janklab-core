@@ -18,11 +18,10 @@ classdef Workbook < jl.office.excel.Workbook
       error('Invalid input for constructor');
     end
     
-
-    function write(this, file)
-      %WRITE Write this workbook out to a file in .xlsx format
+    function save(this, file)
+      %SAVE Write this workbook out to a file in .xlsx format
       %
-      % write(obj, file)
+      % save(obj, file)
       %
       % file (char, str) is the path to the file to write out to. Overwrites any
       % existing file.
@@ -38,7 +37,10 @@ classdef Workbook < jl.office.excel.Workbook
       jOutStream.close();
       
       % When running under matlab, POI produces bad files with the "xmlns="
-      % attribute missing on some elements. (I have no idea why.) Fix them up.
+      % attribute missing on some elements. (I have no idea why.) So we have to
+      % fix them up.
+      % See: https://stackoverflow.com/questions/59811366/apache-poi-3-16-creates-invalid-files-when-run-inside-matlab?noredirect=1#comment105804128_59811366
+      
       zIn = jl.util.ZipFile(tmpFile1);
       zOut = jl.util.ZipWriter.forFile(tmpFile2);
       zEntries = zIn.getEntries;
@@ -74,7 +76,19 @@ classdef Workbook < jl.office.excel.Workbook
       delete(tmpFile1);
       movefile(tmpFile2, file);
     end
+
+    function out = createCellStyle(this)
+      out = jl.office.excel.xlsx.CellStyle(this.j.createCellStyle);
+    end
+
+  end
+  
+  methods (Access = protected)
     
+    function out = fileFormat(this) %#ok<MANU>
+      out = 'xlsx';
+    end
+        
   end
   
 end

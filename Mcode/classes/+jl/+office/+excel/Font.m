@@ -146,8 +146,6 @@ classdef Font < handle
       this.j.setUnderline(val);
     end
     
-    
-    
   end
   
 end

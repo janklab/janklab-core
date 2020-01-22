@@ -17,15 +17,23 @@ classdef Workbook < jl.office.excel.Workbook
       end
       error('Invalid input for constructor');
     end
-
-    function write(this, file)
+    
+    function save(this, file)
       jFile = java.io.File(file);
       this.j.write(jFile);
+    end
+    
+    function out = createCellStyle(this)
+      out = jl.office.excel.xls.CellStyle(this.j.createCellStyle);
     end
     
   end
   
   methods (Access = protected)
+    
+    function out = fileFormat(this) %#ok<MANU>
+      out = 'xls';
+    end
     
     function out = wrapSheetObject(this, jObj)
       out = jl.office.excel.xls.Sheet(this, jObj);

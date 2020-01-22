@@ -29,15 +29,27 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   end
   
   methods (Static)
-    function out = fromFile(file)
+    function out = openFile(file)
+      % Open an existing .xls or .xlsx file for reading
+      %
+      % out = jl.office.excel.Workbook.openFile(file)
+      %
+      % Opens an existing Excel file for reading. The format (Excel 97 or Excel
+      % 2007) is detected based on the file extension.
+      %
+      % file (string) is the path to the file to open. It must end in the
+      % extension '.xls' or '.xlsx' (case-insensitive).
+      %
+      % Returns a Workbook subclass of the appropriate type for the workbook
+      % file's format.
       [~,~,extn] = fileparts(file);
       jFile = java.io.File(file);
       switch lower(extn)
         case '.xls'
-          jWkbk = org.apache.xssf.usermodel.HSSFWorkbook(jFile);
+          jWkbk = org.apache.poi.hssf.usermodel.HSSFWorkbook(jFile);
           out = jl.office.excel.xls.Workbook(jWkbk);
         case '.xlsx'
-          jWkbk = org.apache.xssf.usermodel.XSSFWorkbook(jFile);
+          jWkbk = org.apache.poi.xssf.usermodel.XSSFWorkbook(jFile);
           out = jl.office.excel.xlsx.Workbook(jWkbk);
         otherwise
           error('jl:InvalidInput', ['Invalid file extension: ''%s''. ' ...
@@ -46,13 +58,14 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       end
     end
     
-    function out = create(format)
+    function out = createNew(format)
+      narginchk(1, 1);
       switch lower(format)
         case 'xls'
-          jWkbk = org.apache.xssf.usermodel.HSSFWorkbook();
+          jWkbk = org.apache.poi.hssf.usermodel.HSSFWorkbook();
           out = jl.office.excel.xls.Workbook(jWkbk);
         case 'xlsx'
-          jWkbk = org.apache.xssf.usermodel.XSSFWorkbook();
+          jWkbk = org.apache.poi.xssf.usermodel.XSSFWorkbook();
           out = jl.office.excel.xlsx.Workbook(jWkbk);
         otherwise
           error('jl:InvalidInput', 'Invalid format: ''%s''. Must be ''xls'' or ''xlsx''', ...
@@ -62,7 +75,26 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   end
   
   methods (Abstract)
-    write(this, file)
+    % Save this workbook to a file
+    %
+    % save(obj, file)
+    %
+    % File (char) is the path to the file to save the workbook to. Overwrites
+    % any existing file at that location.
+    %
+    % Raises an error if the file I/O operation fails.
+    save(this, file)
+    
+    % Create a new cell style
+    %
+    % out = createCellStyle(obj)
+    %
+    % Creates a new cell style and adds it to this workbook's style table.
+    %
+    % Returns a jl.office.excel.CellStyle object.
+    out = createCellStyle(this)
+    
+    
   end
   
   methods
@@ -193,15 +225,29 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       out = this.j.addPicture(pictureData, jFormat);
     end
     
+    function out = getDataFormats(this)
+      out = this.createDataFormat;
+    end
+    
     function close(this)
       this.j.close;
     end
     
   end
   
+  methods (Access = protected)
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('[Workbook: format=%s, %d sheets]', ...
+        this.fileFormat, this.numberOfSheets);
+    end
+    
+  end
+  
   methods (Abstract, Access = protected)
-    out = this.wrapSheetObject(this, jObj)
-    out = this.wrapCellStyleObject(this, jObj)
+    out = wrapSheetObject(this, jObj)
+    out = wrapCellStyleObject(this, jObj)
+    out = fileFormat(this)
   end
   
 end
