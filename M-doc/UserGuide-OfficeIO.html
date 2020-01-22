@@ -1,0 +1,46 @@
+<h1 id="janklab-office-io-user-guide">Janklab Office IO User Guide</h1>
+
+<p>Janklab provides an API for reading and writing Office files, especially Excel.
+This allows you to work with Excel</p>
+
+<h2 id="why-this-is-good">Why this is good</h2>
+
+<p>Matlab has support for Excel reading and writing, using <code class="highlighter-rouge">xlswrite</code>, <code class="highlighter-rouge">writetable</code>, and similar functions. But it only supports reading and writing of basic arrays and tables, and requires Microsoft Excel to be installed on your machine.</p>
+
+<p>Janklab’s Office IO API doesn’t use the Office applications. Instead, it’s built on the Apache POI Java library, and reads &amp; writes the files directly. This is good because:</p>
+
+<ul>
+  <li>Works on Linux</li>
+  <li>Is suitable for <a href="https://support.microsoft.com/en-us/help/257757/considerations-for-server-side-automation-of-office">server-side automation</a>, unlike Office-based implementations like Matlab’s</li>
+  <li>Supports advanced Excel features, like cell formatting, merged cells, freeze panes &amp; split panes, data validation, hyperlinks, charting (coming soon), and so on</li>
+  <li>Doesn’t require Office to be installed</li>
+  <li>Doesn’t require an Office license</li>
+  <li>Will work when multiple Matlab processes are running in the same desktop session</li>
+  <li>Won’t interfere with running interactive Excel instances on your desktop</li>
+  <li>Is potentially faster, once I write some accelerated code ;)</li>
+</ul>
+
+<h2 id="quick-start">Quick start</h2>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wkbk</span> <span class="o">=</span> <span class="n">jl</span><span class="o">.</span><span class="n">office</span><span class="o">.</span><span class="n">excel</span><span class="o">.</span><span class="n">createNew</span><span class="p">();</span>
+<span class="n">sheet</span> <span class="o">=</span> <span class="n">wkbk</span><span class="o">.</span><span class="n">createSheet</span><span class="p">(</span><span class="s2">"Hello"</span><span class="p">);</span>
+<span class="n">sheet</span><span class="o">.</span><span class="n">cells</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="s2">"Hello, world!"</span><span class="p">;</span>
+<span class="n">sheet</span><span class="o">.</span><span class="n">cells</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">}</span> <span class="o">=</span> <span class="mi">42</span><span class="p">;</span>
+<span class="n">wkbk</span><span class="o">.</span><span class="nb">save</span><span class="p">(</span><span class="s2">"Hello World.xlsx"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>Actually, Excel is the only format currently implemented.
+I’ll add Word or other applications if there’s actual user interest in them.</p>
+
+<h3 id="not-implemented-yet">Not implemented yet</h3>
+
+<ul>
+  <li>Excel
+    <ul>
+      <li>Charting</li>
+      <li>OLE embedding</li>
+    </ul>
+  </li>
+</ul>
