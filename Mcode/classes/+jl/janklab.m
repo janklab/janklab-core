@@ -40,7 +40,9 @@ classdef janklab
         thisDir = fileparts(mfilename('fullpath'));
         repoDir = fileparts(fileparts(fileparts(thisDir)));
         versionFile = [repoDir '/VERSION'];
-        val = fileread(versionFile);
+        txt = fileread(versionFile);
+        lines = regexp(txt, '\r?\n', 'split');
+        val = lines{1};
       end
       out = val;
     end
