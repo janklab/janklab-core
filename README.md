@@ -6,7 +6,7 @@ Janklab is not a standalone application. It requires Matlab or the Matlab Compil
 
 See [Feature Areas](doc/Feature-Areas.md) to learn what Janklab provides.
 
-##  License
+## License
 
 Apache 2.0, with other FOSS licenses for dependencies.
 
@@ -19,43 +19,43 @@ Janklab depends on and is redistributed with third-party libraries, some of whic
 * SwingExplorer - LGPL
 * Dispstr - BSD 2-Clause License
 
-##  Contributing
+## Contributing
 
 Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
-##  Installation and use
+## Installation and use
 
-To use Janklab, install it to your local system by cloning the Git repo. You must use the `--recursive` option because the Janklab repo includes submodules.
+To use Janklab, install it to your local system by cloning the Git repo.
 
+```bash
+git clone https://github.com/apjanke/janklab
 ```
-git clone --recursive https://github.com/apjanke/janklab
-```
 
-In your Matlab session, run the `init_janklab` function found under `dist/Mcode/` in the repo. You can also use the initialization functions found in `bootstrap/`.
+In your Matlab session, run the `init_janklab` function found under `dist/Mcode/toplevel` in the repo.
 
-```
+```matlab
 % Example initialization script
 oldDir = pwd;
 
-cd /path/to/janklab/installation/janklab/bootstrap
+cd /path/to/janklab/installation/janklab/Mcode/toplevel
 init_janklab
 
 cd(oldDir)
 ```
 
-##  Compatibility
+## Compatibility
 
-Janklab requires Matlab R2017b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab.
+Janklab requires Matlab R2019b or later, though parts of it may work on earlier versions of Matlab. Future Janklab releases will target newer versions of Matlab, and make use of their new features, so some features of Janklab may require later versions of Matlab.
 
 Extended support of older Matlab versions is not a goal of Janklab. I haven't decided how long older versions of Matlab will be supported, but it's not going to be measured in years.
 
-###  Octave compatibility
+### Octave compatibility
 
 Parts of Janklab are compatible with GNU Octave; others are not. If you're interested in seeing a particular part work under Octave, let me know.
 
 Janklab makes extensive use of some features not supported by Octave. Parts using these won't be made Octave-compatible unless Octave grows support for them. Features:
-  * Dot-style Java class references
-  * `table`
-  * `datetime`
-  * Handle object destructors
 
+* Dot-style Java class references
+* `table`
+* `datetime`
+* Handle object destructors

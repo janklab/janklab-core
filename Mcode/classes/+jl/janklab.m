@@ -1,36 +1,43 @@
 classdef janklab
-%JANKLAB Central info and management for the Janklab library
-
-	methods(Static)
-		function init_janklab
-			%INIT_JANKLAB Runs Janklab initialization code
-			%
-			% This is for Janklab's internal use, to be called by the top-level
-			% INIT_JANKLAB.
-			% Do not call it yourself.
-			
-            % Initialize state data
-            setappdata(0, 'JanklabState', struct);
-            % Initialize logging
-            % No need to call initSLF4M, since we've loaded Dispstr ourselves
-            % Just configure the console logging.
-            logger.Log4jConfigurator.configureBasicConsoleLogging();
-            
-            % Initialize MDBC
-            jl.sql.Mdbc.initMdbc();
-            
-            % Add common synchronized folders, as a developer convenience
-            addSynchronizedFoldersToPath();
-            
-            % Announce initialization and version
-			dispf('Janklab %s initalized', jl.janklab.version);
-		end
-		
-		function out = version
-		%VERSION Version information for Janklab
-		out = 'v0.1-SNAPSHOT';
-		end
-	end
+  %JANKLAB Central info and management for the Janklab library
+  
+  methods(Static)
+    function init_janklab
+      %INIT_JANKLAB Runs Janklab initialization code
+      %
+      % This is for Janklab's internal use, to be called by the top-level
+      % INIT_JANKLAB.
+      % Do not call it yourself.
+      
+      % Initialize state data
+      setappdata(0, 'JanklabState', struct);
+      % Initialize logging
+      % No need to call initSLF4M, since we've loaded Dispstr ourselves
+      % Just configure the console logging.
+      logger.Log4jConfigurator.configureBasicConsoleLogging();
+      
+      % Initialize MDBC
+      jl.sql.Mdbc.initMdbc();
+      
+      % Add common synchronized folders, as a developer convenience
+      addSynchronizedFoldersToPath();
+      
+      % Announce initialization and version
+      dispf('Janklab %s initalized', jl.janklab.version);
+      
+      % Check the version
+      
+      if verLessThan('matlab', '9.7.0')
+        warning(['This version of Matlab is too old. Janklab requires Matlab R2019b ' ...
+          'or newer. Some parts of Janklab will not work.\n']);
+      end
+    end
+    
+    function out = version
+      %VERSION Version information for Janklab
+      out = 'v0.1.0-SNAPSHOT';
+    end
+  end
 end
 
 function addSynchronizedFoldersToPath()
@@ -47,7 +54,7 @@ function addSynchronizedFoldersToPath()
 dropboxDir = dropboxPath();
 dropboxMatlabPath = fullfile(dropboxDir, 'Documents', 'MATLAB');
 if isfolder(dropboxMatlabPath)
-    addpath(dropboxMatlabPath);
+  addpath(dropboxMatlabPath);
 end
 
 % Nothing else is supported yet. Sorry, Microsoft OneDrive users!
@@ -57,12 +64,12 @@ end
 function out = dropboxPath()
 userHomeDir = char(java.lang.System.getProperty('user.home'));
 if ismac()
-    out = fullfile(userHomeDir, 'Dropbox');
+  out = fullfile(userHomeDir, 'Dropbox');
 elseif ispc()
-    out = fullfile(userHomeDir, 'Dropbox');
+  out = fullfile(userHomeDir, 'Dropbox');
 else
-    % I don't know where Dropbox lives on Linux. Let's just guess it's at
-    % ~/Dropbox.
-    out = fullfile(userHomeDir, 'Dropbox');
+  % I don't know where Dropbox lives on Linux. Let's just guess it's at
+  % ~/Dropbox.
+  out = fullfile(userHomeDir, 'Dropbox');
 end
 end
