@@ -1,5 +1,4 @@
-Janklab Feature Areas
-=======================
+# Janklab Feature Areas
 
 Janklab provides several feature areas, many of which interact with each other.
 
@@ -86,7 +85,7 @@ Here are some highlights.
 
 A function that operates like C and Java’s ternary operator (except that all inputs are evaluated eagerly). Useful for concise one-liners that replace five-line `if`/`else` structures.
 
-```
+```matlab
 value = ifthen(condition, valueIfTrue, valueIfFalse);
 ```
 
