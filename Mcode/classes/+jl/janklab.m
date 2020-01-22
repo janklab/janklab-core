@@ -35,7 +35,14 @@ classdef janklab
     
     function out = version
       %VERSION Version information for Janklab
-      out = 'v0.1.0-SNAPSHOT';
+      persistent val
+      if isempty(val)
+        thisDir = fileparts(mfilename('fullpath'));
+        repoDir = fileparts(fileparts(fileparts(thisDir)));
+        versionFile = [repoDir '/VERSION'];
+        val = fileread(versionFile);
+      end
+      out = val;
     end
   end
 end

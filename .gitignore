@@ -9,3 +9,4 @@
 src/java/janklab-java/.idea/workspace.xml
 doc/_site
 doc/.jekyll-cache
+dist
