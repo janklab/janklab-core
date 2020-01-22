@@ -5,6 +5,7 @@ Janklab Changelog
 ------------------
 
 * Package Janklab as a Matlab Toolbox
+* Some Excel API bug fixes
 
 0.1.0 (2020-01-22)
 ------------------
