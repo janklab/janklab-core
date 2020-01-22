@@ -8,6 +8,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: PaneInformation
   % TODO: PrintSetup, repeatingColumns/Rows
   % TODO: ConditionalFormatting
+  % TODO: removeArrayFormula/setArrayFormula
+  % TODO: setAutoFilter
   
   properties (SetAccess = protected)
     % The underlying POI XSSFSheet object
@@ -17,6 +19,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     % A FriendlyCellView into this sheet, which lets you view the sheet's
     % cells as a Matlab array
     cells
+    % A view into the margins of this sheet
+    margins
   end
   
   properties (Dependent)
@@ -47,6 +51,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     rowSumsBelow
     rowSumsRight
     scenarioProtect
+    selected
   end
   
   methods
@@ -202,6 +207,17 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       out = this.j.getColumnWidth(colIndex - 1);
     end
     
+    function setColumnWidth(this, colIndex, width)
+      % Set the width of a column
+      %
+      % setColumnWidth(obj, colIndex, width)
+      %
+      % ColIndex is the index of the column to set the width for.
+      %
+      % Width is the column width in 1/256th of a character width.
+      this.j.setColumnWidth(colIndex - 1, width)
+    end
+    
     function out = getColumnWidthInPixels(this, colIndex)
       out = this.j.getColumnWidthInPixels(colIndex - 1);
     end
@@ -258,12 +274,13 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       this.j.setLeftCol(val);
     end
     
+    % TODO: The types for this margin are wrong.
     function out = get.margin(this)
-      out = this.j.getMargin;
+       UNIMPLEMENTED
     end
     
     function set.margin(this, val)
-      this.j.setMargin(val);
+      UNIMPLEMENTED
     end
     
     function out = get.physicalNumberOfRows(this)
@@ -398,18 +415,111 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       this.j.setRightToLeft(val);
     end
     
-    function out = isSelected(this)
+    function out = get.selected(this)
       out = this.j.isSelected;
+    end
+    
+    function set.selected(this, val)
+      this.j.setSelected(val);
     end
     
     function protectSheet(this, password)
       this.j.protectSheet(password);
     end
     
+    function removeColumnBreak(this, index)
+      this.j.removeColumnBreak(index - 1);
+    end
+    
+    function removeMergedRegion(this, index)
+      if isscalar(index)
+        this.j.removeMergedRegion(index - 1);
+      else
+        error('Multiple indexes are not supported yet.')
+      end
+    end
+    
+    function removeRow(this, row)
+      mustBeA(row, 'jl.office.excel.Row')
+      this.j.removeRow(row.j);
+    end
+    
+    function removeRowBreak(this, index)
+      this.j.removeRowBreak(index - 1);
+    end
+    
+    function setColumnGroupCollapsed(this, colIndex, isCollapsed)
+      this.j.setColumnGroupCollapsed(colIndex - 1, isCollapsed);
+    end
+    
+    function setRowGroupCollapsed(this, rowIndex, isCollapsed)
+      this.j.setRowGroupCollapsed(rowIndex - 1, isCollapsed);
+    end
+    
+    function setColumnBreak(this, index)
+      this.setColumnBreak(index - 1);
+    end
+    
+    function setRowBreak(this, index)
+      this.setRowBreak(index - 1);
+    end
+    
+    function setColumnHidden(this, index)
+      this.setColumnHidden(index - 1);
+    end
+    
+    function setDefaultColumnStyle(this, colIndex, cellStyle)
+      mustBeA(cellStyle, 'jl.office.excel.CellStyle');
+      this.j.setDefaultColumnStyle(colIndex - 1, cellStyle.j);
+    end
+    
+    function setDefaultColumnWidth(this, width)
+      this.j.setDefaultColumnWidth(width);
+    end
+    
+    function setDefaultRowHeight(this, height)
+      this.j.setDefaultRowHeight(height);
+    end
+    
+    function setDefaultRowHeightInPoints(this, height)
+      this.j.setDefaultRowHeightInPoints(height);
+    end
+    
+    function setZoom(this, scale)
+      this.j.setZoom(scale);
+    end
+    
+    function shiftColumns(this, ixStart, ixEnd, n)
+      this.j.shiftColumns(ixStart - 1, ixEnd - 1, n);
+    end
+    
+    function shiftRows(this, ixStart, ixEnd, n)
+      this.j.shiftRows(ixStart - 1, ixEnd - 1, n);
+    end
+    
+    function showInPane(this, topRow, leftCol)
+      this.j.showInPane(topRow - 1, leftCol - 1);
+    end
+    
+    function ungroupColumn(this, fromCol, toCol)
+      this.j.ungroupColumn(fromCol - 1, toCol - 1);
+    end
+    
+    function ungroupRow(this, fromRow, toRow)
+      this.j.ungroupRow(fromRow - 1, toRow - 1);
+    end
+    
+    function validateMergedRegions(this)
+      this.j.validateMergedRegions;
+    end
     
   end
 
   methods (Access = protected)
+    
+    function this = Sheet
+      this.margins = jl.office.excel.SheetMargins(this);
+    end
     
     function out = dispstr_scalar(this)
       out = sprintf('[Sheet: name=''%s'']', ...
