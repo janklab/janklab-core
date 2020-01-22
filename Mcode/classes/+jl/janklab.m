@@ -23,7 +23,7 @@ classdef janklab
       addSynchronizedFoldersToPath();
       
       % Announce initialization and version
-      dispf('Janklab %s initalized', jl.janklab.version);
+      dispf('Janklab %s initialized', jl.janklab.version);
       
       % Check the version
       
