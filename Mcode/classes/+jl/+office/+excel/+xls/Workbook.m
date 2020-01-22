@@ -2,15 +2,14 @@ classdef Workbook < jl.office.excel.Workbook
   % An XLS (Excel 97) format Workbook
   
   % TODO: OLE2 embedding support
-  % TODO: backupFlag
   % TODO: getCustomPalette
   % TODO: getEncryptionInfo
   % TODO: NameRecord?
-  % TODO: get/setSelectedTabs
-  % TODO: [un]writeProtectWorkbook
   % TODO: save back to currently-open file (write() with 0 args)
   
   properties
+    selectedTabs
+    backupFlag
   end
   
   methods
@@ -55,6 +54,34 @@ classdef Workbook < jl.office.excel.Workbook
       for i = 1:list.size
         out(i) = jl.office.excel.xls.PictureData(list.get(i-1));
       end
+    end
+    
+    function out = get.selectedTabs(this)
+      list = this.j.getSelectedTabs;
+      out = NaN([1 list.size]);
+      for i = 1:list.size
+        out(i) = list.get(i-1);
+      end
+    end
+    
+    function set.selectedTabs(this, val)
+      this.j.setSelectedTabs(val);
+    end
+    
+    function out = get.backupFlag(this)
+      out = this.j.getBackupFlag;
+    end
+    
+    function set.backupFlag(this, val)
+      this.j.setBackupFlag(val);
+    end
+    
+    function writeProtect(this)
+      this.j.writeProtectWorkbook;
+    end
+    
+    function unWriteProtect(this)
+      this.j.unWriteProtectWorkbook;
     end
     
   end
