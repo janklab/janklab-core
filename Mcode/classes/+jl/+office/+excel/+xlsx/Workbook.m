@@ -103,6 +103,10 @@ classdef Workbook < jl.office.excel.Workbook
       out = jl.office.excel.xlsx.Name(this.j.createName);
     end
     
+    function out = getDataFormatTable(this)
+      out = jl.office.excel.xlsx.DataFormatTable(this.j.createDataFormat);
+    end
+    
     function out = getAllPictures(this)
       list = this.j.getAllPictures;
       out = repmat(jl.office.excel.xlsx.PictureData, [1 list.size]);

@@ -39,7 +39,7 @@ classdef SheetMargins < handle
       this.sheet.j.setMargin(org.apache.poi.ss.usermodel.Sheet.LeftMargin, val);
     end
     
-    function out = get.Bottm(this)
+    function out = get.Bottom(this)
       out = this.sheet.j.getMargin(org.apache.poi.ss.usermodel.Sheet.BottmMargin);
     end
 

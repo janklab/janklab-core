@@ -103,12 +103,12 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
         out = [];
         return
       end
-      out = this.wrapRowObject(this, jRow);
+      out = this.wrapRowObject(jRow);
     end
     
     function out = createRow(this, index)
       jRow = this.j.createRow(index - 1);
-      out = this.wrapRowObject(this, jRow);
+      out = this.wrapRowObject(jRow);
     end
     
     function out = addMergedRegion(this, region)

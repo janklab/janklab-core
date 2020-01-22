@@ -339,7 +339,7 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       else
         jSheet = this.j.createSheet(name);
       end
-      out = this.createSheetObject(this, jSheet);
+      out = this.wrapSheetObject(jSheet);
     end
     
     function out = cloneSheet(this, index)

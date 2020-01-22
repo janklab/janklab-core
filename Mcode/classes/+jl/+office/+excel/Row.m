@@ -98,7 +98,7 @@ classdef (Abstract) Row < jl.util.DisplayableHandle
     
     function out = createCell(this, ixCol)
       jCell = this.j.createCell(ixCol - 1);
-      out = this.wrapCellObject(this, jCell);
+      out = this.wrapCellObject(jCell);
     end
     
   end
