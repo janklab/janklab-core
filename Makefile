@@ -3,7 +3,7 @@
 default: all
 
 .PHONY: all
-all: mdoc dist
+all: doc dist
 
 .PHONY: dist
 dist:
