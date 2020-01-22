@@ -25,7 +25,7 @@ scratch
     <param.demosxml />
     <param.apps />
     <param.registered.apps />
-    <param.docs>${PROJECT_ROOT}/doc/info.xml</param.docs>
+    <param.docs>${PROJECT_ROOT}/info.xml</param.docs>
     <param.getting.started.guide>${PROJECT_ROOT}/doc/GettingStarted.mlx</param.getting.started.guide>
     <param.matlabpath.excludes>
       <item>/</item>
@@ -38,6 +38,7 @@ scratch
       <item>/Mcode/monkeypatch</item>
       <item>/Mcode/commands</item>
       <item>/Mcode/classes</item>
+      <item>/scratch</item>
     </param.matlabpath.excludes>
     <param.javaclasspath.excludes>
       <item>/lib/java-ext-static/postgresql-42.2.9.jar</item>
@@ -117,16 +118,19 @@ scratch
       <file>${PROJECT_ROOT}/LICENSE-Apache.txt</file>
       <file>${PROJECT_ROOT}/LICENSE.txt</file>
       <file>${PROJECT_ROOT}/M-doc</file>
+      <file>${PROJECT_ROOT}/Makefile</file>
       <file>${PROJECT_ROOT}/Mcode</file>
       <file>${PROJECT_ROOT}/NOTICE.txt</file>
       <file>${PROJECT_ROOT}/README.md</file>
+      <file>${PROJECT_ROOT}/VERSION</file>
       <file>${PROJECT_ROOT}/dev-kit</file>
+      <file>${PROJECT_ROOT}/dist</file>
       <file>${PROJECT_ROOT}/doc</file>
       <file>${PROJECT_ROOT}/examples</file>
-      <file>${PROJECT_ROOT}/doc/info.xml</file>
       <file>${PROJECT_ROOT}/lib</file>
       <file>${PROJECT_ROOT}/src</file>
       <file>${PROJECT_ROOT}/tests</file>
+      <file>${PROJECT_ROOT}/info.xml</file>
     </fileset.rootfiles>
     <fileset.depfun.included />
     <fileset.depfun.excluded />
