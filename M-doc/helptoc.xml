@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<toc version="2.0">
+    <tocitem target="janklab_product_page.html">Janklab Toolbox
+        <!-- Nest tocitems to create hierarchical entries in  Contents-->
+        <!-- To include icons, use the following syntax for tocitems: -->
+        <!-- <tocitem target="foo.html" image="HelpIcon.NAME"> -->
+        <!-- Title-of-Section </tocitem> -->
+        <!-- where NAME is one of the following (use capital letters): -->
+        <!-- FUNCTION, USER_GUIDE, EXAMPLES, BLOCK, GETTING_STARTED, -->
+        <!-- DEMOS, RELEASE_NOTES --> 
+        <!-- Icon images used for these entries are also stored in -->
+        <!-- matlabroot/toolbox/matlab/icons -->
+        <!-- A Getting Started Guide usually comes first -->
+
+        <tocitem target="Goals.html">Janklab Goals</tocitem>
+        <tocitem target="Feature-Areas.html">Feature Areas</tocitem>
+        <tocitem target="UserGuide-MDBC.html">MDBC User Guide</tocitem>
+        <tocitem target="Error-Identifiers.html">Error Identifiers</tocitem>
+        <tocitem target="TODO.html">Project TODOs</tocitem>
+        <!--
+        <tocitem target="mytbx_gs_top.html" image="HelpIcon.GETTING_STARTED">
+            Getting Started with the MyToolbox Toolbox
+            <tocitem target="mytbx_reqts_example.html">System Requirements
+            </tocitem>
+            <tocitem target="mytbx_features_example.html">Features
+                2nd and lower TOC levels usually have anchor IDs
+                <tocitem target="mytbx_feature1_example.htm#10187">Feature 1
+                </tocitem>
+                <tocitem target="mytbx_feature2_example.htm#10193">Feature 2
+                </tocitem>
+            </tocitem>
+        </tocitem>
+        -->
+        <!-- User Guide comes next -->
+        <!--
+        <tocitem target="mytbx_ug_intro.html" 
+            image="HelpIcon.USER_GUIDE">MyToolbox User Guide
+            <tocitem target="mytbx_ch_1.html">Setting Up MyToolbox
+            </tocitem>
+            <tocitem target="mytbx_ch_2.html">Processing Data
+            </tocitem>
+            <tocitem target="mytbx_ch_3.html">Verifying MyToolbox outputs 
+                <tocitem target="mytbx_ch_3a.html">Handling Test Failures
+                </tocitem>
+            </tocitem>
+        </tocitem>
+        -->
+
+        <!-- Optional link or links to your or other Web sites -->
+        <tocitem target="https://github.com/apjanke.janklab">
+        Janklab Project Web Site
+        </tocitem>
+    </tocitem>
+</toc>
