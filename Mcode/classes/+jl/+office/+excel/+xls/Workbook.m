@@ -1,4 +1,14 @@
 classdef Workbook < jl.office.excel.Workbook
+  % An XLS (Excel 97) format Workbook
+  
+  % TODO: OLE2 embedding support
+  % TODO: backupFlag
+  % TODO: getCustomPalette
+  % TODO: getEncryptionInfo
+  % TODO: NameRecord?
+  % TODO: get/setSelectedTabs
+  % TODO: [un]writeProtectWorkbook
+  % TODO: save back to currently-open file (write() with 0 args)
   
   properties
   end

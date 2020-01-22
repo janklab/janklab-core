@@ -16,7 +16,9 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   %
   % % Create a new in-memory workbook in Excel 2007 format
   % wkbk = jl.office.excel.Workbook.createNew()
-  % % You can also 
+  %
+  % % You can also specify the format explicitly:
+  % wkbk = jl.office.excel.Workbook.createNew('xlsx')
   %
   % % Create a new in-memory workbook in the legacy Excel 97 format
   % wkbk = jl.office.excel.Workbook.createNew('xls')
@@ -25,7 +27,10 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   % jl.office.excel.xls.Workbook
   % jl.office.excel.xlsx.Workbook
   
-  % TODO: missingCellPolicy
+  % TODO: MissingCellPolicy
+  % TODO: Sheet reordering
+  % TODO: Cross-workbook linking (linkExternalWorkbook())
+  % TODO: XLS- and XLSX-specific stuff
   
   properties
     % The underlying Java POI XSSFWorkbook object
@@ -75,12 +80,12 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
         case '.xls'
           jWkbk = org.apache.poi.hssf.usermodel.HSSFWorkbook(jFile);
           out = jl.office.excel.xls.Workbook(jWkbk);
-        case '.xlsx'
+        case {'.xlsx' '.xlsm'}
           jWkbk = org.apache.poi.xssf.usermodel.XSSFWorkbook(jFile);
           out = jl.office.excel.xlsx.Workbook(jWkbk);
         otherwise
           error('jl:InvalidInput', ['Invalid file extension: ''%s''. ' ...
-            'Must be ''.xls'' or ''.xlsx'''], ...
+            'Must be ''.xls'', ''.xlsx'', or ''.xlsm'''], ...
             extn);
       end
     end

@@ -1,21 +1,37 @@
 classdef Workbook < jl.office.excel.Workbook
+  % An Excel 2007 format Workbook
+  
+  % TODO: Chart support (done through DrawingPatriarch)
+  % TODO: PivotTable/PivotCache support
+  % TODO: addPicture() from file (maybe that should go in the superclass)
+  % TODO: createDialogSheet
+  % TODO: CalculationChain support
+  % TODO: get/setCellFormulaValidation
+  % TODO: external links (ExternalLinksTable)
+  % TODO: getTable/XSSFTable
+  % TODO: Macro support
+  % TODO: OLE stuff
   
   properties
   end
   
+  methods (Static)
+    
+    function out = createNew()
+        j = org.apache.poi.xssf.usermodel.XSSFWorkbook();
+        out = jl.office.excel.xlsx.Workbook(j);
+    end
+    
+  end
+  
   methods
     
-    function this = Workbook(varargin)
+    function this = Workbook(jObj)
       if nargin == 0
-        this.j = org.apache.poi.xssf.usermodel.XSSFWorkbook();
         return
       end
-      if nargin == 1 && isa(varargin{1}, 'org.apache.poi.xssf.usermodel.XSSFWorkbook')
-        % Wrap Java object
-        this.j = varargin{1};
-        return
-      end
-      error('Invalid input for constructor');
+      mustBeA(jObj, 'org.apache.poi.xssf.usermodel.XSSFWorkbook');
+      this.j = jObj;
     end
     
     function save(this, file)
@@ -95,6 +111,10 @@ classdef Workbook < jl.office.excel.Workbook
       for i = 1:list.size
         out(i) = jl.office.excel.xlsx.PictureData(list.get(i-1));
       end
+    end
+    
+    function out = isDate1904(this)
+      out = this.j.isDate1904;
     end
     
   end
