@@ -1,0 +1,109 @@
+<h1 id="janklab-feature-areas">Janklab Feature Areas</h1>
+
+<p>Janklab provides several feature areas, many of which interact with each other.</p>
+
+<h2 id="extended-type-system">Extended Type System</h2>
+
+<p>The Janklab “extended type system” provides a unified view of the entire Matlab type system by defining new pseudotypes that represent sets of types (like <code class="highlighter-rouge">primitive</code> or <code class="highlighter-rouge">java</code>) or subtypes that depend on the state of values (like <code class="highlighter-rouge">cellstr</code> or <code class="highlighter-rouge">cellrec</code>). This is in the <code class="highlighter-rouge">jl.types</code> namespace.</p>
+
+<p>This lets you write concise type tests using <code class="highlighter-rouge">isa2</code> instead of having to do combinations of <code class="highlighter-rouge">isnumeric</code>/<code class="highlighter-rouge">iscellstr</code>/<code class="highlighter-rouge">isjava</code> and so on. This can be used to do concise type conversions that look almost like declarative type constraints/coercions for function arguments.</p>
+
+<h2 id="datetime">Date/Time</h2>
+
+<p>Janklab provides additional date/time types to supplement Matlab’s new <code class="highlighter-rouge">datetime</code> class. These are inspired by the Joda-Time and JSR-310 Java APIs.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">localdate</code> - a calendar date without a time component</li>
+  <li><code class="highlighter-rouge">localtime</code> - a local (wall clock) time</li>
+  <li><code class="highlighter-rouge">duration</code> - a length of time</li>
+</ul>
+
+<p>These are found in the <code class="highlighter-rouge">jl.time</code> namespace.</p>
+
+<p>Note: <code class="highlighter-rouge">jl.time.duration</code> is probably going away because Matlab’s own <code class="highlighter-rouge">duration</code> object provides the same functionality.</p>
+
+<h2 id="validators">Validators</h2>
+
+<p>Janklab provides several validator functions for use with Matlab R2017b’s new function-based object property validation feature. These are in the <code class="highlighter-rouge">validators</code> directory; browse through it to learn what’s available.</p>
+
+<h2 id="mdbc-database-connectivity">MDBC Database Connectivity</h2>
+
+<p>MDBC is an extension to the Matlab Database Toolbox that provides additional features and improved performance.</p>
+
+<p>Additional features:</p>
+
+<ul>
+  <li>Placeholders and bound parameters in SQL queries</li>
+  <li><code class="highlighter-rouge">datetime</code>, <code class="highlighter-rouge">categorical</code>, <code class="highlighter-rouge">BigDecimal</code>, and other types in result sets and inserts</li>
+  <li>Prepared statements</li>
+  <li>SQL query tracing</li>
+  <li>Larger data sets for inserts and query result sets</li>
+  <li>Multiple result sets and out-of-band management data support</li>
+</ul>
+
+<p>Performance of MDBC is improved in some cases over the JDBC mode of the Database Toolbox. This is accomplished by using custom column buffering code and other optimizations down in the Java layer.</p>
+
+<p>MDBC is an extension to the Database Toolbox, not a replacement for it. But you still need to use the new API and objects that MDBC provides, instead of using the regular Database Toolbox API.</p>
+
+<h2 id="data-structures">Data Structures</h2>
+
+<h3 id="symbol">Symbol</h3>
+
+<p>The <code class="highlighter-rouge">symbol</code> type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It is similar to Matlab’s <code class="highlighter-rouge">categorical</code> type, but uses a global symbol space, and is integrated with Janklab I/O features.</p>
+
+<h2 id="monkeypatches">Monkeypatches</h2>
+
+<p>Janklab monkey-patches a couple of the Matlab-provided types with additional functionality. The main purpose of this is to define a useful <code class="highlighter-rouge">==</code> and <code class="highlighter-rouge">eqnan</code> for cell values, which are used primarily for polymorphic programming with cellstrs.</p>
+
+<h2 id="csv-reader">CSV Reader</h2>
+
+<p>The <code class="highlighter-rouge">jl.etl.CsvTableReader</code> is an improved version of Matlab’s <code class="highlighter-rouge">csvread()</code>/<code class="highlighter-rouge">readtable()</code> that provides support for additional data types and column type autodetection. It is implemented primarily in Java for speed.</p>
+
+<h2 id="algorithms">Algorithms</h2>
+
+<h2 id="matlab-introspection">Matlab Introspection</h2>
+
+<p>The <code class="highlighter-rouge">jl.mlintrospect</code> namespace contains tools for examining Matlab itself.</p>
+
+<p>The main current use of this is to list and annotate the Java libraries that Matlab ships with, so you can manage your Java dependencies.</p>
+
+<h3 id="binsearch">Binsearch</h3>
+
+<p>Binary search, implemented in M-code and MEX. Useful mostly as a benchmarking reference. Found in <code class="highlighter-rouge">jl.algo</code>.</p>
+
+<h2 id="sql-stuff">SQL Stuff</h2>
+
+<p>Located in the <code class="highlighter-rouge">jl.sql</code> namespace. These are utilities for manipulating SQL query text.</p>
+
+<h3 id="sql-querybuilder">SQL QueryBuilder</h3>
+
+<p>A “sentence diagram” for SQL statements that lets you build them incrementally and programmatically.</p>
+
+<h2 id="miscellaneous">Miscellaneous</h2>
+
+<p>The rest of Janklab is a grab bag of miscellaneous classes and utility functions. Browse the source to see what’s available. These are aimed at supporting concise, readable code, and filling in the behavior around some of Matlab’s edge cases.</p>
+
+<p>Here are some highlights.</p>
+
+<h3 id="ifthen">ifthen()</h3>
+
+<p>A function that operates like C and Java’s ternary operator (except that all inputs are evaluated eagerly). Useful for concise one-liners that replace five-line <code class="highlighter-rouge">if</code>/<code class="highlighter-rouge">else</code> structures.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>value = ifthen(condition, valueIfTrue, valueIfFalse);
+</code></pre></div></div>
+
+<h3 id="nil">nil</h3>
+
+<p>The <code class="highlighter-rouge">nil</code> type is a placeholder for missing values, in places where <code class="highlighter-rouge">[]</code> is not appropriate because it might really represent an empty set or empty array.</p>
+
+<h3 id="pseudoconstants">Pseudoconstants</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">CR</code> - carriage return (<code class="highlighter-rouge">\r</code>)</li>
+  <li><code class="highlighter-rouge">LF</code> - line feed (<code class="highlighter-rouge">\n</code>)</li>
+  <li><code class="highlighter-rouge">CRLF</code> - carriage return / line feed (<code class="highlighter-rouge">\r\n</code>)</li>
+</ul>
+
+<h3 id="table-utilities">Table Utilities</h3>
+
+<p>Found in <code class="highlighter-rouge">jl.util.tables</code>. Provides a higher-level abstraction for doing GROUP BY operations on Matlab <code class="highlighter-rouge">table</code> objects, and convenient methods for constructing them from other data structures.</p>

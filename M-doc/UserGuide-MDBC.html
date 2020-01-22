@@ -1,0 +1,42 @@
+<h1 id="janklab-mdbc-user-guide">Janklab MDBC User Guide</h1>
+
+<p>MDBC is Janklab’s database connectivity layer. It is an extension to the Matlab Database Toolbox, and is built on top of JDBC.</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>MDBC extends the Matlab Database Toolbox to provide additional features and higher performance.</p>
+
+<p>MDBC provides a separate API from the regular Database Toolbox API. Its functions and objects do not interact with the Database Toolbox’s functions, objects, and settings. You can ignore the Database Toolbox documentation when working with MDBC.</p>
+
+<p>The code for MDBC is in the <code class="highlighter-rouge">jl.sql</code> package.</p>
+
+<h2 id="setup">Setup</h2>
+
+<h3 id="installation">Installation</h3>
+
+<p>MDBC is part of <a href="https://github.com/apjanke/janklab">Janklab</a>. To install MDBC, install Janklab.</p>
+
+<p>MDBC cannot be used as an independent component outside of Janklab.</p>
+
+<p>You will also need the JDBC Driver JAR files for the flavors of database you want to connect to (such as Postgres, Microsoft SQL Server, or Oracle). Drop them into the <code class="highlighter-rouge">lib/java-ext-static</code> directory inside your Janklab installation if you want them automatically loaded for you. Or get them on your Matlab JAVACLASSPATH any way you wish.</p>
+
+<h2 id="creating-a-connection">Creating a connection</h2>
+
+<p>The main database connection class in MDBC is <code class="highlighter-rouge">jl.sql.Connection</code>. When you connect to a database, you will get a <code class="highlighter-rouge">Connection</code> object, and work with that for all your queries and other SQL activity.</p>
+
+<p>Currently, MDBC only supports creating connections using a JDBC URL string. Contact your database administrator if you need help figuring out what the connection strings for your database are.</p>
+
+<p>Call <code class="highlighter-rouge">jl.sql.Mdbc.connectFromJdbcUrl</code> to create a new <code class="highlighter-rouge">Connection</code> using a JDBC URL connection string. Do not include “<code class="highlighter-rouge">jdbc:</code>” in your connection string.</p>
+
+<p>Example:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>host = 'mydbserver.local';
+username = 'goose';
+password = 'honk';
+databaseName = 'village';
+
+jdbcUrl = sprintf('postgresql://%s/%s', host, databaseName);
+
+db = jl.sql.Mdbc.connectFromJdbcUrl(jdbcUrl, username, password)
+</code></pre></div></div>
+

@@ -1,0 +1,83 @@
+<h1 id="janklab-goals">Janklab Goals</h1>
+
+<p>These are the goals guiding Janklab’s development. In addition to goals, we explicitly define non-goals, the things we are willing to give up in order to achieve our goals. Engineering is all about trade-offs.</p>
+
+<h2 id="goals">Goals</h2>
+
+<ul>
+  <li>Concise client code</li>
+  <li>Portability of non-OS-specific features</li>
+  <li>Support for useful OS-specific features</li>
+  <li>Support for polymorphic programming</li>
+  <li>Avoiding edge cases and “discontinuities” in our data types</li>
+</ul>
+
+<h2 id="secondary-goals">Secondary goals</h2>
+
+<ul>
+  <li>Concise Janklab implementation code</li>
+</ul>
+
+<h2 id="non-goals">Non-goals</h2>
+
+<ul>
+  <li>Modularity</li>
+  <li>Clean top-level namespace</li>
+  <li>All features being fully portable across OSes</li>
+  <li>Back-compatibility of new Janklab releases with older Matlab releases</li>
+  <li>Minimizing third-party library dependencies</li>
+  <li>Small distribution file size</li>
+  <li>Minimizing number of classes and functions</li>
+  <li>Running without Java</li>
+</ul>
+
+<h2 id="mdbc">MDBC</h2>
+
+<h3 id="goals-for-mdbc">Goals for MDBC</h3>
+
+<ul>
+  <li>Support major open database vendors
+    <ul>
+      <li>PostgreSQL, MySQL, Microsoft SQL Server, Oracle, Derby</li>
+      <li>Major criteria: a free-as-in-beer downloadable version of the DB server for development and testing</li>
+    </ul>
+  </li>
+  <li>Placeholder parameters and prepared statements</li>
+  <li>Efficient large INSERTs</li>
+  <li>Date/times as real date/time types
+    <ul>
+      <li>Definitely not strings, and not raw numerics/datenums</li>
+    </ul>
+  </li>
+  <li>Smooth edge cases and uniform types
+    <ul>
+      <li>E.g. empty result sets returned as empty table types, not ‘[]’</li>
+    </ul>
+  </li>
+  <li>Support “INSERT … RETURNING”</li>
+  <li>Support JDBC driver tuning parameters
+    <ul>
+      <li>Preferably with reasonable Matlab-tuned per-flavor defaults</li>
+    </ul>
+  </li>
+  <li>Symbol/categorical support with Java-side conversion</li>
+  <li>Bonus: extensibility for DB extensions
+    <ul>
+      <li>Like PostGIS and user-defined types</li>
+    </ul>
+  </li>
+  <li>Bonus: NoSQL databases that present PostgreSQL or other JDBC APIs</li>
+</ul>
+
+<h3 id="non-goals-for-mdbc">Non-goals for MDBC</h3>
+
+<ul>
+  <li>Harder-to-work-with or non-free databases
+    <ul>
+      <li>IBM DB2, Sybase</li>
+    </ul>
+  </li>
+  <li>Non-JDBC/non-Java drivers</li>
+  <li>ODBC support</li>
+  <li>Drop-in compatibility with base Database Toolbox</li>
+</ul>

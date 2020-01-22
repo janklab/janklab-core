@@ -1,0 +1,43 @@
+<h1 id="janklab-todo">Janklab TODO</h1>
+
+<h3 id="usability">Usability</h3>
+
+<ul>
+  <li>Documentation
+    <ul>
+      <li>Documentation for MDBC</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="features">Features</h3>
+
+<ul>
+  <li>Graphviz support, with class inheritance &amp; structure diagrams
+    <ul>
+      <li>Generic Graphviz wrapper API</li>
+      <li>Class diagram generation code</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="code">Code</h3>
+
+<ul>
+  <li>Add spaces between output arguments in planargen code.
+    <ul>
+      <li>Or don’t. I’m actually not sure which style I prefer.</li>
+    </ul>
+  </li>
+  <li>Change <code class="highlighter-rouge">isna</code> to be Octave-compatible, and respect the new <code class="highlighter-rouge">ismissing</code> indicators in recent Matlab versions.</li>
+  <li>Refactor the validators to just do all the name-gathering and message construction inline; it’s not worth having that <code class="highlighter-rouge">reportBadValue</code>; its error messages just aren’t flexible enough.</li>
+  <li>Maybe rename <code class="highlighter-rouge">nop</code> to <code class="highlighter-rouge">pass</code> to be like Python</li>
+  <li><code class="highlighter-rouge">cmp</code>/<code class="highlighter-rouge">valcmp</code> support for strings and cellstrs</li>
+  <li>Rename <code class="highlighter-rouge">slurp</code>/<code class="highlighter-rouge">spew</code> to <code class="highlighter-rouge">fileread</code>/<code class="highlighter-rouge">filewrite</code>, to be like Octave?
+    <ul>
+      <li>Oh wait, Matlab has <code class="highlighter-rouge">fileread</code> now. So, probably should be <code class="highlighter-rouge">filewrite</code>, and ditch <code class="highlighter-rouge">slurp</code>.</li>
+    </ul>
+  </li>
+  <li>Build <code class="highlighter-rouge">binsearch_mex</code> on Windows and Linux</li>
+  <li>Rename <code class="highlighter-rouge">dataarray</code> to <code class="highlighter-rouge">xarray</code> and fix it up</li>
+</ul>

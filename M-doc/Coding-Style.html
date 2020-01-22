@@ -1,0 +1,50 @@
+<h1 id="coding-style-and-approach">Coding Style and Approach</h1>
+
+<ul>
+  <li>Failures are generally indicated with errors (exceptions), not return codes that need to be checked.</li>
+  <li>Except for tasks inside UIs that need to be reported back to the user, in which case the status and result are both wrapped in a single return object.</li>
+  <li>Do not change output types or structure based on whether inputs are scalar vs. non-scalar.</li>
+  <li>Prefer OOP approaches instead of sets of related functions, in general.</li>
+  <li>M-Lint-warning-clean</li>
+  <li>All M-Lint warnings should be suppressed (in the source files, not your Matlab configuration) or worked around.</li>
+</ul>
+
+<h2 id="formatting">Formatting</h2>
+
+<ul>
+  <li>alllowercase or TitleCase class names</li>
+  <li>alllowercase function and method names</li>
+  <li>(or should we use camelCase or snake_case?)</li>
+  <li>snake_case local variable and helper function names</li>
+  <li>Indent with tabs, not spaces.</li>
+  <li>Assume a two-space tab display width, if it matters</li>
+  <li>80-character lines.</li>
+  <li>Spacing</li>
+  <li>No space between function name and open paren in function calls</li>
+  <li>Spaces after commas between function arguments</li>
+  <li>Spaces after commas between argouts in multi-argout lists</li>
+  <li>No spaces after commas in array indexing calls</li>
+</ul>
+
+<h3 id="matlab-editor-configuration-for-formatting">Matlab Editor Configuration for Formatting</h3>
+
+<ul>
+  <li>Wrap comments at 80 characters.</li>
+  <li>Display line guide at 80 characters.</li>
+  <li>Suppresss “input argument ‘this’ is unused” in all files</li>
+</ul>
+
+<h2 id="naming-conventions">Naming conventions</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">this</code> - the method dispatch object in an instance method</li>
+  <li><code class="highlighter-rouge">obj</code> - an older name used in place of <code class="highlighter-rouge">this</code> (DEPRECATED)</li>
+  <li><code class="highlighter-rouge">tf</code> - a logical array, indicating whether a test was met</li>
+  <li><code class="highlighter-rouge">loc</code> - an array of indexes indicating the location of something</li>
+  <li><code class="highlighter-rouge">i</code>, <code class="highlighter-rouge">j</code> - loop indexes</li>
+  <li>Yes, I use <code class="highlighter-rouge">i</code> and <code class="highlighter-rouge">j</code> as loop indexes even though they mask the <code class="highlighter-rouge">i</code> and <code class="highlighter-rouge">j</code> functions. Imaginary values can still be constructed with the <code class="highlighter-rouge">1i</code> syntax.</li>
+  <li><code class="highlighter-rouge">iFoo</code> - an index into <code class="highlighter-rouge">foo</code>, usually used in iteration</li>
+  <li><code class="highlighter-rouge">ixFoo</code> - an array of indexes into <code class="highlighter-rouge">foo</code></li>
+  <li><code class="highlighter-rouge">t</code> or <code class="highlighter-rouge">tbl</code> – a temporary or generic table array</li>
+  <li><code class="highlighter-rouge">RAII</code> - a struct holding cleanup objects used for RAII style (“Resource Acquisition Is Initialization”) cleanup</li>
+</ul>
