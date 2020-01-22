@@ -9,10 +9,10 @@ all: mdoc dist
 dist:
 	bash package_janklab.sh
 
-.PHONY: doc
-doc: mdoc
-
 # Builds the Matlab Toolbox help files
-.PHONY: mdoc
-mdoc:
+# feed.xml includes a timestamp and messes up git status, and we don't need
+# it, so blow it away
+.PHONY: doc
+doc:
 	(cd doc; bundle exec jekyll build --destination ../M-doc)
+	rm M-doc/feed.xml
