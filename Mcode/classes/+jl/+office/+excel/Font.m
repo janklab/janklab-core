@@ -1,10 +1,24 @@
-classdef Font < handle
+classdef (Abstract) Font < jl.util.DisplayableHandle
   % A font used in a workbook
-  
-  % TODO: Color, deciding how to handle XSSFColor objects
   
   %#ok<*PROP>
  
+  properties (Constant)
+    AnsiCharset = org.apache.poi.ss.usermodel.Font.ANSI_CHARSET;
+    ColorNormal = org.apache.poi.ss.usermodel.Font.COLOR_NORMAL;
+    ColorRed = org.apache.poi.ss.usermodel.Font.COLOR_RED;
+    DefaultCharset = org.apache.poi.ss.usermodel.Font.DEFAULT_CHARSET;
+    SsNone = org.apache.poi.ss.usermodel.Font.SS_NONE;
+    SsSub = org.apache.poi.ss.usermodel.Font.SS_SUB;
+    SsSuper = org.apache.poi.ss.usermodel.Font.SS_SUPER;
+    SymbolCharset = org.apache.poi.ss.usermodel.Font.SYMBOL_CHARSET;
+    UDouble = org.apache.poi.ss.usermodel.Font.U_DOUBLE;
+    UDoubleAccounting = org.apache.poi.ss.usermodel.Font.U_DOUBLE_ACCOUNTING;
+    UNone = org.apache.poi.ss.usermodel.Font.U_NONE;
+    USingle = org.apache.poi.ss.usermodel.Font.U_SINGLE;
+    USingleAccounting = org.apache.poi.ss.usermodel.Font.U_SINGLE_ACCOUNTING;
+  end  
+
   properties
     % The underlying org.apache.poi.ss.usermodel.Font object
     j
@@ -24,43 +38,6 @@ classdef Font < handle
   end
   
   methods
-    
-    function this = Font(varargin)
-      if nargin == 0
-        return
-      end
-      if nargin == 1 && isa(varargin{1}, 'org.apache.poi.ss.usermodel.Font')
-        this.j = varargin{1};
-        return
-      end
-      error('jl:InvalidInput', 'Invalid constructor input');
-    end
-    
-    function out = dispstr_scalar(this)
-      out = sprintf('%s (index=%d) height = %f (%f pts)', ...
-        this.fontName, this.index, this.fontHeight, this.fontHeightInPoints);
-      if this.bold
-        out = [out ' BOLD'];
-      end
-      if this.italic
-        out = [out ' ITALIC'];
-      end
-      if this.underline
-        out = [out ' UNDERLINE'];
-      end
-      if this.strikeout
-        out = [out ' STRIKEOUT'];
-      end
-      typeOffsetCode = this.typeOffsetCode;
-      switch typeOffsetCode
-        case org.apache.poi.ss.usermodel.Font.SS_NONE
-          % NOP
-        case org.apache.poi.ss.usermodel.Font.SS_SUPER
-          out = [out ' SUPERSCRIPT'];
-        case org.apache.poi.ss.usermodel.Font.SS_SUB
-          out = [out ' SUBSCRIPT'];
-      end
-    end
     
     function out = get.bold(this)
       out = this.j.getBold;
@@ -144,6 +121,39 @@ classdef Font < handle
     
     function set.underline(this, val)
       this.j.setUnderline(val);
+    end
+    
+  end
+  
+  methods (Access = protected)
+     
+    function this = Font(varargin)
+    end
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('%s (index=%d) height = %f (%f pts)', ...
+        this.fontName, this.index, this.fontHeight, this.fontHeightInPoints);
+      if this.bold
+        out = [out ' BOLD'];
+      end
+      if this.italic
+        out = [out ' ITALIC'];
+      end
+      if this.underline
+        out = [out ' UNDERLINE'];
+      end
+      if this.strikeout
+        out = [out ' STRIKEOUT'];
+      end
+      typeOffsetCode = this.typeOffsetCode;
+      switch typeOffsetCode
+        case org.apache.poi.ss.usermodel.Font.SS_NONE
+          % NOP
+        case org.apache.poi.ss.usermodel.Font.SS_SUPER
+          out = [out ' SUPERSCRIPT'];
+        case org.apache.poi.ss.usermodel.Font.SS_SUB
+          out = [out ' SUBSCRIPT'];
+      end
     end
     
   end

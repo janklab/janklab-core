@@ -108,6 +108,12 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     %
     % Returns a DataFormatTable object.
     out = getDataFormatTable(this)
+    
+    % Create a new font and add it to the workbook's font table
+    %
+    % Returns a Font object.
+    out = createFont(this)
+    
   end
   
   methods
@@ -230,6 +236,21 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
           BADSWITCH
       end
       out = this.j.addPicture(pictureData, jFormat);
+    end
+    
+    % Create a new (uninitialized) defined name in this workbook
+    %
+    % Returns a Name object.
+    function out = createName(this)
+      out = jl.office.excel.Name(this.j.createName);
+    end
+
+    function out = getAllNames(this)
+      list = this.j.getAllNames;
+      out = repmat(jl.office.excel.Name, [1 list.size]);
+      for i = 1:list.size
+        out(i) = jl.office.excel.Name(list.get(i-1));
+      end
     end
     
     function close(this)

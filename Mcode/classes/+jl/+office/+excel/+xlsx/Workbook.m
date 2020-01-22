@@ -81,6 +81,14 @@ classdef Workbook < jl.office.excel.Workbook
       out = jl.office.excel.xlsx.CellStyle(this.j.createCellStyle);
     end
 
+    function out = createFont(this)
+      out = jl.office.excel.xlsx.Font(this.j.createFont);
+    end
+    
+    function out = createName(this)
+      out = jl.office.excel.xlsx.Name(this.j.createName);
+    end
+    
   end
   
   methods (Access = protected)

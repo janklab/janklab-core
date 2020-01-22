@@ -31,6 +31,14 @@ classdef Workbook < jl.office.excel.Workbook
       out = jl.office.excel.xls.DataFormatTable(this.j.createDataFormat);
     end
     
+    function out = createFont(this)
+      out = jl.office.excel.xls.Font(this.j.createFont);
+    end
+    
+    function out = createName(this)
+      out = jl.office.excel.xls.Name(this.j.createName);
+    end
+    
   end
   
   methods (Access = protected)
