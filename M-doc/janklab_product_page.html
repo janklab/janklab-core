@@ -1,3 +1,50 @@
 <h1 id="janklab">Janklab</h1>
 
-<p>Nothing here yet; sorry!</p>
+<p>Janklab is a general-purpose library of functions, classes, and  extensions for Matlab. It is informed by my background in quantitive analysis for finance, but should be useful in other application areas as well. It is designed for both interactive Matlab use and for building  applications and production Matlab code.</p>
+
+<p>See <a href="https://github.com/apjanke/janklab">https://github.com/apjanke/janklab</a> for details and more documentation.</p>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Once you’ve installed Janklab, run <code class="highlighter-rouge">init_janklab</code> in Matlab.</p>
+
+<h2 id="features">Features</h2>
+
+<ul>
+  <li>New general-purpose “computer sciencey” data structures and functions</li>
+  <li>Excel I/O for programmatic reading and writing without needing the Excel application</li>
+  <li>MDBC, an enhancement to the Database Toolbox</li>
+  <li>The Dispstr API for customized object display</li>
+  <li>Extension to Matlab’s validator functions</li>
+  <li>A nicer XML reading API</li>
+  <li>Some additional date/time classes</li>
+  <li>Lots of miscellaneous functions and objects</li>
+</ul>
+
+<h2 id="setup">Setup</h2>
+
+<p>You must call the <code class="highlighter-rouge">init_janklab</code> function before using the stuff in this Toolbox. Janklab needs to do some initialization work that is not taken care of by the Matlab Toolbox mechanism itself.</p>
+
+<p>If you want to use the MDBC Database Toolbox extension, you will need to install JDBC drivers for the database servers you want to connect to and get them on your Matlab JAVACLASSPATH. See <code class="highlighter-rouge">doc javaclasspath</code> for info on how to do this.</p>
+
+<h2 id="license">License</h2>
+
+<p>Janklab is licensed under the Apache License 2.0.
+Janklab is redistributed with libraries that are licensed under various licenses. These include:</p>
+
+<ul>
+  <li>Swing Explorer - LGPL 3.0</li>
+  <li>Apache Commons CSV - Apache License 2.0</li>
+  <li>Apache Commons Primitives - Apache License 2.0</li>
+  <li>FastUtil - Apache License 2.0</li>
+</ul>
+
+<h2 id="examples">Examples</h2>
+
+<p>Coming soon, hopefully!</p>
+
+<h2 id="contact-and-support">Contact and Support</h2>
+
+<p>Janklab’s author is Andrew Janke. You can contact him at floss@apjanke.net.</p>
+
+<p>For support, including bug reports and feature requests, post an Issue on the project’s GitHub Issue Tracker at <a href="https://github.com/apjanke/janklab/issues">https://github.com/apjanke/janklab/issues</a>.</p>
