@@ -30,7 +30,7 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
   % TODO: MissingCellPolicy
   % TODO: Sheet reordering
   % TODO: Cross-workbook linking (linkExternalWorkbook())
-  % TODO: XLS- and XLSX-specific stuff
+  % TODO: addPicture() from file
   
   properties
     % The underlying Java POI XSSFWorkbook object

@@ -3,8 +3,6 @@ classdef Workbook < jl.office.excel.Workbook
   
   % TODO: Chart support (done through DrawingPatriarch)
   % TODO: PivotTable/PivotCache support
-  % TODO: addPicture() from file (maybe that should go in the superclass)
-  % TODO: createDialogSheet
   % TODO: CalculationChain support
   % TODO: get/setCellFormulaValidation
   % TODO: external links (ExternalLinksTable)
