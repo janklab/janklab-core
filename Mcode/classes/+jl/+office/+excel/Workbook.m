@@ -51,6 +51,8 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     numberOfSheets
     % Number of cell styles in this workbook
     numberOfCellStyles
+    % Whether this workbook is hidden
+    hidden
   end
   
   methods (Static)
@@ -196,9 +198,37 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       out = this.j.getNumCellStyles;
     end
     
+    function out = get.hidden(this)
+      out = this.j.isHidden;
+    end
+    
+    function set.hidden(this, val)
+      this.j.setHidden(val);
+    end
+    
     function out = getFontAt(this, idx)
       %GETFONTAT Get font at the given index
-      out = this.wrapFontObject(this.j.getFontAt(idx));
+      out = this.wrapFontObject(this.j.getFontAt(idx-1));
+    end
+    
+    function out = getPrintArea(this, index)
+      % Get the print area for specified sheet
+      %
+      % out = getPrintArea(obj, index)
+      %
+      % Index (numeric) is the index of the sheet to get the print area for.
+      %
+      % Returns a string.
+      out = string(this.j.getPrintArea(index-1));
+    end
+    
+    function removePrintArea(this, index)
+      % Delete the print area for the specified sheet
+      %
+      % out = removePrintArea(obj, index)
+      %
+      % Removes (resets) the print area for the sheet at the given index.
+      this.j.removePrintArea(index-1);
     end
     
     function out = getSheet(this, ref)
@@ -207,13 +237,84 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       % out = getSheet(this, name)
       % out = getSheet(this, index)
       if isnumeric(ref)
-        jSheet = this.j.getSheetAt(ref);
+        jSheet = this.j.getSheetAt(ref-1);
       elseif ischar(ref) || isstring(ref)
         jSheet = this.j.getSheet(ref);
       else
         error('Invalid input. Expecting numeric or string; got a %s', class(ref));
       end
       out = this.createSheetObject(this, jSheet);
+    end
+    
+    function removeSheetAt(this, index)
+      % Remove the sheet at the given index
+      %
+      % removeSheetAt(obj, index)
+      %
+      % Index (scalar numeric) is the index of the sheet to remove.
+      this.j.removeSheetAt(index-1);
+    end
+    
+    function setActiveSheet(this, index)
+      % Set the active sheet
+      %
+      % setActiveSheet(obj, index)
+      %
+      % Sets the sheet at the given index to be the active sheet.
+      %
+      % Index (scalar numeric) is the index of the sheet to become active.
+      this.j.setActiveSheet(index-1);
+    end
+    
+    function out = getSheetIndex(this, sheet)
+      % Gets the index of a given sheet
+      %
+      % out = getSheetIndex(obj, sheet)
+      % out = getSheetIndex(obj, sheet)
+      %
+      % Sheet is a Sheet object from this workbook.
+      %
+      % Returns a numeric.
+      if isstring(sheet)
+        out = this.j.getSheetIndex(sheet);
+      elseif isa(sheet, jl.office.excel.Sheet)
+        out = this.j.getSheetIndex(sheet.j);
+      else
+        error('jl:InvalidInput', 'Invalid type for sheet; got a %s', class(sheet));
+      end
+    end
+    
+    function out = getSheetName(this, index)
+      % Get the name for the sheet at a given index
+      %
+      % out = getSheetName(obj, index)
+      %
+      % Returns a string.
+      out = string(this.j.getSheetName(index-1));
+    end
+    
+    function out = getSheetVisibility(this, index)
+      % Get the visibility for a given sheet
+      %
+      % out = getSheetVisibility(obj, index)
+      %
+      % Index (numeric) is the index of the sheet to get the visibility for.
+      %
+      % Returns a SheetVisibility object.
+      out = jl.office.excel.SheetVisibility.ofJava(this.j.getSheetVisibility(index-1));
+    end
+    
+    function setSheetVisibility(this, index, visibility)
+      mustBeA(visibility, 'jl.office.excel.SheetVisibility');
+      this.j.setSheetVisibility(index-1, visibility.j);
+    end
+    
+    function out = isSheetHidden(this, index)
+      out = this.j.isSheetHidden(index-1);
+    end
+    
+    function out = isSheetVeryHidden(this, index)
+      out = this.j.isSheetVeryHidden(index-1);
     end
     
     function out = createSheet(this, name)
@@ -236,8 +337,8 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       out = this.createSheetObject(this, jSheet);
     end
     
-    function out = cloneSheet(this, sheetNum)
-      out = this.createSheetObject(this.j.cloneSheet(sheetNum));
+    function out = cloneSheet(this, index)
+      out = this.createSheetObject(this.j.cloneSheet(index-1));
     end
     
     function out = addPicture(this, pictureData, format)
@@ -270,14 +371,55 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       out = this.wrapPictureDataObject(this.j.addPicture(pictureData, jFormat));
     end
     
-    % Create a new (uninitialized) defined name in this workbook
-    %
-    % Returns a Name object.
     function out = createName(this)
+      % Create a new (uninitialized) defined name in this workbook
+      %
+      % out = createName(obj)
+      %
+      % Returns a Name object.
       out = jl.office.excel.Name(this.j.createName);
     end
-
+    
+    function removeName(this, name)
+      % Remove a previously-defined Name
+      %
+      % removeName(obj, name)
+      %
+      % Name (Name object) is the Name to remove.
+      this.j.removeName(name.j);
+    end
+    
+    function out = getName(this, name)
+      % Looks up a previously-defined Name
+      %
+      % out = getName(obj, name)
+      %
+      % Name (string) is the name of the defined Name.
+      %
+      % Returns a Name object, or empty if not found.
+      out = jl.office.excel.Name(this.j.getName(name));
+    end
+    
+    function out = getNames(this, name)
+      % Gets all previously-defined Names with the given name
+      %
+      % out = getNames(obj, name)
+      %
+      % Name (string) is the name to search for.
+      %
+      % Returns a Name array, which may be empty if no Names matched the given
+      % name.
+      list = this.j.getNames(name);
+      out = repmat(jl.office.excel.Name, [1 list.size]);
+      for i = 1:list.size
+        out(i) = jl.office.excel.Name(list.get(i-1));
+      end
+    end
+    
     function out = getAllNames(this)
+      % Get all defined Names in this workbook
+      %
+      % out = getAllNames(obj)
       list = this.j.getAllNames;
       out = repmat(jl.office.excel.Name, [1 list.size]);
       for i = 1:list.size
@@ -285,17 +427,57 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       end
     end
     
-    function close(this)
-      this.j.close;
-    end
-    
     function out = getCellStyleAt(this, index)
       % Get the CellStyle object for a given index
       %
-      % out = getCellStyleAt(this, index)
+      % out = getCellStyleAt(obj, index)
       %
       % Returns a CellStyle object.
-      out = this.wrapCellStyleObject(this.j.getCellStyleAt(index));
+      out = this.wrapCellStyleObject(this.j.getCellStyleAt(index-1));
+    end
+    
+    function out = getSpreadsheetVersion(this)
+      % Get the version (format) of this spreadsheet
+      %
+      % out = getSpreadsheetVersion(obj)
+      %
+      % This lets you get information about the size limits and other aspects of
+      % this version of the Excel spreadsheet format.
+      %
+      % Returns a SpreadsheetVersion object.
+      out = jl.office.excel.SpreadsheetVersion(this.j.getSpreadsheetVersion);
+    end
+    
+    function setSelectedTab(this, index)
+      % Set the tab whose data is actually seen when the workbook is opened
+      %
+      % setSelectedTab(this, index)
+      %
+      % Index (scalar numeric) is the index of the sheet.
+      this.j.setSelectedTab(index-1);
+    end
+    
+    function setSheetHidden(this, index, hidden)
+      % Hide or unhide a sheet
+      %
+      % setSheetHidden(this, index, hidden)
+      %
+      % Index (scalar numeric) is the index of the sheet to hide or unhide.
+      %
+      % Hidden (scalar logical) is whether it should be visible.
+      this.j.setSheetHidden(index-1, hidden);
+    end
+    
+    function setSheetName(this, index, name)
+      this.j.setSheetName(index-1, name);
+    end
+      
+    function close(this)
+      % Close the connection to the file, if there is one
+      %
+      % After this method is called, the Workbook object can no longer be used.
+      % (I think.)
+      this.j.close;
     end
     
   end
