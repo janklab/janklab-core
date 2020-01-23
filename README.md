@@ -6,6 +6,10 @@ Janklab is not a standalone application. It requires Matlab or the Matlab Compil
 
 See [Feature Areas](doc/Feature-Areas.md) to learn what Janklab provides.
 
+## R2020a Compatibility
+
+Note: Janklab is currently not working with Matlab R2020a. Working on fixing this.
+
 ## License
 
 Apache 2.0, with other FOSS licenses for dependencies.
