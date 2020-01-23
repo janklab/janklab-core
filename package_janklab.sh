@@ -13,7 +13,4 @@ case "$uname" in
     ;;
 esac
 
-# TODO: Probably need to do something else here to get exit status
-# to reflect success of the packaging.
-
-"$MATLAB" -batch 'load_janklab; package_toolbox'
+"$MATLAB" -batch 'batch_package_toolbox'

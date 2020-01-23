@@ -1,5 +1,5 @@
 <deployment-project plugin="plugin.toolbox" plugin-version="1.0">
-  <configuration file="/Users/janke/local/repos/janklab/Janklab.prj" location="/Users/janke/local/repos/janklab" name="Janklab" target="target.toolbox" target-name="Package Toolbox">
+  <configuration file="./Janklab.prj" location="." name="Janklab" target="target.toolbox" target-name="Package Toolbox">
     <param.appname>Janklab</param.appname>
     <param.authnamewatermark>Andrew Janke</param.authnamewatermark>
     <param.email>floss@apjanke.net</param.email>
@@ -7,7 +7,7 @@
     <param.summary>A general-purpose Matlab programming and utility library</param.summary>
     <param.description>Janklab provides new functions and data structures, an enhanced Database Toolbox API, programmatic Microsoft Excel I/O, and a lot of miscellaneous stuff.</param.description>
     <param.screenshot />
-    <param.version>0.1.1</param.version>
+    <param.version>${PROJECT_VERSION}</param.version>
     <param.output>${PROJECT_ROOT}/Janklab.mltbx</param.output>
     <param.products.name />
     <param.products.id />
@@ -136,7 +136,7 @@ scratch
     <fileset.depfun.excluded />
     <fileset.package />
     <build-deliverables>
-      <file location="${PROJECT_ROOT}" name="Janklab.mltbx" optional="false">/Users/janke/local/repos/janklab/Janklab.mltbx</file>
+      <file location="${PROJECT_ROOT}" name="Janklab.mltbx" optional="false">./Janklab.mltbx</file>
     </build-deliverables>
     <workflow />
     <matlab>
