@@ -61,6 +61,8 @@ scratch
       <item>/lib/java/commons-primitives-1.0.jar</item>
       <item>/lib/java-ext/postgresql-42.2.9.jar</item>
       <item>/lib/matlab/SLF4M/SLF4M-HEAD/lib/java/log4j1-config-gui/log4j1-config-gui-0.1.1.jar</item>
+      <item>/lib/matlab/SLF4M/SLF4M-HEAD/lib/shims/eq/R2020a/java/slf4j-1.5.8/slf4j-api-1.5.8.jar</item>
+      <item>/lib/matlab/SLF4M/SLF4M-HEAD/lib/shims/eq/R2020a/java/slf4j-1.5.8/slf4j-log4j12-1.5.8.jar</item>
     </param.javaclasspath.excludes>
     <param.exported.on.package>false</param.exported.on.package>
     <param.required.addons />
