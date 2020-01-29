@@ -15,18 +15,30 @@ classdef FtpClient < handle
   % % If you don't give a username and password before connect(), it
   % % defaults to anonymous ftp
   %
-  % f = jl.net.ftp.FtpClient('gnu.mirror.iweb.com')
+  % f = jl.net.ftp.FtpClient("gnu.mirror.iweb.com")
   % f.connect
-  
+  %
+  % f.cd("uucp")
+  % f.dir
+  % f.get("uucp-1.06.2.tar.gz")
+  % f.cd("..")
+  %
+  % % List or download multiple files using "*" wildcards
+  %
+  % f.cd("m4")
+  % f.dir("*1.4.8*")
+  % f.mget("*1.4.8*.sig")
+  %
+  %
   % Developer notes:
   % * features() is not supported, because the Apache FTP library shipping
   %   with Matlab R2020a is too old.
   
   % TODO: Implement features() myself using the low-level FTP command
-  % interface of the Apache FTP class.
-  % TODO: mget()
+  % interface of the Apache FTP/SocketClient class. (Need to use
+  % SocketClient because Matlab's shipped Apache FTPClient is too old to
+  % have features() or doCommand().)
   % TODO: mput()
-  % TODO: putUnique()
   
   properties (SetAccess = private)
     % The underlying apache FTPClient object
@@ -266,7 +278,8 @@ classdef FtpClient < handle
       %
       % LocalDir is an existing local directory to save the file under.
       %
-      % LocalFile is the path to save the file at locally.
+      % LocalFile is the path to save the file at locally. Passing an empty
+      % is the same as omitting it.
       %
       % If neither LocalDir nor LocalFile is given, saves the file under
       % the Matlab process's current working directory.
@@ -291,6 +304,36 @@ classdef FtpClient < handle
         reply = this.replyCode;
         error('jl:ftp:TransferFailure', 'Failed retrieving file ''%s'': %s', ...
           file, reply);
+      end
+    end
+    
+    function out = mget(this, pattern, localDir)
+      % mget Get multiple files
+      %
+      % obj.mget(pattern)
+      % obj.mget(pattern, localDir)
+      %
+      % Pattern is a string describing the files to download. It may use
+      % the "*" wildcard.
+      %
+      % LocalDir is an optional local directory to download them to. If
+      % omitted, they are downloaded to the current local directory.
+      %
+      % Returns the list of downloaded files, as relative paths.
+      if nargin < 3; localDir = []; end
+      if ~isempty(localDir)
+        if ~isfolder(localDir)
+          error('localDir must be an existing directory; %s is not');
+        end
+      end
+      
+      files = this.ls(pattern);
+      for i = 1:numel(files)
+        this.get(files(i), localDir);
+      end
+      
+      if nargout > 0
+        out = files;
       end
     end
     
