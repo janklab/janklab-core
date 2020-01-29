@@ -25,6 +25,10 @@ for i = 1:numel(children)
     end
 end
 
+% Get the root dir on the path, because that has info.xml, and making that
+% available gets our toolbox doco in the Matlab documentation browser
+addpath(janklab_project_root);
+
 % Get libraries on classpath
 lib_root = [janklab_project_root '/lib'];
 

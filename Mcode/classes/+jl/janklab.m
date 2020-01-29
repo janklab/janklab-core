@@ -2,6 +2,7 @@ classdef janklab
   %JANKLAB Central info and management for the Janklab library
   
   methods(Static)
+    
     function init_janklab
       %INIT_JANKLAB Runs Janklab initialization code
       %
@@ -17,9 +18,6 @@ classdef janklab
       
       % Initialize MDBC
       jl.sql.Mdbc.initMdbc();
-      
-      % Add common synchronized folders, as a developer convenience
-      addSynchronizedFoldersToPath();
       
       % Announce initialization and version
       dispf('Janklab %s initialized', jl.janklab.version);
@@ -45,28 +43,29 @@ classdef janklab
       end
       out = val;
     end
+    
+    function addSynchronizedFoldersToPath()
+      % Add synchronized-service folders to path
+      %
+      % This is a hack to support a common user-specific "MATLAB" folder that lives in
+      % Dropbox or elsewhere.
+      
+      % The paths within these synchronized folders are entirely a Janklab convention;
+      % I just made it up based on where Matlab likes to store its "user documents" by
+      % default.
+      
+      % Add Dropbox
+      dropboxDir = dropboxPath();
+      dropboxMatlabPath = fullfile(dropboxDir, 'Documents', 'MATLAB');
+      if isfolder(dropboxMatlabPath)
+        addpath(dropboxMatlabPath);
+      end
+      
+      % Nothing else is supported yet. Sorry, Microsoft OneDrive users!
+      
+    end
+    
   end
-end
-
-function addSynchronizedFoldersToPath()
-% Add synchronized-service folders to path
-%
-% This is a hack to support a common user-specific "MATLAB" folder that lives in
-% Dropbox or elsewhere.
-
-% The paths within these synchronized folders are entirely a Janklab convention;
-% I just made it up based on where Matlab likes to store its "user documents" by
-% default.
-
-% Add Dropbox
-dropboxDir = dropboxPath();
-dropboxMatlabPath = fullfile(dropboxDir, 'Documents', 'MATLAB');
-if isfolder(dropboxMatlabPath)
-  addpath(dropboxMatlabPath);
-end
-
-% Nothing else is supported yet. Sorry, Microsoft OneDrive users!
-
 end
 
 function out = dropboxPath()
