@@ -35,13 +35,46 @@ classdef DisplayableHandle < handle
         out{i} = dispstr_scalar(this(i));
       end
     end
+    
+    
+    function error(varargin)
+      args = convertDisplayablesToString(varargin);
+      err = MException(args{:});
+      throwAsCaller(err);
+    end
+    
+    function warning(varargin)
+      args = convertDisplayablesToString(varargin);
+      warning(args{:});
+    end
+    
+    function out = sprintf(varargin)
+      args = convertDisplayablesToString(varargin);
+      out = sprintf(args{:});
+    end
+    
+    function out = fprintf(varargin)
+      args = convertDisplayablesToString(varargin);
+      out = sprintf(args{:});
+    end
+    
   end
   
   methods (Access = protected)
     function out = dispstr_scalar(this) %#ok<STOUT>
-      error('jl:Unimplemented', ['Subclasses of Displayable must override ' ...
+      error('jl:Unimplemented', ['Subclasses of DisplayableHandle must override ' ...
         'dispstr_scalar; %s does not'], ...
         class(this));
     end
   end
+end
+
+function out = convertDisplayablesToString(c)
+mustBeA(c, 'cell');
+out = c;
+for i = 1:numel(c)
+  if isa(c{i}, 'jl.util.DisplayableHandle')
+    out{i} = dispstr(c{i});
+  end
+end
 end
