@@ -25,7 +25,8 @@ classdef FtpClient < handle
   % TODO: Implement features() myself using the low-level FTP command
   % interface of the Apache FTP class.
   % TODO: mget()
-  % TODO: put(), mput()
+  % TODO: mput()
+  % TODO: putUnique()
   
   properties (SetAccess = private)
     % The underlying apache FTPClient object
@@ -368,6 +369,81 @@ classdef FtpClient < handle
       else
         out = string(missing);
       end
+    end
+    
+    function put(this, localFile, remoteFile)
+      % put Upload a file to the remote host
+      %
+      % obj.put(localFile)
+      % obj.put(localFile, remoteFile)
+      %
+      % Uploads and stores the given local file to the server.
+      %
+      % RemoteFile is the path to the remote file to store. If omitted,
+      % stores in the current remote working directory using the leaf file
+      % name of localFile.
+      if nargin < 3; remoteFile = []; end
+      if isempty(remoteFile)
+        [~,base,extn] = fileparts(localFile);
+        remoteFile = [base extn];
+      end
+      jFile = java.io.File(localFile);
+      jIstr = java.io.BufferedInputStream(java.io.FileInputStream(jFile));
+      RAII.jIstr = onCleanup(@() jIstr.close);
+      ok = this.jobj.storeFile(remoteFile, jIstr);
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:OperationFailure', 'Failed storing file ''%s'' on remote host: %s', ...
+          localFile, reply);
+      end      
+    end
+    
+    function putUnique(this, localFile, remoteFileBase)
+      % putUnique Upload a file to the remote host with a unique name
+      %
+      % obj.putUnique(localFile)
+      % obj.putUnique(localFile, remoteFileBase)
+      %
+      % Stores a file on the server using a unique name assigned by the
+      % server.
+      %
+      % RemoteFileBase (string) is the base name to use for the remote file
+      % name. If provided, the remote unique name is derived from the given
+      % file name. If omitted, the server just makes up whatever name it
+      % wants.
+      if nargin < 3; remoteFileBase = []; end
+      jFile = java.io.File(localFile);
+      jIstr = java.io.BufferedInputStream(java.io.FileInputStream(jFile));
+      RAII.jIstr = onCleanup(@() jIstr.close);
+      if isempty(remoteFileBase)
+        ok = this.jobj.storeUniqueFile(jIstr);
+      else
+        ok = this.jobj.storeUniqueFile(remoteFileBase, jIstr);
+      end
+      if ~ok
+        reply = this.replyCode;
+        if isempty(remoteFileBase)
+        else
+          error('jl:ftp:OperationFailure', 'Failed storing unique file ''%s'' on remote host: %s', ...
+            localFile, reply);
+        end
+      end      
+    end
+    
+    function out = mtime(this, file)
+      % mtime Get the modification time of a file
+      %
+      % out = obj.mtime(file)
+      %
+      % Gets the modification time of a file on the remote host.
+      %
+      % Not all servers support this command. If your server does not
+      % support this command, you may get a weird Java error message in the
+      % raised error.
+      %
+      % Returns a datetime.
+      mtimeStr = string(this.jobj.getModificationTime(java.lang.String(file)));
+      out = datetime(mtimeStr);
     end
     
   end
