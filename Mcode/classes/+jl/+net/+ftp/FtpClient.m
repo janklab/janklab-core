@@ -25,6 +25,7 @@ classdef FtpClient < handle
   % TODO: Implement features() myself using the low-level FTP command
   % interface of the Apache FTP class.
   % TODO: mget()
+  % TODO: put(), mput()
   
   properties (SetAccess = private)
     % The underlying apache FTPClient object
@@ -51,6 +52,8 @@ classdef FtpClient < handle
     isconnected
     % Whether to include hidden files in the dir listing
     listHiddenFiles
+    % Type of the remote system
+    systemType
   end
   
   methods
@@ -290,8 +293,85 @@ classdef FtpClient < handle
       end
     end
     
-  end
+    function mkdir(this, newDir)
+      % mkdir Create a new directory on the remote server
+      ok = this.jobj.makeDirectory(newDir);
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:OperationFailure', 'Failed creating dir ''%s'': %s', ...
+          newDir, reply);
+      end
+    end
+    
+    function noop(this)
+      % noop Send a no-op command to the server
+      %
+      % obj.noop()
+      %
+      % Sends a "no-op" command to the server which does nothing, but
+      % ensures that the control connection is still working.
+      %
+      % This is useful for keeping the network connection alive if you're
+      % going to be idle for a long time.
+      ok = this.jobj.sendNoOp;
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:OperationFailure', 'Failed doing no-op: %s', ...
+          reply);
+      end
+    end
+    
+    function allocate(this, nbytes)
+      % allocate Reserve space on the server for the next file transfer
+      %
+      % obj.allocate(nbytes)
+      ok = this.jobj.allocate(nbytes);
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:OperationFailure', 'Failed allocating %d bytes: %s', ...
+          nbytes, reply);
+      end
+    end
+    
+    function deleteFile(this, file)
+      % deleteFile Delete a file on the remote server
+      ok = this.jobj.deleteFile(file);
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:OperationFailure', 'Failed deleting file ''%s'': %s', ...
+          file, reply);
+      end
+    end
+    
+    function ascii(this)
+      % ascii Switch to ASCII file type mode
+      this.jobj.setFileType(org.apache.commons.net.ftp.FTPClient.ASCII_FILE_TYPE);
+    end
+    
+    function binary(this)
+      % binary Switch to binary file type mode
+      this.jobj.setFileType(org.apache.commons.net.ftp.FTPClient.BINARY_FILE_TYPE);
+    end
 
+    function out = status(this)
+      % status Get session status
+      %
+      % Gets session status information, as a human-readable string.
+      %
+      % Returns a scalar string.
+      out = string(this.jobj.getStatus);
+    end
+    
+    function out = get.systemType(this)
+      if this.isconnected
+        out = string(this.jobj.getSystemName);
+      else
+        out = string(missing);
+      end
+    end
+    
+  end
+  
   methods (Access = private)
 
     function out = getFullReply(this)
