@@ -1,7 +1,7 @@
 Janklab Changelog
 =================
 
-0.1.1 (???)
+0.1.1 (2020-01-28)
 ------------------
 
 * Package Janklab as a Matlab Toolbox
