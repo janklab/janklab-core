@@ -1,5 +1,5 @@
-classdef Displayable
-  % A mix-in class for custom display with dispstr() and dispstrs()
+classdef DisplayableHandle < handle
+  % A mix-in class for custom display with dispstr() and dispstrs(), for handles
   %
   % To use this, inherit from it, and define a custom dispstrs() method. It
   % will be picked up and used by dispstr() and disp(), which will also make
@@ -7,7 +7,7 @@ classdef Displayable
   %
   % Examples:
   %
-  % classdef Birthday < dispstrlib.Displayable
+  % classdef Birthday < dispstrlib.DisplayableHandle
   %
   %     properties
   %         Month
@@ -30,10 +30,9 @@ classdef Displayable
   % end
   %
   % See also:
-  % dispstrlib.DisplayableHandle
+  % dispstrlib.Displayable
   
   methods
-    
     function disp(this)
       %DISP Custom display
       disp(dispstr(this));
@@ -52,8 +51,7 @@ classdef Displayable
     function out = dispstrs(this)
       out = cell(size(this));
       for i = 1:numel(this)
-        out{i} = dispstr_scalar(subsref(this, ...
-          struct('type','()', 'subs',{{i}})));
+        out{i} = dispstr_scalar(this(i));
       end
     end
     
@@ -81,40 +79,11 @@ classdef Displayable
   end
   
   methods (Access = protected)
-    
     function out = dispstr_scalar(this) %#ok<STOUT>
-      error('jl:Unimplemented', ['Subclasses of Displayable must override ' ...
+      error('jl:Unimplemented', ['Subclasses of DisplayableHandle must override ' ...
         'dispstr_scalar; %s does not'], ...
         class(this));
     end
-    
-    function dispMaybeMatrix(this)
-      if ~ismatrix(this)
-        disp(dispstr(this));
-        return
-      elseif isempty(this)
-        if isequal(size(this), [0 0])
-          fprintf('[] (%s)\n', class(this));
-        else
-          fprintf('Empty %s %s array\n', size2str(size(this)), ...
-            class(this));
-        end
-      else
-        strs = dispstrs(this);
-        nCols = size(strs, 2);
-        colWidths = NaN(1, nCols);
-        for i = 1:nCols
-          colWidths(i) = max(strlen(strs(:,i)));
-        end
-        fmt = [strjoin(repmat({'%*s'}, [1 nCols]), '  ') '\n'];
-        for iRow = 1:size(strs, 1)
-          args = [num2cell(colWidths); strs(iRow,:)];
-          args = args(:);
-          fprintf(fmt, args{:});
-        end
-      end
-    end
-    
   end
 end
 
@@ -122,7 +91,7 @@ function out = convertDisplayablesToString(c)
 mustBeA(c, 'cell');
 out = c;
 for i = 1:numel(c)
-  if isa(c{i}, 'dispstrlib.Displayable')
+  if isa(c{i}, 'dispstrlib.DisplayableHandle')
     out{i} = dispstr(c{i});
   end
 end

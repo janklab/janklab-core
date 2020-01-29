@@ -1,4 +1,4 @@
-classdef Birthday < dispstrable
+classdef Birthday < dispstrlib.Displayable
     
     properties
         Month
@@ -10,12 +10,11 @@ classdef Birthday < dispstrable
             this.Month = month;
             this.Day = day;
         end
-        
-        function out = dispstrs(this)
-            out = cell(size(this));
-            for i = 1:numel(this)
-                out{i} = datestr(datenum(1, this(i).Month, this(i).Day), 'mmm dd');
-            end
+    end
+    
+    methods (Access = protected)
+        function out = dispstr_scalar(this)
+            out = datestr(datenum(1, this.Month, this.Day), 'mmm dd');
         end
     end
     
