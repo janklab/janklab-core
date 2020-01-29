@@ -101,6 +101,12 @@ classdef ReplyCode < jl.util.Displayable
   
   methods
     
+    function this = ReplyCode()
+      % Construct a new object
+      %
+      % You generally don't want to call this. Use OFNUMERICCODE instead.
+    end
+    
     function out = get.series(this)
       out = (floor(this.code/100)) * 100;
     end
@@ -123,12 +129,5 @@ classdef ReplyCode < jl.util.Displayable
     end
     
   end
-  
-  methods (Access = private)
     
-    function this = ResponseCode()
-    end
-    
-  end
-  
 end

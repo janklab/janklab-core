@@ -11,6 +11,7 @@ classdef Displayable
   % jl.util.DisplayableHandle
   
   methods
+    
     function disp(this)
       %DISP Custom display
       disp(dispstr(this));
@@ -33,9 +34,22 @@ classdef Displayable
 					struct('type','()', 'subs',{{i}})));
       end
     end
+    
+    function error(varargin)
+      args = convertDisplayablesToString(varargin);
+      err = MException(args{:});
+      throwAsCaller(err);
+    end
+    
+    function warning(varargin)
+      args = convertDisplayablesToString(varargin);
+      warning(args{:});
+    end
+    
   end
   
   methods (Access = protected)
+    
     function out = dispstr_scalar(this) %#ok<STOUT>
       error('jl:Unimplemented', ['Subclasses of Displayable must override ' ...
         'dispstr_scalar; %s does not'], ...
@@ -67,6 +81,17 @@ classdef Displayable
 					fprintf(fmt, args{:});
 				end
 			end
-		end
+    end
+    
   end
+end
+
+function out = convertDisplayablesToString(c)
+mustBeA(c, 'cell');
+out = c;
+for i = 1:numel(c)
+  if isa(c{i}, 'jl.util.Displayable')
+    out{i} = dispstr(c{i});
+  end
+end
 end

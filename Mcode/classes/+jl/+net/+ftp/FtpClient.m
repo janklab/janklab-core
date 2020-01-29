@@ -9,8 +9,24 @@ classdef FtpClient < handle
   % you can use that, you can probably pick this up pretty quickly. The big
   % difference is that you must call connect() on FtpClient before doing
   % any file transfer activity with it.
+  %
+  % Examples:
+  %
+  % % If you don't give a username and password before connect(), it
+  % % defaults to anonymous ftp
+  %
+  % f = jl.net.ftp.FtpClient('gnu.mirror.iweb.com')
+  % f.connect
   
-  properties (Access = private)
+  % Developer notes:
+  % * features() is not supported, because the Apache FTP library shipping
+  %   with Matlab R2020a is too old.
+  
+  % TODO: Implement features() myself using the low-level FTP command
+  % interface of the Apache FTP class.
+  % TODO: mget()
+  
+  properties (SetAccess = private)
     % The underlying apache FTPClient object
     jobj = org.apache.commons.net.ftp.FTPClient
   end
@@ -18,16 +34,23 @@ classdef FtpClient < handle
     % Remote host to connect to
     host (1,1) string = string(missing)
     % Port for the command port
-    port (1,1) double = 21
+    port (1,1) double = NaN
     % Username to log in as. Defaults to 'anonymous'.
     username (1,1) string = "anonymous"
     % Password to provide. Defaults to your email address from Matlab's
     % Internet prefs
-    password (1,1) string = getpref('Internet', 'E_mail')
+    password string = repmat("", [0 0])
+    % Account to use in addition to username and password. May be empty to
+    % indicate "no account"
+    account string = repmat("", [0 0])
   end
   properties (Dependent)
     % The current directory on the remote host
     cwd
+    % Whether the client has an active FTP connection to the remote host
+    isconnected
+    % Whether to include hidden files in the dir listing
+    listHiddenFiles
   end
   
   methods
@@ -52,27 +75,60 @@ classdef FtpClient < handle
       end
     end
     
-    function out = isconnected(this)
+    function out = get.isconnected(this)
       out = this.jobj.isConnected;
     end
     
     function connect(this)
+      % connect Connect and log in
+      %
+      % obj.connect()
+      %
+      % Creates a connection to the FTP server and logs in using the
+      % username, password, and account set on this object.
+      %
+      % If you wish to use non-anonymous FTP, you must set the username and
+      % password properties on obj before calling connect.
       if ismissing(this.host)
         error('jl:IllegalState', 'No host name is set. You must set a host name before calling connect().')
       end
-      this.jobj.connect(this.host, this.port);
+      if isnan(this.port)
+        this.jobj.connect(this.host);
+      else
+        this.jobj.connect(this.host, this.port);
+      end
       replyCode = this.replyCode;
       if ~replyCode.isPositiveCompletion
         this.jobj.disconnect;
-        error('Failed connecting to FTP server: %s', ...
-          dispstr(replyCode);
+        error('jl:ftp:LoginFailure', 'Failed connecting to FTP server: %s', ...
+          replyCode);
+      end
+      passwd = this.password;
+      if isempty(passwd) && this.username == "anonymous"
+        passwd = this.defaultPasswordForAnonymousFtp;
+      end
+      if isempty(this.account)
+        ok = this.jobj.login(this.username, passwd);
+      else
+        ok = this.jobj.login(this.username, passwd, this.account);
+      end
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:LoginFailure', 'Failed logging in as %s to %s: %s', ...
+          this.username, this.host, reply);
       end
     end
     
     function disconnect(this)
       if this.isconnected
-        this.jobj.logout;
-        this.jobj.disconnect;
+        try
+          this.jobj.logout;
+          this.jobj.disconnect;
+        catch err %#ok<NASGU>
+          % Quash. You'll often get errors that the remote connection was
+          % closed without indication, especially if you're cleaning up
+          % after a failure
+        end
       end
     end
     
@@ -92,6 +148,180 @@ classdef FtpClient < handle
       out = jl.net.ftp.ReplyCode.ofNumericCode(code);
     end
     
+    function cd(this, newDir)
+      % cd Change directory on remote server
+      %
+      % obj.cd(newDir)
+      % obj.cd("..")
+      newDir = string(newDir);
+      if newDir == ".."
+        ok = this.jobj.changeToParentDirectory;
+      else
+        ok = this.jobj.changeWorkingDirectory(newDir);
+      end
+      if ~ok
+        reply = this.getFullReply;
+        error('Failed changing dir on remote server to ''%s'': %s: %s', ...
+          newDir, reply.code, reply.message);
+      end
+    end
+    
+    function out = dir(this, pathname)
+      % dir List files in a directory, with info
+      %
+      % out = obj.dir()
+      % out = obj.dir(pathname)
+      %
+      % If no pathname is given, lists files in obj.cwd.
+      %
+      % Returns a table with at least variables:
+      %   name
+      %   date
+      %   bytes
+      %   isdir
+      %   issymlink
+      %   user
+      %   group
+      % or if there were no files, returns empty []. (Sorry about that; I'm
+      % lazy.)
+      if nargin == 1
+        jFtpFiles = this.jobj.listFiles;
+      else
+        jFtpFiles = this.jobj.listFiles(pathname);
+      end
+      out = [];
+      for i = 1:numel(jFtpFiles)
+        jf = jFtpFiles(i);
+        s = struct;
+        s.name = string(jf.getName);
+        s.date = javaCalendarToDatetime(jf.getTimestamp);
+        s.bytes = jf.getSize;
+        s.isdir = jf.isDirectory;
+        s.issymlink = jf.isSymbolicLink;
+        s.user = string(jf.getUser);
+        s.group = string(jf.getGroup);
+        out = [out; s]; %#ok<AGROW>
+      end
+      if ~isempty(out)
+        out = struct2table(out);
+      end
+    end
+    
+    function out = ls(this, pathname)
+      % ls List files in a dir, getting just file names
+      %
+      % out = obj.ls()
+      % out = obj.ls(pathname)
+      %
+      % Returns a string array of file names.
+      if nargin == 1
+        jFiles = this.jobj.listNames;
+      else
+        jFiles = this.jobj.listNames(pathname);
+      end
+      out = string(jFiles);
+    end
+    
+    function out = get.cwd(this)
+      out = string(this.jobj.printWorkingDirectory);
+    end
+    
+    function out = get.listHiddenFiles(this)
+      out = this.jobj.getListHiddenFiles;
+    end
+    
+    function set.listHiddenFiles(this, newVal)
+      this.jobj.setListHiddenFiles(newVal);
+    end
+    
+    function pasv(this)
+      % pasv Enter Passive Mode
+      %
+      % obj.pasv()
+      %
+      % This causes the server to listen for data connections from the
+      % client, instead of the other way around. This may be needed when
+      % you're connecting from behind a firewall, like in many corporate IT
+      % environments.
+      this.jobj.enterLocalPassiveMode;
+    end
+    
+    function actv(this)
+      % actv Enter Active Mode
+      %
+      % obj.actv()
+      this.jobj.enterLocalActiveMode;
+    end
+    
+    function get(this, file, localFile)
+      % get Retrieve a single file from the server to the local machine
+      %
+      % obj.get(file)
+      % obj.get(file, localDir)
+      % obj.get(file, localFile)
+      %
+      % LocalDir is an existing local directory to save the file under.
+      %
+      % LocalFile is the path to save the file at locally.
+      %
+      % If neither LocalDir nor LocalFile is given, saves the file under
+      % the Matlab process's current working directory.
+      %
+      % Raises an error if the file transfer fails.
+      if nargin < 3; localFile = []; end
+      if isempty(localFile)
+        localFile = fullfile(pwd, file);
+      else
+        if isfolder(localFile)
+          [~,base,extn] = fileparts(file);
+          baseFile = [base extn];
+          localFile = fullfile(localFile, baseFile);
+        end
+      end
+      % TODO: Save to a temp file and then move the file, to avoid
+      % clobbering local file upon download failure
+      jOstr = java.io.BufferedOutputStream(java.io.FileOutputStream(localFile));
+      RAII.jOstr = onCleanup(@() jOstr.close);
+      ok = this.jobj.retrieveFile(file, jOstr);
+      if ~ok
+        reply = this.replyCode;
+        error('jl:ftp:TransferFailure', 'Failed retrieving file ''%s'': %s', ...
+          file, reply);
+      end
+    end
+    
   end
-  
+
+  methods (Access = private)
+
+    function out = getFullReply(this)
+      % getFullReply Get the full reply, including code and message text
+      %
+      % Note: This can hang for a long time if there is no actual message
+      % text to be retrieved! Only call it when you know you're in a state
+      % to receive a text reply.
+      code = this.jobj.getReply;
+      msg = strjoin(string(this.jobj.getReplyStrings), LF);
+      out = jl.net.ftp.Reply.of(code, msg);
+    end
+
+    function out = wrapReplyCode(this, code) %#ok<INUSL>
+      out = jl.net.ftp.ReplyCode.ofNumericCode(code);
+    end
+    
+    function out = defaultPasswordForAnonymousFtp(this) %#ok<MANU>
+      try
+        out = getpref('Internet', 'E_mail');
+      catch err %#ok<NASGU>
+        out = 'janklab_user@example.com';
+      end
+    end
+    
+  end
+end
+
+function out = javaCalendarToDatetime(jCal)
+unixMillis = jCal.getTimeInMillis;
+unixSecs = double(unixMillis) / 1000;
+out = datetime(unixSecs, 'ConvertFrom','posixtime');
 end
