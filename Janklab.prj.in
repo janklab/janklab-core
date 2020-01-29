@@ -28,7 +28,6 @@ scratch
     <param.docs>${PROJECT_ROOT}/info.xml</param.docs>
     <param.getting.started.guide>${PROJECT_ROOT}/doc/GettingStarted.mlx</param.getting.started.guide>
     <param.matlabpath.excludes>
-      <item>/</item>
       <item>/tests/Mcode</item>
       <item>/dev-kit/Mcode</item>
       <item>/lib/matlab/matlab-jarext-inspector/matlab-jarext-inspector-1.0.1/Mcode</item>
