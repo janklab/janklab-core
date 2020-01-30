@@ -14,7 +14,7 @@ This fixes Matlab output that looks like this:
 
 ```
 >> disp(tbl)
-    Name         UserID          Birthday   
+    Name       UserID          Birthday
     _______    ____________    ______________
     'Alice'    [1x1 UserID]    [1x1 Birthday]
     'Bob'      [1x1 UserID]    [1x1 Birthday]
@@ -32,7 +32,6 @@ to look more useful, like this:
     Carol   Sales\carol   Apr 20  
 ```
 
-
 There's not a whole lot of code in this library. I think the major value in it is in establishing the function convention and signatures, not in the implementation code itself.
 
 ## Functions
@@ -45,9 +44,11 @@ There's not a whole lot of code in this library. I think the major value in it i
 
 `dispstr` produces a string for each element in an array, that describes that particular element's value or contents.
 
-### `sprintfds` and `fprintfds`
+### `sprintfds`, `fprintfds`, `errords`, and `warningds`
 
 `sprintfds` and `fprintfds` are variants of `sprintf` and `fprintf` that respect dispstr() methods defined on their arguments, so you can pass objects to '%s' conversion specifiers and get nice output.
+
+Similarly, `errords` and `warningds` are variants of Matlab’s `error` and `warning` that support dispstr functionality, so you can pass objects to their '%s' conversion specifiers, too.
 
 ### `prettyprint` and `pp`
 
