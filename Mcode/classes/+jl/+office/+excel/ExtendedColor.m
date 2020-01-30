@@ -1,4 +1,8 @@
 classdef (Abstract) ExtendedColor < jl.office.excel.Color
+  % An Extended Color. This is the base for the XLS and XLSX Colors
+  
+  % TODO: Are indexed and RGB alternate modes? Will I still get valid RGB
+  % values if a color is an indexed color?
   
   properties (Dependent)
     argb
