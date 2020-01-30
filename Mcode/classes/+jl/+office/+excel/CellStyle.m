@@ -143,7 +143,7 @@ classdef CellStyle < handle
     end
     
     function set.fillPattern(this, val)
-      mustBeA(val, 'jl.office.excel.FillPattern';
+      mustBeA(val, 'jl.office.excel.FillPattern');
       this.j.setFillPattern(val.toJava);
     end
     

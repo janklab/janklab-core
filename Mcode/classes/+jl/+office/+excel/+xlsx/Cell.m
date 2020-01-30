@@ -21,6 +21,10 @@ classdef Cell < jl.office.excel.Cell
       out = jl.office.excel.xlsx.Cell(this, jCell);
     end
     
+    function out = wrapCellStyleObject(this, jObj)
+      out = jl.office.excel.xlsx.CellStyle(this.row.sheet.workbook, jObj);
+    end
+    
   end
   
 end

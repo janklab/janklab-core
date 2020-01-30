@@ -9,6 +9,7 @@ classdef Cell < jl.util.DisplayableHandle
   
   properties (Dependent)
     address
+    cellStyle
     cellType
     comment
     columnIndex
@@ -36,8 +37,12 @@ classdef Cell < jl.util.DisplayableHandle
       out = jl.office.excel.CellAddress(this.j.getAddress);
     end
     
+    function out = get.cellStyle(this)
+      out = this.wrapCellStyleObject(this.j.getCellStyle);
+    end
+    
     function out = get.cellType(this)
-      out = jl.office.excel.CellType.ofJava(this.j.getCellType);
+      out = jl.office.excel.CellType.ofJava(this.j.getCellTypeEnum);
     end
     
     function out = get.comment(this)
@@ -149,10 +154,14 @@ classdef Cell < jl.util.DisplayableHandle
   methods (Access = protected)
 
     function out = dispstr_scalar(this)
+      val = this.value;
       out = sprintf('[Cell: r=%d c=%d type=%s val=%s]', ...
-        this.rowIndex, this.columnIndex, this.cellType, dispstr(this.value));
+        this.rowIndex, this.columnIndex, this.cellType, dispstr(val));
     end
 
   end
-  
+
+  methods (Abstract, Access = protected)
+    out = wrapCellStyleObject(this, jObj)
+  end
 end
