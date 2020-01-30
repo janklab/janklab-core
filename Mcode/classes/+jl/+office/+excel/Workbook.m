@@ -351,29 +351,13 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       %
       % pictureData (uint8) is the bytes of picture data.
       %
-      % format (char) is the format the picture data is in. Valid values: 'DIB',
-      % 'EMF', 'JPEG', 'PICT', 'PNG', 'WMF'.
+      % format (jl.office.excel.PictureType) is the format that the picture
+      % data is in.
       %
       % Returns the index to this picture.
       mustBeA(pictureData, 'uint8');
-      mustBeMember(upper(format), ["DIB" "EMF" "JPEG" "PICT" "PNG" "WMF"]);
-      switch upper(format)
-        case 'DIB'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_DIB;
-        case 'EMF'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_EMF;
-        case 'JPEG'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_JPEB;
-        case 'PICT'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PICT;
-        case 'PNG'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_PNG;
-        case 'WMF'
-          jFormat = org.apache.poi.ss.usermodel.Workbook.PICTURE_TYPE_WMF;
-        otherwise
-          BADSWITCH
-      end
-      out = this.wrapPictureDataObject(this.j.addPicture(pictureData, jFormat));
+      mustBeA(format, 'jl.office.excel.PictureType');
+      out = this.wrapPictureDataObject(this.j.addPicture(pictureData, format.code));
     end
     
     function out = createName(this)

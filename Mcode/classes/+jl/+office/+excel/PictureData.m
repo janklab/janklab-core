@@ -8,7 +8,7 @@ classdef (Abstract) PictureData < jl.util.DisplayableHandle
   properties (Dependent)
     % The MIME type for the image, as a string
     mimeType
-    % The picture type, as an integer code; may be 0 for unknown image type
+    % The picture type, as a PictureType object
     pictureType
   end
   
@@ -28,7 +28,7 @@ classdef (Abstract) PictureData < jl.util.DisplayableHandle
     end
     
     function out = get.pictureType(this)
-      out = this.j.getPictureType;
+      out = jl.office.excel.PictureType.ofCode(this.j.getPictureType);
     end
     
     function out = suggestFileExtension(this)
@@ -45,7 +45,7 @@ classdef (Abstract) PictureData < jl.util.DisplayableHandle
   methods (Access = protected)
     
     function out = dispstr_scalar(this)
-      out = sprintf('[PictureData: type=%d, mimeType=%s, %d bytes, extn="%s"]', ...
+      out = sprintf('[PictureData: type=%s, mimeType=%s, %d bytes, extn="%s"]', ...
         this.pictureType, this.mimeType, numel(this.getData), this.suggestFileExtension);
     end
     
