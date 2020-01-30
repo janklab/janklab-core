@@ -4,11 +4,17 @@ Janklab is a general-purpose library of functions, classes, and extensions for M
 
 Janklab is not a standalone application. It requires Matlab or the Matlab Compiler Runtime.
 
-See [Feature Areas](doc/Feature-Areas.md) to learn what Janklab provides.
+Janklab provides:
 
-## R2020a Compatibility
+* Extended type system
+* Additional date/time classes
+* A Database Toolbox (“MDBC”) with increased performance and features
+* Advanced Excel I/O suitable for server-side use
+* Advanced FTP client
+* More validators
+* A bunch of miscellaneous utilities
 
-Note: Janklab is currently not working with Matlab R2020a. Working on fixing this.
+See [Feature Areas](doc/Feature-Areas.md) for details.
 
 ## License
 
