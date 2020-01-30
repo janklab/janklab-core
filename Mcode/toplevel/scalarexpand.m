@@ -1,5 +1,7 @@
 function varargout = scalarexpand(varargin)
 %SCALAREXPAND Expand scalar inputs to be same size as nonscalar inputs
+%
+% varargout = scalarexpand(varargin)
 
 sz = [];
 
