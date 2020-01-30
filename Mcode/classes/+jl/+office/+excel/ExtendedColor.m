@@ -28,7 +28,7 @@ classdef (Abstract) ExtendedColor < jl.office.excel.Color
     end
     
     function out = get.argb(this)
-      out = this.j.getARGB;
+      out = typecast(this.j.getARGB, 'uint8')';
     end
     
     function out = get.argbHex(this)
@@ -44,15 +44,15 @@ classdef (Abstract) ExtendedColor < jl.office.excel.Color
     end
     
     function out = get.rgb(this)
-      out = this.j.getRGB;
+      out = typecast(this.j.getRGB, 'uint8')';
     end
     
     function out = get.rgbOrArgb(this)
-      out = this.j.getRGBOrARGB;
+      out = typecast(this.j.getRGBOrARGB, 'uint8')';
     end
     
     function out = get.rgbWithTint(this)
-      out = this.j.getRGBWithTint;
+      out = typecast(this.j.getRGBWithTint, 'uint8')';
     end
     
     function out = get.storedRgb(this)
