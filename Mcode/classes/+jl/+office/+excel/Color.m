@@ -10,8 +10,9 @@ classdef (Abstract) Color < jl.util.DisplayableHandle
   % jl.office.excel.xls.Color
   % jl.office.excel.xlsx.Color
   
-  properties
-    % The underlying POI Java object
+  properties (SetAccess = protected)
+    % The underlying POI Java Color object. May be one of the HSSFColor,
+    % XSSFColor, or HSSFExtendedColor subclasses.
     j
   end
   
