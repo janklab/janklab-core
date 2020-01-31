@@ -1,14 +1,18 @@
-classdef HorizontalAlignment
+classdef HorizontalAlignment < jl.util.Displayable
   
   enumeration
-    Center
-    CenterSelection
-    Distributed
-    Fill
-    General
-    Justify
-    Left
-    Right
+    Center("Center")
+    CenterSelection("CenterSelection")
+    Distributed("Distributed")
+    Fill("Fill")
+    General("General")
+    Justify("Justify")
+    Left("Left")
+    Right("Right")
+  end
+  
+  properties (SetAccess = immutable)
+    name string
   end
 
   methods (Static)
@@ -16,6 +20,9 @@ classdef HorizontalAlignment
     function out = ofJava(jObj)
       if isempty(jObj)
         out = [];
+      elseif ~isa(jObj, 'org.apache.poi.ss.usermodel.HorizontalAlignment')
+        error('jl:InvalidInput', 'jObj must be a org.apache.poi.ss.usermodel.HorizontalAlignment; got a %s', ...
+          class(jObj));
       elseif jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER)
         out = jl.office.excel.HorizontalAlignment.Center;
       elseif jObj.equals(org.apache.poi.ss.usermodel.HorizontalAlignment.CENTER_SELECTION)
@@ -66,5 +73,20 @@ classdef HorizontalAlignment
     
   end
   
+  methods (Access = private)
+    
+    function this = HorizontalAlignment(name)
+      this.name = name;
+    end
+    
+  end
+  
+  methods (Access = protected)
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('[HorizontalAlignment: %s]', this.name);
+    end
+    
+  end
   
 end

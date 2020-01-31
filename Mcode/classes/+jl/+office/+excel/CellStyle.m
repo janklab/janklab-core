@@ -49,7 +49,7 @@ classdef CellStyle < handle
     end
     
     function out = get.horizontalAlignment(this)
-      jObj = this.j.getAlignment;
+      jObj = this.j.getAlignmentEnum;
       out = jl.office.excel.HorizontalAlignment.ofJava(jObj);
     end
     
@@ -59,8 +59,8 @@ classdef CellStyle < handle
     end
     
     function out = get.borderBottom(this)
-      jObj = this.j.getBorderBottom;
-      out = jl.office.excel.HorizontalAlignment.ofJava(jObj);
+      jObj = this.j.getBorderBottomEnum;
+      out = jl.office.excel.BorderStyle.ofJava(jObj);
     end
     
     function set.borderBottom(this, val)
@@ -69,33 +69,33 @@ classdef CellStyle < handle
     end
     
     function out = get.borderLeft(this)
-      jObj = this.j.getBorderLeft;
-      out = jl.office.excel.HorizontalAlignment.ofJava(jObj);
+      jObj = this.j.getBorderLeftEnum;
+      out = jl.office.excel.BorderStyle.ofJava(jObj);
     end
     
     function set.borderLeft(this, val)
       mustBeA(val, 'jl.office.excel.BorderStyle');
-      this.j.setBorderBottom(val.toJava);
+      this.j.setBorderLeft(val.toJava);
     end
     
     function out = get.borderRight(this)
-      jObj = this.j.getBorderBottom;
-      out = jl.office.excel.HorizontalAlignment.ofJava(jObj);
+      jObj = this.j.getBorderRightEnum;
+      out = jl.office.excel.BorderStyle.ofJava(jObj);
     end
     
     function set.borderRight(this, val)
       mustBeA(val, 'jl.office.excel.BorderStyle');
-      this.j.setBorderBottom(val.toJava);
+      this.j.setBorderRight(val.toJava);
     end
     
     function out = get.borderTop(this)
-      jObj = this.j.getBorderBottom;
-      out = jl.office.excel.HorizontalAlignment.ofJava(jObj);
+      jObj = this.j.getBorderTopEnum;
+      out = jl.office.excel.BorderStyle.ofJava(jObj);
     end
     
     function set.borderTop(this, val)
       mustBeA(val, 'jl.office.excel.BorderStyle');
-      this.j.setBorderBottom(val.toJava);
+      this.j.setBorderTop(val.toJava);
     end
     
     function out = get.borderColorBottom(this)
@@ -127,11 +127,11 @@ classdef CellStyle < handle
     end
     
     function out = get.fillBackgroundColor(this)
-      UNIMPLEMENTED;
+      out = this.wrapColorObject(this.j.getFillBackgroundColorColor);
     end
     
     function set.fillBackgroundColor(this, val)
-      UNIMPLEMENTED;
+      this.setFillBackgroundColor(val);
     end
     
     function out = get.fillBackgroundColorIndex(this)
@@ -142,8 +142,16 @@ classdef CellStyle < handle
       this.j.setFillBackgroundColor(val);
     end
     
+    function out = get.fillForegroundColor(this)
+      out = this.wrapColorObject(this.j.getFillForegroundColorColor);
+    end
+    
+    function out = get.fillForegroundColorIndex(this)
+      out = this.j.getFillForegroundColor;
+    end
+    
     function out = get.fillPattern(this)
-      jObj = this.j.getFillPattern;
+      jObj = this.j.getFillPatternEnum;
       out = jl.office.excel.FillPattern.ofJava(jObj);
     end
     
@@ -209,7 +217,7 @@ classdef CellStyle < handle
     end
     
     function out = get.verticalAlignment(this)
-      out = jl.office.excel.VerticalAlignment.ofJava(this.j.getVerticalAlignment);
+      out = jl.office.excel.VerticalAlignment.ofJava(this.j.getVerticalAlignmentEnum);
     end
     
     function set.verticalAlignment(this, val)
@@ -226,4 +234,11 @@ classdef CellStyle < handle
     end
   end
   
+  methods (Access = protected, Hidden, Abstract)
+    
+    setFillBackgroundColor(this, val);
+    
+    out = wrapColorObject(this, jObj);
+    
+  end
 end

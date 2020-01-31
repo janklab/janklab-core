@@ -16,7 +16,20 @@ classdef CellStyle < jl.office.excel.CellStyle
   end
   
   methods (Access = protected)
-        
+    
+    function out = wrapColorObject(this, jObj) %#ok<INUSL>
+      if isempty(jObj)
+        out = [];
+      else
+        out = jl.office.excel.xlsx.Color(jObj);
+      end
+    end
+    
+    function setFillBackgroundColor(this, val)
+      color = jl.office.excel.xlsx.Color.ofWhatever(val);
+      this.j.setFillBackgroundColor(color.index);
+    end
+    
   end
   
 end

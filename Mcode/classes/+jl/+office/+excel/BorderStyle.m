@@ -1,30 +1,34 @@
-classdef BorderStyle
+classdef BorderStyle < jl.util.Displayable
   
   enumeration
-    DashDot
-    DashDotDot
-    Dashed
-    Dotted
-    Double
-    Hair
-    Medium
-    MediumDashDot
-    MediumDashDotDot
-    MediumDashed
-    None
-    SlantedDashDot
-    Thick
-    Thin
+    DashDot('DashDot')
+    DashDotDot('DashDotDot')
+    Dashed('Dashed')
+    Dotted('Dotted')
+    Double('Double')
+    Hair('Hair')
+    Medium('Medium')
+    MediumDashDot('MediumDashDot')
+    MediumDashDotDot('MediumDashDotDot')
+    MediumDashed('MediumDashed')
+    None('None')
+    SlantedDashDot('SlantedDashDot')
+    Thick('Thick')
+    Thin('Thin')
   end
   
-  properties
+  properties (SetAccess = immutable)
+    name
   end
   
   methods (Static)
+    
     function out = ofJava(jObj)
-      
       if isempty(jObj)
         out = [];
+      elseif ~isa(jObj, 'org.apache.poi.ss.usermodel.BorderStyle')
+        error('jl:InvalidInput', 'jObj must be a org.apache.poi.ss.usermodel.BorderStyle; got a %s', ...
+          class(jObj));
       elseif jObj.equals(org.apache.poi.ss.usermodel.BorderStyle.DASH_DOT)
         out = jl.office.excel.BorderStyle.DashDot;
       elseif jObj.equals(org.apache.poi.ss.usermodel.BorderStyle.DASH_DOT_DOT)
@@ -92,6 +96,22 @@ classdef BorderStyle
       else
         BADSWITCH
       end
+    end
+    
+  end
+  
+  methods (Access = private)
+  
+    function this = BorderStyle(name)
+      this.name = name;
+    end
+    
+  end
+  
+  methods (Access = protected)
+    
+    function out = dispstr_scalar(this)
+      out = sprintf('[BorderStyle: %s]', this.name);
     end
     
   end
