@@ -38,6 +38,11 @@ classdef CellStyle < handle
   
   methods
     
+    function disp(obj)
+      fprintf('   %s:\n', class(obj));
+      dispstrlib.disp(jl.util.obj2structquiet(obj));
+    end
+    
     function cloneFrom(this, other)
       mustBeA(other, 'jl.office.excel.CellStyle');
       this.j.cloneFrom(other.j);
