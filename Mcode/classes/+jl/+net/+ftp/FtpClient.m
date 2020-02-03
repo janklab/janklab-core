@@ -70,10 +70,16 @@ classdef FtpClient < handle
   
   methods
   
-    function this = FtpClient(host, port)
+    function this = FtpClient(host, port, username, password)
       % FtpClient Construct a new object
       %
+      % obj = jl.net.ftp.FtpClient(host)
       % obj = jl.net.ftp.FtpClient(host, port)
+      % obj = jl.net.ftp.FtpClient(host, port, username, password)
+      %
+      % Port, username, and password are all optional. They can be omitted
+      % entirely, or you can pass an empty, in which case they'll use the
+      % default values.
       if nargin == 0
         return
       end
@@ -87,6 +93,12 @@ classdef FtpClient < handle
       if nargin >= 2 && ~isempty(port) && ~ismissing(port)
         mustBeScalarNumeric(port);
         this.port = port;
+      end
+      if nargin >= 3 && ~isempty(username)
+        this.username = username;
+      end
+      if nargin >= 4 && ~isempty(password)
+        this.password = password;
       end
     end
     
