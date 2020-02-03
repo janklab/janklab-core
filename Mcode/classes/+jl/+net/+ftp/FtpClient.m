@@ -28,8 +28,7 @@ classdef FtpClient < handle
   % f.cd("m4")
   % f.dir("*1.4.8*")
   % f.mget("*1.4.8*.sig")
-  %
-  %
+
   % Developer notes:
   % * features() is not supported, because the Apache FTP library shipping
   %   with Matlab R2020a is too old.
@@ -205,6 +204,7 @@ classdef FtpClient < handle
       else
         jFtpFiles = this.jobj.listFiles(pathname);
       end
+      this.checkReplyCode('dir');
       out = [];
       for i = 1:numel(jFtpFiles)
         jf = jFtpFiles(i);
@@ -235,11 +235,13 @@ classdef FtpClient < handle
       else
         jFiles = this.jobj.listNames(pathname);
       end
+      this.checkReplyCode('ls');
       out = string(jFiles);
     end
     
     function out = get.cwd(this)
       out = string(this.jobj.printWorkingDirectory);
+      this.checkReplyCode('pwd');
     end
     
     function out = get.listHiddenFiles(this)
@@ -260,6 +262,7 @@ classdef FtpClient < handle
       % you're connecting from behind a firewall, like in many corporate IT
       % environments.
       this.jobj.enterLocalPassiveMode;
+      this.checkReplyCode('PASV');
     end
     
     function actv(this)
@@ -267,6 +270,7 @@ classdef FtpClient < handle
       %
       % obj.actv()
       this.jobj.enterLocalActiveMode;
+      this.checkReplyCode('ACTV');
     end
     
     function get(this, file, localFile)
@@ -328,6 +332,11 @@ classdef FtpClient < handle
       end
       
       files = this.ls(pattern);
+      this.checkReplyCode('mget');
+      if isempty(files)
+        error('jl:ftp:FileNotFound', 'Cannot mget ''%s'': no files on server matched pattern', ...
+          pattern);
+      end
       for i = 1:numel(files)
         this.get(files(i), localDir);
       end
@@ -513,6 +522,15 @@ classdef FtpClient < handle
         out = getpref('Internet', 'E_mail');
       catch err %#ok<NASGU>
         out = 'janklab_user@example.com';
+      end
+    end
+
+    function checkReplyCode(this, operation)
+      if nargin < 2 || isempty(operation); operation = 'operation'; end
+      replyCode = this.replyCode;
+      if ~replyCode.isPositiveCompletion
+        error('jl:net:ftp:FailedOperation', '%s failed: error %s', ...
+          operation, replyCode);
       end
     end
     
