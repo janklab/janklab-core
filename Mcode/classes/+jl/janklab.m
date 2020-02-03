@@ -25,8 +25,9 @@ classdef janklab
       % Check the version
       
       if verLessThan('matlab', '9.7.0')
-        warning(['This version of Matlab is too old. Janklab requires Matlab R2019b ' ...
-          'or newer. Some parts of Janklab will not work.\n']);
+        warning('jl:IncompatibleMatlabVersion', ['This version of Matlab is ' ...
+            'too old. Janklab requires Matlab R2019b ' ...
+            'or newer. Some parts of Janklab will not work.']);
       end
     end
     
