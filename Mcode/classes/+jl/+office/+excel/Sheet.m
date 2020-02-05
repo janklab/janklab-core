@@ -22,6 +22,9 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     % A view into the margins of this sheet
     margins
   end
+  properties (Access = protected)
+    jIoHelper
+  end
   
   properties (Dependent)
     activeCellAddress
@@ -513,6 +516,33 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       this.j.validateMergedRegions;
     end
     
+    function out = readRangeNumeric(this, rangeAddress)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      data = this.jIoHelper.readRangeNumeric(rangeAddress.j);
+      out = reshapeReadData(data, rangeAddress);      
+    end
+    
+    function out = readRangeDatetime(this, rangeAddress)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      data = this.jIoHelper.readRangeDatenum(rangeAddress.j);
+      dnums = reshapeReadData(data, rangeAddress);
+      out = datetime(dnums, 'ConvertFrom','datenum');
+    end
+    
+    function out = readRangeString(this, rangeAddress)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      data = this.jIoHelper.readRangeString(rangeAddress.j);
+      data = string(cellstr(data));
+      out = reshapeReadData(data, rangeAddress);
+    end
+    
+    function out = readRangeCategorical(this, rangeAddress)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      data = this.jIoHelper.readRangeString(rangeAddress.j);
+      data = categorical(cellstr(data));
+      out = reshapeReadData(data, rangeAddress);
+    end
+    
   end
 
   methods (Access = protected)
@@ -533,4 +563,10 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     out = wrapCellStyleObject(this, jObj)
   end
   
+end
+
+function out = reshapeReadData(data, rangeAddress)
+data = data(:);
+out = reshape(data, [rangeAddress.numCols rangeAddress.numRows]);
+out = out';
 end

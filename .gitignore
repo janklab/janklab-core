@@ -11,3 +11,8 @@ doc/_site
 doc/.jekyll-cache
 dist
 Janklab.mltbx
+
+# Test data that gets scattered around
+*.xlsx
+*.xls
+

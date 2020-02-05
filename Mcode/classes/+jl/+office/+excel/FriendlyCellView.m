@@ -1,7 +1,7 @@
 classdef FriendlyCellView < handle
   % An adapter that lets you view the cells in a Sheet as a Matlab array
   
-  properties
+  properties (SetAccess = private)
     sheet
   end
   

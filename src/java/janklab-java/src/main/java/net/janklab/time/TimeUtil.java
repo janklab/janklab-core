@@ -3,6 +3,8 @@ package net.janklab.time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Date/time utility methods.
@@ -13,9 +15,33 @@ public class TimeUtil {
      * Determined by doing `datenum('1/1/1970')` in Matlab. */
     public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS = 719529;
     public static final int SECONDS_PER_DAY = 24 * 60 * 60;
+    public static final long MILLIS_PER_DAY = SECONDS_PER_DAY * 1000;
     public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS = UNIX_TO_DATENUM_EPOCH_OFFSET_DAYS * SECONDS_PER_DAY;
-    
-    
+    public static final long UNIX_TO_DATENUM_EPOCH_OFFSET_MILLIS = UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS * 1000;
+
+    public static double unixEpochSecondsToDatenum(long unixEpochSeconds) {
+        return ((double)(unixEpochSeconds + UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS))
+                / ((double) SECONDS_PER_DAY);
+    }
+
+    public static double unixEpochSecondsToDatenum(double unixEpochSeconds) {
+        return (unixEpochSeconds + UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS)
+                / ((double) SECONDS_PER_DAY);
+    }
+
+    public static double unixEpochMillisecondsToDatenum(long unixEpochMillis) {
+        return ((double)(unixEpochMillis + UNIX_TO_DATENUM_EPOCH_OFFSET_MILLIS))
+                / ((double) MILLIS_PER_DAY);
+    }
+
+    public static double javaDateToDatenum(Date date) {
+        return unixEpochMillisecondsToDatenum(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
+    }
+
+    public static double javaCalendarToDatenum(Calendar calendar) {
+        return unixEpochMillisecondsToDatenum(calendar.getTimeInMillis());
+    }
+
     /**
      * Convert a LocalDate to a Matlab datenum.
      * @param d LocalDate to convert
@@ -38,8 +64,7 @@ public class TimeUtil {
         // is a zoneless local date.
         double unixEpochSeconds = (double) dt.toEpochSecond(ZoneOffset.UTC);
         unixEpochSeconds += dt.getNano() / 1_000_000_000;
-        double datenum = (((double) unixEpochSeconds) + UNIX_TO_DATENUM_EPOCH_OFFSET_SECONDS)
-                / ((double) SECONDS_PER_DAY);
+        double datenum = unixEpochSecondsToDatenum(unixEpochSeconds);
         return datenum;
     }
     

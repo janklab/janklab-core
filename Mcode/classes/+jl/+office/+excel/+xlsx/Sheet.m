@@ -12,6 +12,7 @@ classdef Sheet < jl.office.excel.Sheet
         this.j = jObj;
       end
       this.cells = jl.office.excel.FriendlyCellView(this);
+      this.jIoHelper = net.janklab.office.excel.SheetIOHelper(jObj);
     end
     
   end

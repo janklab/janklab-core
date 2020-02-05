@@ -26,6 +26,12 @@ classdef CellRangeAddress < jl.util.DisplayableHandle
     firstCol
     % Index of the last column (inclusive)
     lastCol
+    % Range size, as [numRows numCols]
+    rangeSize
+    % Number of rows in range
+    numRows
+    % Number of columns in range
+    numCols
   end
   
   methods (Static)
@@ -138,6 +144,18 @@ classdef CellRangeAddress < jl.util.DisplayableHandle
     
     function set.lastCol(this, val)
       this.j.setLastCol(val - 1);
+    end
+    
+    function out = get.numCols(this)
+      out = this.lastCol - this.firstCol + 1;
+    end
+    
+    function out = get.numRows(this)
+      out = this.lastRow - this.firstRow + 1;
+    end
+    
+    function out = get.rangeSize(this)
+      out = [this.numRows this.numCols];
     end
     
     function out = containsColumn(this, index)

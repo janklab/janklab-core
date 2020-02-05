@@ -48,18 +48,18 @@ classdef CellAddress < jl.util.DisplayableHandle
       a1 = string(a1);
       a1 = upper(a1);
       
-      check = regexp(in,'\D*\d*','match');
+      check = regexp(a1, '\D*\d*','match');
       if any(cellfun('isempty', check))
         error('Unrecognized Excel cell references');
       end
       
-      rStr = regexp(in, '\d*', 'match');
+      rStr = regexp(a1, '\d*', 'match');
       rStr = cat(2, rStr{:});
       r = str2double(rStr);
       
-      cStr = regexp(in,'\D*', 'match');
+      cStr = regexp(a1,'\D*', 'match');
       cStr = cat(2, cStr{:});
-      cStr = strjust(char(cStr{:}), 'right');
+      cStr = strjust(cStr, 'right');
       
       letterA = double('A');
       c = double(cStr) - letterA + 1;

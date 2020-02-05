@@ -248,7 +248,7 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
       else
         error('Invalid input. Expecting numeric or string; got a %s', class(ref));
       end
-      out = this.createSheetObject(this, jSheet);
+      out = this.wrapSheetObject(jSheet);
     end
     
     function removeSheetAt(this, index)
