@@ -80,6 +80,19 @@ public class SheetIOHelper {
         }
     }
 
+    public void writeRange(CellRangeAddress rangeAddr, CategoricalArrayList data) {
+        checkRangeSizeAgainstInputData(rangeAddr, data.size());
+        int i = 0;
+        for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
+            Row row = sheet.getRow(ixRow);
+            for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
+                Cell cell = row.getCell(ixCol);
+                cell.setCellValue(data.get(i));
+                ++i;
+            }
+        }
+    }
+
     // TODO: writeRangeDatenum()
 
     /**

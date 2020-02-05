@@ -554,16 +554,61 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
       data = this.jIoHelper.readRangeCategoricalish(rangeAddress.j);
       codes = data.getCodes;
-      levels = cellstr(jl.util.java.convertStringsToMatlab(data.getLevels));
+      levels = cellstr(jl.util.java.convertJavaStringsToMatlab(data.getLevels));
       ixs = codes + 1;
       ctgLevels = categorical(levels);
       out = ctgLevels(ixs);
       out = reshapeReadData(out, rangeAddress);
     end
     
+    function writeRange(this, rangeAddress, vals)
+      if iscategorical(vals)
+        this.writeRangeCategorical(rangeAddress, vals);
+      elseif isstring(vals) || iscellstr(vals)
+        this.writeRangeString(rangeAddress, vals);
+      elseif isa(vals, 'datetime')
+        this.writeRangeDatetime(rangeAddress, vals);
+      elseif isobject(vals)
+        valStrs = dispstrs(vals);
+        this.writeRangeString(rangeAddress, valStrs);
+      else
+        this.writeRangeGeneric(rangeAddress, vals);
+      end
+    end
+    
   end
 
   methods (Access = protected)
+    
+    function writeRangeGeneric(this, rangeAddress, vals)
+      rowMajorVals = vals';
+      rowMajorVals = rowMajorVals(:);
+      this.jIoHelper.writeRange(rangeAddress, rowMajorVals);
+    end
+    
+    function writeRangeDatetime(this, rangeAddress, vals)
+      %TODO: Need to figure out cell formatting in addition to the value
+      %conversion.
+      UNIMPLEMENTED
+    end
+
+    function writeRangeString(this, rangeAddress, vals)
+      vals = string(vals);
+      rowMajorVals = vals';
+      rowMajorVals = rowMajorVals(:);
+      jVals = jl.util.java.convertMatlabStringsToJava(rowMajorVals);
+      this.jIoHelper.writeRange(rangeAddress, jVals);
+    end
+    
+    function writeRangeCategorical(this, rangeAddress, vals)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      jLevelStrs = jl.util.java.convertMatlabStringsToJava(categories(vals));
+      jCodes = int32(vals) - 1;
+      jCodes = jCodes'; % row-major-ify
+      jCodes = jCodes(:);
+      jCtgArray = net.janklab.util.CategoricalArrayList(jCodes, jLevelStrs);
+      this.jIoHelper.writeRange(rangeAddress, jCtgArray);
+    end
     
     function this = Sheet
       this.margins = jl.office.excel.SheetMargins(this);

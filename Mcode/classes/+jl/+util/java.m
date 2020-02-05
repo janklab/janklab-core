@@ -183,7 +183,7 @@ classdef java
       out = method.invoke([], methodArgs);
     end
     
-    function out = convertStringsToMatlab(jObj)
+    function out = convertJavaStringsToMatlab(jObj)
       % Convert Java strings or string arrays to Matlab strings
       %
       % Be aware that java.lang.String objects lose their identity in this
@@ -219,6 +219,14 @@ classdef java
       else
         error('jl:InvalidInput', "Don't know how to convert a %s to Matlab string array", ...
           class(jObj));
+      end
+    end
+    
+    function out = convertMatlabStringsToJava(strs)
+      strs = string(strs);
+      out = javaArray('java.lang.String', numel(strs));
+      for i = 1:numel(strs)
+        out(i) = java.lang.String(char(strs(i)));
       end
     end
     
