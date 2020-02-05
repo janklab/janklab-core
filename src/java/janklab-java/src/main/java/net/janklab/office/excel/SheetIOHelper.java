@@ -1,6 +1,7 @@
 package net.janklab.office.excel;
 
 import net.janklab.time.TimeUtil;
+import net.janklab.util.CategoricalArrayList;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
@@ -9,6 +10,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.util.Calendar;
 import java.util.Date;
+
+// TODO: Write range from categoricals
 
 public class SheetIOHelper {
 
@@ -77,10 +80,12 @@ public class SheetIOHelper {
         }
     }
 
+    // TODO: writeRangeDatenum()
+
     /**
      * Takes an array in ROW-MAJOR order and writes it into a range.
-     * @param rangeAddr
-     * @param data
+     * @param rangeAddr Range address to write to
+     * @param data Data for range in ROW MAJOR order
      */
     public void writeRange(CellRangeAddress rangeAddr, Object[] data) {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
@@ -96,20 +101,20 @@ public class SheetIOHelper {
                     throw new RuntimeException("Column index out of range: " + ixCol);
                 }
                 Object val = data[i];
-                if (val == null) {
-                    // NOP
-                } else if (val instanceof String) {
-                    cell.setCellValue((String)val);
-                } else if (val instanceof Date) {
-                    cell.setCellValue((Date)val);
-                } else if (val instanceof Calendar) {
-                    cell.setCellValue((Calendar)val);
-                } else if (val instanceof Double) {
-                    cell.setCellValue((Double)val);
-                } else if (val instanceof RichTextString) {
-                    cell.setCellValue((RichTextString)val);
-                } else {
-                    cell.setCellValue(val.toString());
+                if (val != null) {
+                    if (val instanceof String) {
+                        cell.setCellValue((String) val);
+                    } else if (val instanceof Date) {
+                        cell.setCellValue((Date) val);
+                    } else if (val instanceof Calendar) {
+                        cell.setCellValue((Calendar) val);
+                    } else if (val instanceof Double) {
+                        cell.setCellValue((Double) val);
+                    } else if (val instanceof RichTextString) {
+                        cell.setCellValue((RichTextString) val);
+                    } else {
+                        cell.setCellValue(val.toString());
+                    }
                 }
                 ++i;
             }
@@ -192,5 +197,24 @@ public class SheetIOHelper {
         return out;
     }
 
-    // TODO: Symbol/canonicalizing-string version, to support categorical arrays
+    public CategoricalArrayList readRangeCategoricalish(CellRangeAddress rangeAddr) {
+        CategoricalArrayList out = new CategoricalArrayList();
+        int i = 0;
+        for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
+            Row row = sheet.getRow(ixRow);
+            if (row == null) {
+                throw new RuntimeException("Row index out of range: " + ixRow);
+            }
+            for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
+                Cell cell = row.getCell(ixCol);
+                if (cell == null) {
+                    throw new RuntimeException("Column index out of range: " + ixCol);
+                }
+                out.add(cell.getStringCellValue());
+            }
+        }
+        return out;
+    }
+
+
 }

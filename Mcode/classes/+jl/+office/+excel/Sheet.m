@@ -1,6 +1,7 @@
 classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
+  % TODO: writeTable(), readTable()
   % TODO: Format-specific stuff
   % TODO: DataValidation
   % TODO: Header and Footer
@@ -522,11 +523,24 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       out = reshapeReadData(data, rangeAddress);      
     end
     
-    function out = readRangeDatetime(this, rangeAddress)
+    function out = readRangeDatetimeWithJavaDates(this, rangeAddress)
       rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
       data = this.jIoHelper.readRangeDatenum(rangeAddress.j);
       dnums = reshapeReadData(data, rangeAddress);
       out = datetime(dnums, 'ConvertFrom','datenum');
+    end
+    
+    function out = readRangeDatetime(this, rangeAddress)
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      data = this.jIoHelper.readRangeNumeric(rangeAddress.j);
+      xdates = reshapeReadData(data, rangeAddress);
+      if isa(this.workbook, 'jl.office.xlsx.Workbook')
+        is1904 = this.workbookisDate1904;
+      else
+        is1904 = false;
+      end
+      out = x2mdate(xdates, is1904, 'datetime');
+      out.Format = 'yyyy-MM-dd HH:mm:SS';
     end
     
     function out = readRangeString(this, rangeAddress)
@@ -538,9 +552,13 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     
     function out = readRangeCategorical(this, rangeAddress)
       rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
-      data = this.jIoHelper.readRangeString(rangeAddress.j);
-      data = categorical(cellstr(data));
-      out = reshapeReadData(data, rangeAddress);
+      data = this.jIoHelper.readRangeCategoricalish(rangeAddress.j);
+      codes = data.getCodes;
+      levels = cellstr(jl.util.java.convertStringsToMatlab(data.getLevels));
+      ixs = codes + 1;
+      ctgLevels = categorical(levels);
+      out = ctgLevels(ixs);
+      out = reshapeReadData(out, rangeAddress);
     end
     
   end
