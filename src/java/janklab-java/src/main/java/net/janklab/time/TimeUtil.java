@@ -34,6 +34,7 @@ public class TimeUtil {
                 / ((double) MILLIS_PER_DAY);
     }
 
+    @SuppressWarnings("deprecation")
     public static double javaDateToDatenum(Date date) {
         return unixEpochMillisecondsToDatenum(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
     }
