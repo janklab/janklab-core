@@ -16,7 +16,7 @@ Janklab’s Office IO API doesn’t use the Office applications. Instead, it’s
 * Doesn’t require an Office license
 * Will work when multiple Matlab processes are running in the same desktop session
 * Won’t interfere with running interactive Excel instances on your desktop
-* Is potentially faster, once I write some accelerated code ;)
+* Is potentially faster, since it uses optimized Java code for reading and writing of cell ranges and type conversion
 
 ## Quick start
 
