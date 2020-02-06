@@ -34,7 +34,7 @@ public class CategoricalArrayList {
                 throw new IllegalArgumentException("Code out of range: " + code + " is less than 0.");
             }
             if (code > maxCode) {
-                throw new IllegalArgumentException(("Code out of range: " + code " is greater than max code "
+                throw new IllegalArgumentException(("Code out of range: " + code + " is greater than max code "
                     +maxCode + " (for " + n + " levels)"));
             }
             this.codes.add(code);
