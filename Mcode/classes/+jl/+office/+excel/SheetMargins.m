@@ -1,4 +1,7 @@
 classdef SheetMargins < handle
+  % SheetMargins The margins on a sheet
+  %
+  % All margin values are given in inches.
   
   properties (Access = private)
     sheet
