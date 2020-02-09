@@ -4,7 +4,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: readTable()
   % TODO: Hyperlinks
   % TODO: PaneInformation
-  % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
   % TODO: Format-specific stuff
@@ -55,6 +54,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     selected
     repeatingColumns
     repeatingRows
+    sheetConditionalFormatting
   end
   
   methods
@@ -98,6 +98,10 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
         row = this.getRow(iRow);
         out = max(out, row.nCols);
       end
+    end
+    
+    function out = get.sheetConditionalFormatting(this)
+      out = jl.office.excel.SheetConditionalFormatting(this.j.getSheetConditionalFormatting);
     end
     
     function out = getRow(this, index)
