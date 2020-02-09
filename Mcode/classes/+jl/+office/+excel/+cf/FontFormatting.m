@@ -1,4 +1,4 @@
-classdef FontFormatting < handle
+classdef (Abstract) FontFormatting < handle
   %FONTFORMATTING 
   
   properties
@@ -73,6 +73,34 @@ classdef FontFormatting < handle
       this.j.setUnderlineType(val.toJava);
     end
     
+    function out = get.isBold(this)
+      out = this.j.isBold;
+    end
+    
+    function set.isBold(this, val)
+      this.j.setBold(this, val);
+    end
+    
+    function out = get.isItalic(this)
+      out = this.j.isItalic;
+    end
+    
+    function set.isItalic(this, val)
+      this.j.setItalic(val);
+    end
+    
+    function out = get.isStruckout(this)
+      out = this.j.isStruckout;
+    end
+    
+    function set.isStruckout(this, val)
+      this.setIsStruckout(val);
+    end
+    
+  end
+  
+  methods (Abstract, Access = protected)
+    setIsStruckout(this, val)
   end
   
 end
