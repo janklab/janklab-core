@@ -161,7 +161,7 @@ classdef CellStyle < handle
     end
     
     function out = get.fontIndex(this)
-      out = this.j.getFontIndexAsInt;
+      out = this.j.getFontIndex + 1;
     end
     
     function out = get.hidden(this)

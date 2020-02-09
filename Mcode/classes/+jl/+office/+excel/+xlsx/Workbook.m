@@ -92,7 +92,7 @@ classdef Workbook < jl.office.excel.Workbook
     end
 
     function out = createCellStyle(this)
-      out = jl.office.excel.xlsx.CellStyle(this.j.createCellStyle);
+      out = jl.office.excel.xlsx.CellStyle(this, this.j.createCellStyle);
     end
 
     function out = createFont(this)

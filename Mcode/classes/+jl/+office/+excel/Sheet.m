@@ -638,11 +638,11 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
           varName = t.Properties.VariableNames{iVar};
           this.cells{ixRow,ixCol} = varName;
           c = this.getCell(ixRow, ixCol);
-          cellStyle = c.cellStyle;
           if opts.BoldColHeaders
             % TODO: Bold the text
           end
-          cellStyle.horizontalAlignment = jl.office.excel.HorizontalAlignment.Center;
+          c.cellStyle = colHeaderCellStyle;
+          % TODO: Why are cell style changes not taking effect?
           if isa(val, 'table')
             nestedTblWidth = jl.util.tables.flatWidth(val);
             this.addMergedRegion([ixRow, ixCol, ixRow, ixCol + nestedTblWidth - 1]);
@@ -653,6 +653,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
           end
         end
       end
+      colHeaderCellStyle = this.workbook.createCellStyle;
+      colHeaderCellStyle.horizontalAlignment = jl.office.excel.HorizontalAlignment.Center;
       colHeadersStart = startAddress + colHeaderOffset;
       ixCol1 = colHeadersStart.column;
       ixCol = ixCol1;

@@ -41,6 +41,11 @@ classdef Cell < jl.util.DisplayableHandle
       out = this.wrapCellStyleObject(this.j.getCellStyle);
     end
     
+    function set.cellStyle(this, val)
+      mustBeA(val, 'jl.office.excel.CellStyle');
+      this.j.setCellStyle(val.j);
+    end
+    
     function out = get.cellType(this)
       out = jl.office.excel.CellType.ofJava(this.j.getCellTypeEnum);
     end
