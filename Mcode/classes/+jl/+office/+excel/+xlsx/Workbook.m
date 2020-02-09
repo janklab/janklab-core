@@ -55,6 +55,17 @@ classdef Workbook < jl.office.excel.Workbook
       % fix them up.
       % See: https://stackoverflow.com/questions/59811366/apache-poi-3-16-creates-invalid-files-when-run-inside-matlab?noredirect=1#comment105804128_59811366
       
+      replacements = {
+        '<Types>' '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'
+        '<Relationships>' '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+        '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' ...
+            [ '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" ' ...
+                'xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" ' ...
+                'mc:Ignorable="x14ac x16r2 xr" ' ...
+                'xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac" ' ...
+                'xmlns:x16r2="http://schemas.microsoft.com/office/spreadsheetml/2015/02/main" ' ...
+                'xmlns:xr="http://schemas.microsoft.com/office/spreadsheetml/2014/revision">']
+        };
       zIn = jl.util.ZipFile(tmpFile1);
       zOut = jl.util.ZipWriter.forFile(tmpFile2);
       zEntries = zIn.getEntries;
@@ -62,11 +73,12 @@ classdef Workbook < jl.office.excel.Workbook
         zEntry = zEntries(iEntry);
         bytes = zIn.getContents(zEntry);
         needToEdit = {'[Content_Types].xml', '_rels/.rels', 'docProps/core.xml' ...
-          'xl/_rels/workbook.xml.rels'};
+          'xl/_rels/workbook.xml.rels', 'xl/styles.xml'};
         if ismember(zEntry.name, needToEdit)
           str = native2unicode(bytes, 'UTF-8')';
-          str = strrep(str, '<Types>', '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">');
-          str = strrep(str, '<Relationships>', '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">');
+          for iRep = 1:size(replacements, 1)
+            str = strrep(str, replacements{iRep,1}, replacements{iRep,2});
+          end
           bytes = unicode2native(str, 'UTF-8');
         end
         zEntryOut = jl.util.ZipEntry(zEntry.name);

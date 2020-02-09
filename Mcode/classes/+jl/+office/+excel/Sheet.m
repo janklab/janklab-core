@@ -557,12 +557,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
       data = this.jIoHelper.readRangeNumeric(rangeAddress.j);
       xdates = reshapeReadData(data, rangeAddress);
-      if isa(this.workbook, 'jl.office.xlsx.Workbook')
-        is1904 = this.workbookisDate1904;
-      else
-        is1904 = false;
-      end
-      out = x2mdate(xdates, is1904, 'datetime');
+      out = x2mdate(xdates, this.workbook.isDate1904, 'datetime');
       out.Format = 'yyyy-MM-dd HH:mm:SS';
     end
     
@@ -641,6 +636,13 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       if hasRowNames
         dataOffset(2) = 1;
       end
+      wholeRange = jl.office.excel.CellRangeAddress([ ...
+        startRC(1), startRC(2), startRC(1) + dataOffset(1) + height(tbl), ...
+        startRC(2) + dataOffset(2) + jl.util.tables.flatWidth(tbl)]);
+      
+      % Clobber styles back to default, in case user has set them to something
+      % else
+      this.setRangeDataFormat(wholeRange, "General");
       
       % Write col headers
       function writeColHeadersRecursive(t, ixRow)
@@ -654,13 +656,15 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
             % TODO: Bold the text
           end
           c.cellStyle = colHeaderCellStyle;
-          % TODO: Why are cell style changes not taking effect?
           if isa(val, 'table')
             nestedTblWidth = jl.util.tables.flatWidth(val);
             this.addMergedRegion([ixRow, ixCol, ixRow, ixCol + nestedTblWidth - 1]);
             writeColHeadersRecursive(val, ixRow + 1);
             ixCol = ixCol + nestedTblWidth;
           else
+            if ixRow < ixLastColHeaderRow
+              this.addMergedRegion([ixRow, ixCol, ixLastColHeaderRow, ixCol]);
+            end
             ixCol = ixCol + 1;
           end
         end
@@ -670,6 +674,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       colHeadersStart = startAddress + colHeaderOffset;
       ixCol1 = colHeadersStart.column;
       ixCol = ixCol1;
+      ixLastColHeaderRow = startRC(1) + nestDepth - 1;
       writeColHeadersRecursive(tbl, colHeadersStart.row);
       
       % Maybe write row names
@@ -701,10 +706,27 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       % TODO: Auto-size columns
       
       % Package output
-      out.range = jl.office.excel.CellRangeAddress([ ...
-        startRC(1), startRC(2), startRC(1) + dataOffset(1) + height(tbl), ...
-        startRC(2) + dataOffset(2) + jl.util.tables.flatWidth(tbl)]);
+      out.range = wholeRange;
       out.dataStart = dataStartAddr;
+    end
+    
+    function setRangeDataFormat(this, rangeAddress, dataFormat)
+      % TODO: This is inefficient because it creates so many new styles
+      rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
+      dataFormat = string(dataFormat);
+      formatTable = this.workbook.getDataFormatTable;
+      formatIndex = formatTable.getFormatIndex(dataFormat);
+      for ixRow = rangeAddress.firstRow:rangeAddress.lastRow
+        row = this.vivifyRow(ixRow);
+        for ixCol = rangeAddress.firstCol:rangeAddress.lastCol
+          cell = row.vivifyCell(ixCol);
+          oldCellStyle = cell.cellStyle;
+          cellStyle = this.workbook.createCellStyle;
+          cellStyle.cloneFrom(oldCellStyle);
+          cellStyle.dataFormatIndex = formatIndex;
+          cell.cellStyle = cellStyle;
+        end
+      end
     end
     
   end
@@ -718,11 +740,20 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     end
     
     function writeRangeDatetime(this, rangeAddress, vals)
-      %TODO: Need to figure out cell formatting in addition to the value
-      %conversion.
-      warning('Writing dates as strings')
-      strVals = string(cellstr(datestr(vals)));
-      this.writeRangeString(rangeAddress, strVals);
+      % Write values to a range as datetimes
+      
+      if this.workbook.isDate1904
+        xDates = m2xdate(vals, 1);
+      else
+        xDates = m2xdate(vals);
+      end
+      this.writeRangeGeneric(rangeAddress, xDates);
+      if all(jl.time.util.ismidnight(vals))
+        dateFormat = "mm/dd/yyyy";
+      else
+        dateFormat = "mm/dd/yyyy h:mm AM/PM";
+      end
+      this.setRangeDataFormat(rangeAddress, dateFormat);
     end
 
     function writeRangeString(this, rangeAddress, vals)

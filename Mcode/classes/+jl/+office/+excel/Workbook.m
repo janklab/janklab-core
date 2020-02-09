@@ -488,6 +488,11 @@ classdef (Abstract) Workbook < jl.util.DisplayableHandle
     
   end
   
+  methods (Abstract)
+    % Whether this workbook uses the 1904 date convention for its dates
+    out = isDate1904(this)
+  end
+  
   methods (Abstract, Access = protected)
     out = wrapSheetObject(this, jObj)
     out = wrapCellStyleObject(this, jObj)

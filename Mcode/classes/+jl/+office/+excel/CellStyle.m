@@ -45,7 +45,7 @@ classdef CellStyle < handle
     
     function cloneFrom(this, other)
       mustBeA(other, 'jl.office.excel.CellStyle');
-      this.j.cloneFrom(other.j);
+      this.j.cloneStyleFrom(other.j);
     end
     
     function out = get.horizontalAlignment(this)

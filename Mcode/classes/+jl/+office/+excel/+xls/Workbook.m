@@ -84,6 +84,10 @@ classdef Workbook < jl.office.excel.Workbook
       this.j.unWriteProtectWorkbook;
     end
     
+    function out = isDate1904(this) %#ok<MANU>
+      out = false;
+    end
+    
   end
   
   methods (Access = protected)

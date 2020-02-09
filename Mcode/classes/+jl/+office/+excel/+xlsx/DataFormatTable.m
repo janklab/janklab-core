@@ -16,6 +16,7 @@ classdef DataFormatTable < jl.office.excel.DataFormatTable
       % Index (numeric) is the index into obj's format list.
       %
       % Returns a string.
+      mustBeScalarNumeric(index);
       out = string(this.j.getFormat(index));
     end
     
@@ -29,7 +30,7 @@ classdef DataFormatTable < jl.office.excel.DataFormatTable
       % Returns a numeric.
       mustBeStringy(format);
       mustBeScalar(format);
-      out = this.j.getFormatIndex(format);
+      out = this.j.getFormat(format);
     end
     
     function putFormat(this, index, format)
