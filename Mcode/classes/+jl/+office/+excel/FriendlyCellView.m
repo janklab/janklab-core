@@ -29,8 +29,6 @@ classdef FriendlyCellView < handle
     end
     
     function setValueAt(this, ixRow, ixCol, val)
-      fprintf('FCV: setValue: (%d, %d) -> %s\n', ...
-        ixRow, ixCol, dispstr(val));
       row = this.sheet.vivifyRow(ixRow);
       c = row.vivifyCell(ixCol);
       c.value = val;

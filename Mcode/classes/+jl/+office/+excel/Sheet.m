@@ -622,7 +622,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
         for iVar = 1:nVars
           val = t{:,iVar};
           varName = t.Properties.VariableNames{iVar};
-          fprintf('Write col header: %s at (%d,%d)\n', varName, ixRow, ixCol);
           this.cells{ixRow,ixCol} = varName;
           if isa(val, 'table')
             nestedTblWidth = jl.util.tables.flatWidth(val);
