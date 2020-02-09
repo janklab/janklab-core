@@ -4,7 +4,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: readTable()
   % TODO: Hyperlinks
   % TODO: PaneInformation
-  % TODO: repeatingColumns/Rows - needs sheet-referenced range addrs?
   % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
@@ -54,6 +53,8 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     rowSumsRight
     scenarioProtect
     selected
+    repeatingColumns
+    repeatingRows
   end
   
   methods
@@ -298,15 +299,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       this.j.setLeftCol(val);
     end
     
-    % TODO: The types for this margin are wrong.
-    function out = get.margin(this)
-       UNIMPLEMENTED
-    end
-    
-    function set.margin(this, val)
-      UNIMPLEMENTED
-    end
-    
     function out = get.physicalNumberOfRows(this)
       out = this.j.getPhysicalNumberOfRows;
     end
@@ -511,6 +503,26 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     
     function setZoom(this, scale)
       this.j.setZoom(scale);
+    end
+    
+    function out = get.repeatingRows(this)
+      jRange = this.j.getRepeatingRows;
+      out = jl.office.excel.CellRangeAddress(jRange);
+    end
+    
+    function set.repeatingRows(this, val)
+      mustBeA(val, 'jl.office.excel.CellRangeAddress');
+      this.j.setRepeatingRows(val.j);
+    end
+    
+    function out = get.repeatingColumns(this)
+      jRange = this.j.getRepeatingColumns;
+      out = jl.office.excel.CellRangeAddress(jRange);
+    end
+    
+    function set.repeatingColumns(this, val)
+      mustBeA(val, 'jl.office.excel.CellRangeAddress');
+      this.j.setRepeatingColumns(val.j);
     end
     
     function shiftColumns(this, ixStart, ixEnd, n)
