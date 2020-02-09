@@ -682,7 +682,10 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       
       % Maybe write row names
       if hasRowNames
+        rowHeaderCellStyle = this.workbook.createCellStyle;
+        rowHeaderCellStyle.font = headerFont;
         this.writeRange(startAddress + [nestDepth 0], tbl.Properties.RowNames);
+        
       end
       
       % Write contained data
@@ -711,6 +714,16 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       % Package output
       out.range = wholeRange;
       out.dataStart = dataStartAddr;
+    end
+    
+    function setRangeStyle(this, rangeAddress, cellStyle)
+      for ixRow = rangeAddress.firstRow:rangeAddress.lastRow
+        row = this.vivifyRow(ixRow);
+        for ixCol = rangeAddress.firstCol:rangeAddress.lastCol
+          cell = row.vivifyCell(ixCol);
+          cell.cellStyle = cellStyle;
+        end
+      end
     end
     
     function setRangeDataFormat(this, rangeAddress, dataFormat)
