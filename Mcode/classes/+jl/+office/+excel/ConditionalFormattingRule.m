@@ -166,8 +166,14 @@ classdef (Abstract) ConditionalFormattingRule < handle
     function out = wrapConditionFilterTypeObject(this, jObj)
       out = jl.office.excel.cf.ConditionFilterType.ofJava(jObj);
     end
+  
+    function out = wrapPatternFormattingObject(this, jObj)
+      out = jl.office.excel.PatternFormatting(jObj);
+    end
     
   end
+  
+  % TODO: wrapExcelNumberFormatting - it can probably be defined on this class
   
   methods (Abstract, Access = protected)
     out = wrapBorderFormattingObject(this, jObj)
@@ -176,7 +182,6 @@ classdef (Abstract) ConditionalFormattingRule < handle
     out = wrapFontFormattingObject(this, jObj)
     out = wrapIconMultiStateFormattingObject(this, jObj)
     out = wrapExcelNumberFormatObject(this, jObj)
-    out = wrapPatternFormattingObject(this, jObj)
   end
   
 end
