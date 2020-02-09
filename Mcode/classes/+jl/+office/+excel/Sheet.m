@@ -2,7 +2,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
   % TODO: readTable()
-  % TODO: DataValidation
   % TODO: Hyperlinks
   % TODO: PaneInformation
   % TODO: repeatingColumns/Rows - needs sheet-referenced range addrs?
