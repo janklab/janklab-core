@@ -16,7 +16,7 @@ classdef ConditionalFormattingRule < jl.office.excel.ConditionalFormattingRule
   
   methods (Access = protected)
     function out = wrapBorderFormattingObject(this, jObj)
-      out = jl.office.excel.xls.BorderFormatting(jObj);
+      out = jl.office.excel.xl.cf.BorderFormatting(jObj);
     end
     
     function out = wrapDataBarFormattingObject(this, jObj)
