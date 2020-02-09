@@ -3,7 +3,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   
   % TODO: readTable()
   % TODO: DataValidation
-  % TODO: Header and Footer
   % TODO: Hyperlinks
   % TODO: PaneInformation
   % TODO: PrintSetup, repeatingColumns/Rows
