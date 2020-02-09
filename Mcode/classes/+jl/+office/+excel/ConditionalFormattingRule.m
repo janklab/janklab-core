@@ -1,4 +1,6 @@
 classdef (Abstract) ConditionalFormattingRule < handle
+    
+  %#ok<*INUSL>
   
   properties
     j
@@ -64,6 +66,9 @@ classdef (Abstract) ConditionalFormattingRule < handle
     end
     
     function out = get.comparisonOperation(this)
+      % Comparison operation used when formatting type is CellValueIs
+      %
+      % This currently returns a numeric code. This may change in the future.
       out = this.j.getComparisonOperation;
     end
     
@@ -77,7 +82,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
     end
     
     function out = get.conditionType(this)
-      out = jl.office.excel.ConditionType(this.j.getConditionType);
+      out = jl.office.excel.cf.ConditionType(this.j.getConditionType);
     end
     
     function out = get.dataBarFormatting(this)
@@ -152,6 +157,14 @@ classdef (Abstract) ConditionalFormattingRule < handle
     
     function out = get.text(this)
       out = string(this.j.getText);
+    end
+    
+  end
+  
+  methods (Access = protected)
+    
+    function out = wrapConditionFilterTypeObject(this, jObj)
+      out = jl.office.excel.cf.ConditionFilterType.ofJava(jObj);
     end
     
   end

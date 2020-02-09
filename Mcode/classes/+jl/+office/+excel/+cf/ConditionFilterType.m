@@ -24,7 +24,9 @@ classdef ConditionFilterType
   methods (Static)
     
     function out = ofJava(j)
-      if j.equals(org.apache.poi.ss.usermodel.ConditionFilterType.ABOVE_AVERAGE)
+      if isempty(j)
+        out = [];
+      elseif j.equals(org.apache.poi.ss.usermodel.ConditionFilterType.ABOVE_AVERAGE)
         out = jl.office.excel.ConditionFilterType.AboveAverage;
       elseif j.equals(org.apache.poi.ss.usermodel.ConditionFilterType.BEGINS_WITH)
         out = jl.office.excel.ConditionFilterType.BeginsWith;
