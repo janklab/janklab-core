@@ -52,11 +52,22 @@
 
 <p>MDBC is an extension to the Database Toolbox, not a replacement for it. But you still need to use the new API and objects that MDBC provides, instead of using the regular Database Toolbox API.</p>
 
+<h2 id="advanced-excel-io">Advanced Excel I/O</h2>
+
+<p>The <code class="highlighter-rouge">jl.office</code> package provides an <a href="https://github.com/apjanke/janklab/blob/master/doc/UserGuide-OfficeIO.md">API for reading and writing Excel files</a> without using the Excel application itself.
+This provides support for a bunch of Excel features and formatting control, and is <a href="https://support.microsoft.com/en-us/help/257757/considerations-for-server-side-automation-of-office">suitable for server-side automation</a>, unlike Matlab’s <code class="highlighter-rouge">xlsread</code> and <code class="highlighter-rouge">xlswrite</code> functions.</p>
+
+<p>If there is user demand for it, I’ll add support for Word, PowerPoint, and other Office file types.</p>
+
 <h2 id="data-structures">Data Structures</h2>
 
 <h3 id="symbol">Symbol</h3>
 
 <p>The <code class="highlighter-rouge">symbol</code> type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It is similar to Matlab’s <code class="highlighter-rouge">categorical</code> type, but uses a global symbol space, and is integrated with Janklab I/O features.</p>
+
+<h2 id="advanced-ftp-client">Advanced FTP Client</h2>
+
+<p>The <code class="highlighter-rouge">jl.net.ftp.FtpClient</code> class is an FTP client that provides more features than Matlab’s <code class="highlighter-rouge">@ftp</code> class, including support for Passive Mode transfers, which are often required when you’re behind a corporate firewall.</p>
 
 <h2 id="monkeypatches">Monkeypatches</h2>
 

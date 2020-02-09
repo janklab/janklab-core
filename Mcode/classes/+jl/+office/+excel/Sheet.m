@@ -2,7 +2,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
   % TODO: readTable()
-  % TODO: Format-specific stuff
   % TODO: DataValidation
   % TODO: Header and Footer
   % TODO: Hyperlinks
@@ -12,6 +11,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
   % TODO: Margins
+  % TODO: Format-specific stuff
   
   properties (SetAccess = protected)
     % The underlying POI XSSFSheet object
@@ -727,7 +727,10 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     end
     
     function setRangeDataFormat(this, rangeAddress, dataFormat)
-      % TODO: This is inefficient because it creates so many new styles
+      % Set the data format for all cells in a range
+      %
+      % Note: This is inefficient because it creates a new cell style for every
+      % cell in the range.
       rangeAddress = jl.office.excel.CellRangeAddress(rangeAddress);
       dataFormat = string(dataFormat);
       formatTable = this.workbook.getDataFormatTable;

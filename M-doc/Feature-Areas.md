@@ -41,11 +41,22 @@ Performance of MDBC is improved in some cases over the JDBC mode of the Database
 
 MDBC is an extension to the Database Toolbox, not a replacement for it. But you still need to use the new API and objects that MDBC provides, instead of using the regular Database Toolbox API.
 
+## Advanced Excel I/O
+
+The `jl.office` package provides an [API for reading and writing Excel files](https://github.com/apjanke/janklab/blob/master/doc/UserGuide-OfficeIO.md) without using the Excel application itself.
+This provides support for a bunch of Excel features and formatting control, and is [suitable for server-side automation](https://support.microsoft.com/en-us/help/257757/considerations-for-server-side-automation-of-office), unlike Matlab’s `xlsread` and `xlswrite` functions.
+
+If there is user demand for it, I’ll add support for Word, PowerPoint, and other Office file types.
+
 ## Data Structures
 
 ### Symbol
 
 The `symbol` type is a compact way of representing low-cardinality sets of strings that supports low memory usage and fast equality comparison. It is similar to Matlab's `categorical` type, but uses a global symbol space, and is integrated with Janklab I/O features.
+
+## Advanced FTP Client
+
+The `jl.net.ftp.FtpClient` class is an FTP client that provides more features than Matlab’s `@ftp` class, including support for Passive Mode transfers, which are often required when you’re behind a corporate firewall.
 
 ## Monkeypatches
 
