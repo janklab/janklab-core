@@ -23,6 +23,7 @@ classdef CellStyle < handle
     fillForegroundColor
     fillForegroundColorIndex
     fillPattern
+    font
     fontIndex
     horizontalAlignment
     hidden
@@ -162,6 +163,11 @@ classdef CellStyle < handle
     
     function out = get.fontIndex(this)
       out = this.j.getFontIndex + 1;
+    end
+    
+    function set.font(this, font)
+      mustBeA(font, 'jl.office.excel.Font');
+      this.j.setFont(font.j);
     end
     
     function out = get.hidden(this)

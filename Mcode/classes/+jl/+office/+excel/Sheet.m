@@ -669,8 +669,11 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
           end
         end
       end
+      headerFont = this.workbook.createFont;
+      headerFont.bold = true;
       colHeaderCellStyle = this.workbook.createCellStyle;
       colHeaderCellStyle.horizontalAlignment = jl.office.excel.HorizontalAlignment.Center;
+      colHeaderCellStyle.font = headerFont;
       colHeadersStart = startAddress + colHeaderOffset;
       ixCol1 = colHeadersStart.column;
       ixCol = ixCol1;
