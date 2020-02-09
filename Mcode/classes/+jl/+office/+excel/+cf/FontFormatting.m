@@ -1,0 +1,79 @@
+classdef FontFormatting < handle
+  %FONTFORMATTING 
+  
+  properties
+    j
+  end
+  
+  properties (Dependent)
+    escapementType
+    fontColor
+    fontColorIndex
+    fontHeight
+    isBold
+    isItalic
+    isStruckout
+    underlineType
+  end
+  
+  methods
+    
+    function this = FontFormatting(jObj)
+      if nargin == 1
+        return
+      end
+      mustBeA(jObj, 'org.apache.poi.ss.usermodel');
+      this.j = jObj;
+    end
+    
+    function resetFontStyle(this)
+      this.j.resetFontStyle;
+    end
+    
+    function out = get.escapementType(this)
+      out = jl.office.excel.cf.EscapementType.ofJava(this.j.getEscapementType);
+    end
+
+    function set.escapementType(this, val)
+      mustBeA(val, 'jl.office.excel.cf.EscapementType');
+      this.j.setEscapementType(val.toJava);
+    end
+    
+    function out = get.fontColor(this)
+      out = jl.office.excel.Color(this.j.getFontColor);
+    end
+    
+    function set.fontColor(this, val)
+      mustBeA(val, 'jl.office.excel.Color');
+      this.j.setFontColor(val.j);
+    end
+    
+    function out = get.fontColorIndex(this)
+      out = this.j.getFontColorIndex;
+    end
+    
+    function set.fontColorIndex(this, val)
+      this.j.setFontColorIndex(val);
+    end
+    
+    function out = get.fontHeight(this)
+      out = this.j.getFontHeight;
+    end
+    
+    function set.fontHeight(this, val)
+      this.j.setFontHeight(val);
+    end
+    
+    function out = get.underlineType(this)
+      out = jl.office.excel.cf.UnderlineType.ofJava(this.j.getUnderlineType);
+    end
+    
+    function set.underlineType(this, val)
+      mustBeA(val, 'jl.office.excel.cf.UnderlineType');
+      this.j.setUnderlineType(val.toJava);
+    end
+    
+  end
+  
+end
+

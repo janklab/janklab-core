@@ -99,7 +99,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
       if isempty(jObj)
         out = [];
       else
-        out = this.wrapFilterConfigurationObject(jObj);
+        out = this.wrapConditionFilterDataObject(jObj);
       end
     end
     
@@ -108,7 +108,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
       if isempty(jObj)
         out = [];
       else
-        out = this.wrapConditionFontFormattingObject(jObj);
+        out = this.wrapFontFormattingObject(jObj);
       end
     end
     
@@ -172,7 +172,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
   methods (Abstract, Access = protected)
     out = wrapBorderFormattingObject(this, jObj)
     out = wrapDataBarFormattingObject(this, jObj)
-    out = wrapFilterConfigurationObject(this, jObj)
+    out = wrapConditionFilterDataObject(this, jObj)
     out = wrapFontFormattingObject(this, jObj)
     out = wrapIconMultiStateFormattingObject(this, jObj)
     out = wrapExcelNumberFormatObject(this, jObj)
