@@ -1,5 +1,10 @@
 classdef Sheet < jl.office.excel.Sheet
   
+  properties (Dependent)
+    header
+    footer
+  end
+  
   methods
     
     function this = Sheet(workbook, jObj)
@@ -13,6 +18,14 @@ classdef Sheet < jl.office.excel.Sheet
       end
       this.cells = jl.office.excel.FriendlyCellView(this);
       this.jIoHelper = net.janklab.office.excel.SheetIOHelper(jObj);
+    end
+    
+    function out = get.footer(this)
+      out = jl.office.excel.HeaderFooter(this.j.getFooter);
+    end
+    
+    function out = get.header(this)
+      out = jl.office.excel.HeaderFooter(this.j.getHeader);
     end
     
   end
