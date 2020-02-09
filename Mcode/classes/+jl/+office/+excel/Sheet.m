@@ -9,7 +9,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
-  % TODO: Margins
   % TODO: Format-specific stuff
   
   properties (SetAccess = protected)
