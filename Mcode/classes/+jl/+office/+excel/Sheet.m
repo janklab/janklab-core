@@ -2,7 +2,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
   % TODO: readTable()
-  % TODO: Hyperlinks
   % TODO: PaneInformation
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
@@ -218,6 +217,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     
     function out = getCellComments(this)
       UNIMPLEMENTED
+      % TODO: Decide how to represent a map<CellAddress,Comment> object
     end
     
     function out = getColumnBreaks(this)
@@ -551,6 +551,16 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     
     function validateMergedRegions(this)
       this.j.validateMergedRegions;
+    end
+    
+    function out = getHyperlink(this, cellAddress)
+      cellAddress = jl.office.excel.CellAddress(cellAddress);
+      jHyperlink = this.j.getHyperlink(cellAddress.j);
+      out = jl.office.excel.Hyperlink(jHyperlink);
+    end
+    
+    function out = getHyperlinkList(this)
+      UNIMPLEMENTED
     end
     
     function out = readRangeNumeric(this, rangeAddress)
