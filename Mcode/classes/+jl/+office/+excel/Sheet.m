@@ -5,7 +5,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: DataValidation
   % TODO: Hyperlinks
   % TODO: PaneInformation
-  % TODO: PrintSetup, repeatingColumns/Rows
+  % TODO: repeatingColumns/Rows
   % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
