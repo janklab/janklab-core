@@ -122,6 +122,20 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       end
       out = this.wrapRowObject(jRow);
     end
+
+    function out = getCell(this, ixRow, ixCol)
+      row = this.getRow(ixRow);
+      if isempty(row)
+        out = [];
+        return
+      end
+      out = row.getCell(ixCol);
+    end
+    
+    function out = vivifyCell(this, ixRow, ixCol)
+      row = this.vivifyRow(ixRow);
+      out = row.vivifyCell(ixCol);
+    end
     
     function out = addMergedRegion(this, region)
       % Add a merged region of cells
@@ -623,6 +637,12 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
           val = t{:,iVar};
           varName = t.Properties.VariableNames{iVar};
           this.cells{ixRow,ixCol} = varName;
+          c = this.getCell(ixRow, ixCol);
+          cellStyle = c.cellStyle;
+          if opts.BoldColHeaders
+            % TODO: Bold the text
+          end
+          cellStyle.horizontalAlignment = jl.office.excel.HorizontalAlignment.Center;
           if isa(val, 'table')
             nestedTblWidth = jl.util.tables.flatWidth(val);
             this.addMergedRegion([ixRow, ixCol, ixRow, ixCol + nestedTblWidth - 1]);

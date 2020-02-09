@@ -84,7 +84,8 @@ classdef HorizontalAlignment < jl.util.Displayable
   methods (Access = protected)
     
     function out = dispstr_scalar(this)
-      out = sprintf('[HorizontalAlignment: %s]', this.name);
+      out = sprintf('[HorizontalAlignment: %s (%s)]', this.name, ...
+        char(this.toJava.toString));
     end
     
   end
