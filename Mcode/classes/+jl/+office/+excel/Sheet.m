@@ -5,7 +5,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: DataValidation
   % TODO: Hyperlinks
   % TODO: PaneInformation
-  % TODO: repeatingColumns/Rows
+  % TODO: repeatingColumns/Rows - needs sheet-referenced range addrs?
   % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
