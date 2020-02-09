@@ -218,6 +218,13 @@ classdef CellRangeAddress < jl.util.DisplayableHandle
       this.j.validate(spreadsheetVersion.j);
     end
     
+    function out = toJavaArray(obj)
+      out = javaArray('org.apache.poi.ss.util.CellRangeAddress', numel(obj));
+      for i = 1:numel(obj)
+        out(i) = obj(i).j;
+      end
+    end
+    
   end
   
   methods (Access = protected)
