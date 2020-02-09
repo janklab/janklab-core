@@ -32,9 +32,9 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 cell.setCellFormula(data[i]);
                 ++i;
             }
@@ -45,9 +45,9 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 cell.setCellValue(data[i]);
                 ++i;
             }
@@ -58,9 +58,9 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 cell.setCellValue(data[i]);
                 ++i;
             }
@@ -71,9 +71,9 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 cell.setCellValue(data[i]);
                 ++i;
             }
@@ -84,9 +84,9 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.size());
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 cell.setCellValue(data.get(i));
                 ++i;
             }
@@ -104,12 +104,12 @@ public class SheetIOHelper {
         checkRangeSizeAgainstInputData(rangeAddr, data.length);
         int i = 0;
         for (int ixRow = rangeAddr.getFirstRow(); ixRow <= rangeAddr.getLastRow(); ixRow++) {
-            Row row = sheet.getRow(ixRow);
+            Row row = vivifyRow(sheet, ixRow);
             if (row == null) {
                 throw new RuntimeException("Row index out of range: " + ixRow);
             }
             for (int ixCol = rangeAddr.getFirstColumn(); ixCol <= rangeAddr.getLastColumn(); ixCol++) {
-                Cell cell = row.getCell(ixCol);
+                Cell cell = vivifyCell(row, ixCol);
                 if (cell == null) {
                     throw new RuntimeException("Column index out of range: " + ixCol);
                 }
@@ -229,5 +229,20 @@ public class SheetIOHelper {
         return out;
     }
 
+    private Row vivifyRow(Sheet sheet, int ixRow) {
+        Row out = sheet.getRow(ixRow);
+        if (out == null) {
+            out = sheet.createRow(ixRow);
+        }
+        return out;
+    }
+
+    private Cell vivifyCell(Row row, int ixCol) {
+        Cell out = row.getCell(ixCol);
+        if (out == null) {
+            out = row.createCell(ixCol);
+        }
+        return out;
+    }
 
 }

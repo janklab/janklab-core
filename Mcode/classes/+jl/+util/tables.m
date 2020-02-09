@@ -2,6 +2,7 @@ classdef tables
     %TABLES Utilities for working with table objects
     
     methods (Static = true)
+      
         function out = tableFromVectors(varargin)
             %TABLEFROMVECTORS Construct a table from row or column vector inputs
             %
@@ -224,6 +225,33 @@ classdef tables
           keysB = b(:,keyCols);
           tf = ismember(keysA, keysB);
           out = a(~tf,:);
+        end
+        
+        function out = nestingDepth(tbl)
+          mustBeA(tbl, 'table');
+          depth = 1;
+          for i = 1:width(tbl)
+            varName = tbl.Properties.VariableNames{i};
+            varData = tbl.(varName);
+            if isa(varData, 'table')
+              thisDepth = 1 + jl.util.tables.nestingDepth(varData);
+              depth = max(depth, thisDepth);
+            end
+          end
+          out = depth;
+        end
+        
+        function out = flatWidth(tbl)
+          % flatWidth The "flat" width of a table, considering nesting
+          out = 0;
+          for i = 1:numel(tbl.Properties.VariableNames)
+            val = tbl{:,i};
+            if isa(val, 'table')
+              out = out + jl.util.tables.flatWidth(val);
+            else
+              out = out + 1;
+            end
+          end
         end
     end
     

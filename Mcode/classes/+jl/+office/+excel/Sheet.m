@@ -115,6 +115,14 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       out = this.wrapRowObject(jRow);
     end
     
+    function out = vivifyRow(this, index)
+      jRow = this.j.getRow(index - 1);
+      if isempty(jRow)
+        jRow = this.j.createRow(index - 1);
+      end
+      out = this.wrapRowObject(jRow);
+    end
+    
     function out = addMergedRegion(this, region)
       % Add a merged region of cells
       %
@@ -157,9 +165,9 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     function createFreezePanes(this, colSplit, rowSplit, leftmostColumn, topRow)
       narginchk(3, 5);
       if nargin == 3
-        this.j.createFreezePanes(colSplit - 1, rowSplit - 1);
+        this.j.createFreezePane(colSplit - 1, rowSplit - 1);
       else
-        this.j.createFreezePanes(colSplit - 1, rowSplit - 1, ...
+        this.j.createFreezePane(colSplit - 1, rowSplit - 1, ...
           leftmostColumn - 1, topRow - 1);
       end
     end
@@ -562,6 +570,14 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     end
     
     function writeRange(this, rangeAddress, vals)
+      rangeAddress = jl.office.excel.util.toCellOrRangeAddress(rangeAddress);
+      if isa(rangeAddress, 'jl.office.excel.CellAddress')
+        cellAddr = rangeAddress;
+        rangeAddress = jl.office.excel.CellRangeAddress([...
+          cellAddr.row, cellAddr.column, ...
+          cellAddr.row + size(vals, 1) - 1, ...
+          cellAddr.column + size(vals, 2) - 1]);
+      end
       if iscategorical(vals)
         this.writeRangeCategorical(rangeAddress, vals);
       elseif isstring(vals) || iscellstr(vals)
@@ -576,6 +592,88 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       end
     end
     
+    function out = writeTable(this, tbl, startAddress, opts)
+      % writeTable Write a table to this sheet
+      %
+      % out = writeTable(this, tbl, startAddress, opts)
+      %
+      % Returns a struct with fields:
+      %   range - a CellRangeAddress indicating the entire written area
+      %   dataStart - a CellAddress indicating where the actual data
+      %           columns start
+      
+      if nargin < 3 || isempty(startAddress); startAddress = 'A1'; end
+      if nargin < 4; opts = []; end
+      opts = jl.office.excel.WriteTableOptions(opts);
+      startAddress = jl.office.excel.CellAddress(startAddress);
+      startRC = startAddress.rc;
+      
+      nestDepth = jl.util.tables.nestingDepth(tbl);
+      dataOffset = [nestDepth 0];
+      colHeaderOffset = [0 0];
+      hasRowNames = ~isempty(tbl.Properties.RowNames);
+      if hasRowNames
+        dataOffset(2) = 1;
+      end
+      
+      % Write col headers
+      function writeColHeadersRecursive(t, ixRow)
+        nVars = numel(t.Properties.VariableNames);
+        for iVar = 1:nVars
+          val = t{:,iVar};
+          varName = t.Properties.VariableNames{iVar};
+          fprintf('Write col header: %s at (%d,%d)\n', varName, ixRow, ixCol);
+          this.cells{ixRow,ixCol} = varName;
+          if isa(val, 'table')
+            nestedTblWidth = jl.util.tables.flatWidth(val);
+            this.addMergedRegion([ixRow, ixCol, ixRow, ixCol + nestedTblWidth - 1]);
+            writeColHeadersRecursive(val, ixRow + 1);
+            ixCol = ixCol + nestedTblWidth;
+          else
+            ixCol = ixCol + 1;
+          end
+        end
+      end
+      colHeadersStart = startAddress + colHeaderOffset;
+      ixCol1 = colHeadersStart.column;
+      ixCol = ixCol1;
+      writeColHeadersRecursive(tbl, colHeadersStart.row);
+      
+      % Maybe write row names
+      if hasRowNames
+        this.writeRange(startAddress + [nestDepth 0], tbl.Properties.RowNames);
+      end
+      
+      % Write contained data
+      ixRow = startRC(1) + dataOffset(1);
+      ixCol = startRC(2) + dataOffset(2);
+      function writeTableDataRecursive(t)
+        for iVar = 1:width(t)
+          val = t{:,iVar};
+          if isa(val, 'table')
+            writeTableDataRecursive(val);
+          else
+            this.writeRange([ixRow ixCol], val);
+            ixCol = ixCol + 1;
+          end
+        end
+      end
+      writeTableDataRecursive(tbl);
+      
+      % Formatting
+      dataStartAddr = startAddress + dataOffset;
+      if opts.FreezePanes
+        this.createFreezePanes(dataStartAddr.column, dataStartAddr.row);
+      end
+      % TODO: Auto-size columns
+      
+      % Package output
+      out.range = jl.office.excel.CellRangeAddress([ ...
+        startRC(1), startRC(2), startRC(1) + dataOffset(1) + height(tbl), ...
+        startRC(2) + dataOffset(2) + jl.util.tables.flatWidth(tbl)]);
+      out.dataStart = dataStartAddr;
+    end
+    
   end
 
   methods (Access = protected)
@@ -583,13 +681,15 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     function writeRangeGeneric(this, rangeAddress, vals)
       rowMajorVals = vals';
       rowMajorVals = rowMajorVals(:);
-      this.jIoHelper.writeRange(rangeAddress, rowMajorVals);
+      this.jIoHelper.writeRange(rangeAddress.j, rowMajorVals);
     end
     
     function writeRangeDatetime(this, rangeAddress, vals)
       %TODO: Need to figure out cell formatting in addition to the value
       %conversion.
-      UNIMPLEMENTED
+      warning('Writing dates as strings')
+      strVals = string(cellstr(datestr(vals)));
+      this.writeRangeString(rangeAddress, strVals);
     end
 
     function writeRangeString(this, rangeAddress, vals)
@@ -597,7 +697,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       rowMajorVals = vals';
       rowMajorVals = rowMajorVals(:);
       jVals = jl.util.java.convertMatlabStringsToJava(rowMajorVals);
-      this.jIoHelper.writeRange(rangeAddress, jVals);
+      this.jIoHelper.writeRange(rangeAddress.j, jVals);
     end
     
     function writeRangeCategorical(this, rangeAddress, vals)
@@ -607,7 +707,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       jCodes = jCodes'; % row-major-ify
       jCodes = jCodes(:);
       jCtgArray = net.janklab.util.CategoricalArrayList(jCodes, jLevelStrs);
-      this.jIoHelper.writeRange(rangeAddress, jCtgArray);
+      this.jIoHelper.writeRange(rangeAddress.j, jCtgArray);
     end
     
     function this = Sheet

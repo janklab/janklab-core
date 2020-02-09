@@ -9,6 +9,7 @@ classdef CellAddress < jl.util.DisplayableHandle
     row
     column
     a1
+    rc
   end
   
   methods (Static)
@@ -97,24 +98,44 @@ classdef CellAddress < jl.util.DisplayableHandle
           this.j = org.apache.poi.ss.util.CellAddress(arg);
         elseif ischar(arg) || isstring(arg)
           this.j = org.apache.poi.ss.util.CellAddress(arg);
+        elseif isnumeric(arg)
+          if numel(arg) ~= 2
+            error('jl:InvalidInput', 'Numeric input must be 2 long, got %d', ...
+              numel(arg));
+          end
+          this.j = org.apache.poi.ss.util.CellAddress(arg(1) - 1, arg(2) - 1);
         end
       elseif nargin == 2
-        this.j = org.apache.poi.ss.util.CellAddress(varargin{1}, varargin{2});
+        this.j = org.apache.poi.ss.util.CellAddress(varargin{1} - 1, varargin{2} - 1);
       else
         error('jl:InvalidInput', 'Invalid inputs');
       end
     end
         
     function out = get.row(this)
-      out = this.j.getRow;
+      out = this.j.getRow + 1;
     end
     
     function out = get.column(this)
-      out = this.j.getColumn;
+      out = this.j.getColumn + 1;
     end
     
     function out = get.a1(this)
       out = jl.office.excel.CellAddress.rcToA1(this.row, this.column);
+    end
+    
+    function out = get.rc(this)
+      out = [this.row this.column];
+    end
+    
+    function out = plus(this, offset)
+      newRow = this.row + offset(1);
+      newCol = this.column + offset(2);
+      out = jl.office.excel.CellAddress(newRow, newCol);
+    end
+    
+    function out = minus(this, offset)
+      out = plus(this, -1 * offset);
     end
     
   end

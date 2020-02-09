@@ -101,6 +101,14 @@ classdef (Abstract) Row < jl.util.DisplayableHandle
       out = this.wrapCellObject(jCell);
     end
     
+    function out = vivifyCell(this, ixCol)
+      jCell = this.j.getCell(ixCol - 1);
+      if isempty(jCell)
+        jCell = this.j.createCell(ixCol - 1);
+      end
+      out = this.wrapCellObject(jCell);
+    end
+    
   end
   
   methods (Access = protected)

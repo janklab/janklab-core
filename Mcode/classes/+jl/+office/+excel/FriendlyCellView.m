@@ -29,16 +29,10 @@ classdef FriendlyCellView < handle
     end
     
     function setValueAt(this, ixRow, ixCol, val)
-      if ixRow > this.sheet.nRows
-        row = this.sheet.createRow(ixRow);
-      else
-        row = this.sheet.getRow(ixRow);
-      end
-      if ixCol > row.nCells
-        c = row.createCell(ixCol);
-      else
-        c = row.getCell(ixCol);
-      end
+      fprintf('FCV: setValue: (%d, %d) -> %s\n', ...
+        ixRow, ixCol, dispstr(val));
+      row = this.sheet.vivifyRow(ixRow);
+      c = row.vivifyCell(ixCol);
       c.value = val;
     end
     
