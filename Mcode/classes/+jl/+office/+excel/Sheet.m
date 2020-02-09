@@ -1,7 +1,7 @@
 classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
-  % TODO: writeTable(), readTable()
+  % TODO: readTable()
   % TODO: Format-specific stuff
   % TODO: DataValidation
   % TODO: Header and Footer
@@ -11,6 +11,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % TODO: ConditionalFormatting
   % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
+  % TODO: Margins
   
   properties (SetAccess = protected)
     % The underlying POI XSSFSheet object
@@ -611,11 +612,22 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       %
       % out = writeTable(this, tbl, startAddress, opts)
       %
+      % Tbl is a table array that contains the data to write.
+      %
+      % StartAddress is a jl.office.excel.CellAddress or something that can be
+      % converted to one (such as an 'A1' char address or a [row col] numeric
+      % address).
+      %
+      % opts is a jl.office.excel.WriteTableOptions, or something that can be
+      % converted to one, such as a name/val cell vector or a struct.
+      %
       % Returns a struct with fields:
       %   range - a CellRangeAddress indicating the entire written area
       %   dataStart - a CellAddress indicating where the actual data
       %           columns start
-      
+      %
+      % See also:
+      % jl.office.excel.WriteTableOptions
       if nargin < 3 || isempty(startAddress); startAddress = 'A1'; end
       if nargin < 4; opts = []; end
       opts = jl.office.excel.WriteTableOptions(opts);
