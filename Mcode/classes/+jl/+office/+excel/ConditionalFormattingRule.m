@@ -5,6 +5,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
   end
   
   properties (Dependent)
+    borderFormatting
     colorScaleFormatting
     comparisonOperation
     conditionFilterType
@@ -43,6 +44,15 @@ classdef (Abstract) ConditionalFormattingRule < handle
     function out = createPatternFormatting(this)
       out = this.wrapPatternFormattingObject(this.j.createPatternFormatting);
     end
+    
+    function out = get.borderFormatting(this)
+      jObj = this.j.getBorderFormatting;
+      if isempty(jObj)
+        out = [];
+      else
+        out = this.wrapBorderFormattingObject(jObj);
+      end
+    end    
     
     function out = get.colorScaleFormatting(this)
       jObj = this.j.getColorScaleFormatting;
