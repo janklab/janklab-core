@@ -43,7 +43,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     verticallyCenter
     leftCol
     topRow
-    margin
     physicalNumberOfRows
     isProtected
     isRightToLeft
