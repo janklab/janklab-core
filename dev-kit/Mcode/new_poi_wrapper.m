@@ -2,7 +2,9 @@ function new_poi_wrapper(javaClass, matlabClass)
 
 if nargin < 2 || isempty(matlabClass)
   matlabClass = regexprep(javaClass, '.*\.', '');
+  matlabClass = regexprep(matlabClass, '(H|X)SSF', '');
 end
+
 
 boilerplate = sprintf(strjoin({
   'classdef %s < handle'

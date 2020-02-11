@@ -30,7 +30,7 @@ classdef (Abstract) Chart < jl.office.excel.draw.ManuallyPositionable
   end
 
   methods (Abstract)
-    out = getAxis(this)
+    out = getAxes(this)
     out = getChartAxisFactory(this)
     out = getChartDataFactory(this)
     out = getOrCreateLegend(this)
