@@ -1,7 +1,7 @@
 classdef Hyperlink < jl.util.DisplayableHandle
   
   properties
-    % The underlying POI Hyperlink object
+    % The underlying POI org.apache.poi.ss.usermodel.Hyperlink Java object
     j
   end
   

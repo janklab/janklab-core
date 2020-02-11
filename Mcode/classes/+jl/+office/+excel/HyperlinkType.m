@@ -1,7 +1,15 @@
-classdef HyperlinkType
+classdef HyperlinkType < handle
+  
+  properties
+    j
+  end
   
   enumeration
-    Document, Email, File, None, Url
+    Document(org.apache.poi.common.usermodel.HyperlinkType.DOCUMENT)
+    Email(org.apache.poi.common.usermodel.HyperlinkType.EMAIL)
+    File(org.apache.poi.common.usermodel.HyperlinkType.FILE)
+    None(org.apache.poi.common.usermodel.HyperlinkType.NONE)
+    Url(org.apache.poi.common.usermodel.HyperlinkType.URL)
   end
   
   methods (Static)
@@ -22,6 +30,22 @@ classdef HyperlinkType
       else
         error('jl:InvalidInput', 'Invalid input');
       end
+    end
+    
+  end
+  
+  methods
+    
+    function out = toJava(this)
+      out = this.j;
+    end
+    
+  end
+  
+  methods (Access = private)
+    
+    function this = HyperlinkType(jObj)
+      this.j = jObj;
     end
     
   end

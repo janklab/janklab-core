@@ -559,7 +559,16 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     end
     
     function out = getHyperlinkList(this)
-      UNIMPLEMENTED
+      jList = this.j.getHyperlinkList;
+      out = repmat(jl.office.excel.xlsx.Hyperlink, [1 jList.size]);
+      for i = 1:numel(out)
+        out(i) = jList.get(i - 1);
+      end
+    end
+    
+    function addValidationData(this, dataValidation)
+      mustBeA(dataValidation, 'jl.office.excel.DataValidation');
+      this.j.addValidationData(dataValidation.j);
     end
     
     function out = readRangeNumeric(this, rangeAddress)
@@ -824,6 +833,10 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
         this.name);
     end
     
+  end
+  
+  methods (Abstract)
+    out = createDrawingPatriarch(this)
   end
   
   methods (Abstract, Access = protected)

@@ -5,7 +5,7 @@ classdef (Abstract) DataFormatTable < jl.util.DisplayableHandle
   % used in a workbook.
   
   properties
-    % The underlying Java POI object
+    % The underlying org.apache.poi.ss.usermodel.DataFormat Java POI object
     j
   end
   

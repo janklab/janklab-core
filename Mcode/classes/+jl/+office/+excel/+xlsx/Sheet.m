@@ -70,6 +70,46 @@ classdef Sheet < jl.office.excel.Sheet
       out = jl.office.excel.HeaderFooter(this.j.getHeader);
     end
     
+    function addHyperlink(this, hyperlink)
+      mustBeA(hyperlink, 'jl.office.excel.xlsx.Hyperlink');
+      this.addHyperlink(hyperlink.j);
+    end
+    
+    function addIgnoredErrors(this, region, ignoredErrorTypes)
+      mustBeA(ignoredErrorTypes, 'jl.office.excel.IgnoredErrorType');
+      if ~isa(region, 'jl.office.excel.CellRangeAddress') ...
+          && ~isa(region, 'jl.office.excel.CellReference')
+        error(['region must be a jl.office.excel.CellRangeAddress or a '...
+          'jl.office.excel.CellReference; got a %s'], class(region));
+      end
+      this.j.addIgnoredErrors(region.j, ignoredErrorTypes.toJavaArray);
+    end
+    
+    function out = createDrawingPatriarch(this)
+      jObj = this.j.createDrawingPatriarch;
+      out = jl.office.excel.xlsx.draw.Drawing(jObj);
+    end
+    
+    function out = createPivotTable(this, source, position, sourceSheet)
+      if nargin < 4; sourceSheet = []; end
+      mustBeA(position, 'jl.office.excel.CellReference');
+      if ~isempty(sourceSheet)
+        mustBeA(sourceSheet, 'jl.office.excel.Sheet');
+      end
+      if ~isa(source, 'jl.office.excel.AreaReference') ...
+          && ~isa(source, 'jl.office.excel.Name') ...
+          && ~isa(source, 'jl.office.excel.Table')
+        error(['source must be a jl.office.excel.AreaReference, jl.office.excel.Name, ' ...
+          'or jl.office.excel.Table; got a %s'], class(source));
+      end
+      if nargin < 4
+        jObj = this.j.createPivotTable(source.j, position.j);
+      else
+        jObj = this.j.createPivotTable(source.j, position.j, sourceSheet.j);
+      end
+      out = jl.office.excel.xlsx.PivotTable(jObj);
+    end
+    
   end
   
   methods (Access = protected)
