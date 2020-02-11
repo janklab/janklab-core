@@ -97,7 +97,11 @@ classdef SimpleShape < jl.office.excel.draw.SimpleShape & jl.office.excel.xlsx.d
     end
     
     function out = getTextParagraphs(this)
-      UNIMPLEMENTED
+      jList = this.j.getTextParagraphs;
+      out = repmat(jl.office.excel.xlsx.TextParagraph, [1 jList.size]);
+      for i = 1:numel(out)
+        out(i) = jList.get(i - 1);
+      end
     end
     
     function out = get.textVerticalOverflow(this)
