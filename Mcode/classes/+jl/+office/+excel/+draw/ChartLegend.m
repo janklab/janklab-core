@@ -1,4 +1,4 @@
-classdef ChartLegend < handle
+classdef ChartLegend < jl.office.excel.draw.ManuallyPositionable
   %CHARTLEGEND
   
   properties

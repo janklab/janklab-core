@@ -1,4 +1,4 @@
-classdef (Abstract) Chart < handle
+classdef (Abstract) Chart < jl.office.excel.draw.ManuallyPositionable
   %CHART
   
   properties (SetAccess = protected)
@@ -6,6 +6,14 @@ classdef (Abstract) Chart < handle
   end
   
   methods
+    
+    function this = ChartLegend(jObj)
+      if nargin == 0
+        return
+      end
+      mustBeA(jObj, 'org.apache.poi.ss.usermodel.Chart');
+      this.j = jObj;
+    end
     
     function deleteLegend(this)
       this.j.deleteLegend;
