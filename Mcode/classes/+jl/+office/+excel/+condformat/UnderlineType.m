@@ -17,15 +17,15 @@ classdef UnderlineType
     
     function out = ofJava(jVal)
       if jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.U_DOUBLE)
-        out = jl.office.excel.cf.UnderlineType.Double;
+        out = jl.office.excel.condformat.UnderlineType.Double;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.U_DOUBLE_ACCOUNTING)
-        out = jl.office.excel.cf.UnderlineType.DoubleAccounting;
+        out = jl.office.excel.condformat.UnderlineType.DoubleAccounting;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.U_NONE)
-        out = jl.office.excel.cf.UnderlineType.None;
+        out = jl.office.excel.condformat.UnderlineType.None;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.U_SINGLE)
-        out = jl.office.excel.cf.UnderlineType.Single;
+        out = jl.office.excel.condformat.UnderlineType.Single;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.U_SINGLE_ACCOUNTING)
-        out = jl.office.excel.cf.UnderlineType.SingleAccounting;
+        out = jl.office.excel.condformat.UnderlineType.SingleAccounting;
       else
         BADSWITCH
       end

@@ -15,11 +15,11 @@ classdef EscapementType
     
     function out = ofJava(jVal)
       if jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.SS_NONE)
-        out = jl.office.excel.cf.EscapementType.None;
+        out = jl.office.excel.condformat.EscapementType.None;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.SS_SUB)
-        out = jl.office.excel.cf.EscapementType.Sub;
+        out = jl.office.excel.condformat.EscapementType.Sub;
       elseif jVal.equals(org.apache.poi.ss.usermodel.FontFormatting.SS_SUB)
-        out = jl.office.excel.cf.EscapementType.Super;
+        out = jl.office.excel.condformat.EscapementType.Super;
       else
         BADSWITCH
       end

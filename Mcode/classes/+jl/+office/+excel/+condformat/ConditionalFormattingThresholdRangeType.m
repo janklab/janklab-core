@@ -29,25 +29,25 @@ classdef ConditionalFormattingThresholdRangeType
         out = [];
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'FORMULA'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Formula;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Formula;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'MAX'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Max;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Max;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'MIN'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Min;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Min;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'NUMBER'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Number;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Number;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'PERCENT'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Percent;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Percent;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'PERCENTILE'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Percentile;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Percentile;
       elseif jObj.equals(jl.util.java.getStaticFieldOnClass(...
           'org.apache.poi.ss.usermodel.ConditionalFormattingThreshold$RangeType', 'UNALLOCATED'))
-        out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.Unallocated;
+        out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.Unallocated;
       else
         BADSWITCH
       end

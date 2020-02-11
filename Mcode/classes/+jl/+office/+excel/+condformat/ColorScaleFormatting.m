@@ -44,7 +44,7 @@ classdef (Abstract) ColorScaleFormatting < handle
     end
     
     function set.thresholds(this, val)
-      mustBeA(val, 'jl.office.excel.cf.ConditionalFormattingThresholdRangeType');
+      mustBeA(val, 'jl.office.excel.condformat.ConditionalFormattingThresholdRangeType');
       this.j.setThresholds(val.toJavaArray);
     end
     

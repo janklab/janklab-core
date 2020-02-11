@@ -35,11 +35,11 @@ classdef DataBarFormatting < handle
     end
     
     function out = get.maxThreshold(this)
-      out = jl.office.excel.cf.ConditionalFormattingThreshold(this.j.getMaxThreshold);
+      out = jl.office.excel.condformat.ConditionalFormattingThreshold(this.j.getMaxThreshold);
     end
     
     function out = get.minThreshold(this)
-      out = jl.office.excel.cf.ConditionalFormattingThreshold(this.j.getMinThreshold);
+      out = jl.office.excel.condformat.ConditionalFormattingThreshold(this.j.getMinThreshold);
     end
     
     function out = get.widthMax(this)

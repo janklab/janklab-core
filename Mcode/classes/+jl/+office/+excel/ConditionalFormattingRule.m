@@ -82,7 +82,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
     end
     
     function out = get.conditionType(this)
-      out = jl.office.excel.cf.ConditionType(this.j.getConditionType);
+      out = jl.office.excel.condformat.ConditionType(this.j.getConditionType);
     end
     
     function out = get.dataBarFormatting(this)
@@ -164,7 +164,7 @@ classdef (Abstract) ConditionalFormattingRule < handle
   methods (Access = protected)
     
     function out = wrapConditionFilterTypeObject(this, jObj)
-      out = jl.office.excel.cf.ConditionFilterType.ofJava(jObj);
+      out = jl.office.excel.condformat.ConditionFilterType.ofJava(jObj);
     end
   
     function out = wrapPatternFormattingObject(this, jObj)

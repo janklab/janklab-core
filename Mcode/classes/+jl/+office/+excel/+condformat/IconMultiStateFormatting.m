@@ -23,20 +23,20 @@ classdef IconMultiStateFormatting < handle
     end
         
     function out = get.iconSet(this)
-      out = jl.office.excel.cf.IconMultiStateFormattingIconSet.ofJava(this.getIconSet);
+      out = jl.office.excel.condformat.IconMultiStateFormattingIconSet.ofJava(this.getIconSet);
     end
     
     function set.iconSet(this, val)
-      mustBeA(val, 'jl.office.excel.cf.IconMultiStateFormattingIconSet');
+      mustBeA(val, 'jl.office.excel.condformat.IconMultiStateFormattingIconSet');
       this.j.setIconSet(val.j);
     end
     
     function out = get.thresholds(this)
-      out = jl.office.excel.cf.ConditionalFormattingThreshold(this.j.getThresholds);
+      out = jl.office.excel.condformat.ConditionalFormattingThreshold(this.j.getThresholds);
     end
     
     function set.thresholds(this, val)
-      mustBeA(val, 'jl.office.excel.cf.ConditionalFormattingThreshold');
+      mustBeA(val, 'jl.office.excel.condformat.ConditionalFormattingThreshold');
       this.j.setThresholds(val.toJavaArray);
     end
     

@@ -36,7 +36,7 @@ classdef ConditionalFormattingThreshold < handle
     end
     
     function set.rangeType(this, val)
-      mustBeA(val, 'jl.office.excel.cf.ConditionalFormattingThresholdRangeType');
+      mustBeA(val, 'jl.office.excel.condformat.ConditionalFormattingThresholdRangeType');
       this.j.setRangeType(val.j);
     end
     
@@ -53,7 +53,7 @@ classdef ConditionalFormattingThreshold < handle
   methods (Access = protected)
     
     function out = wrapRangeTypeObject(this, jObj)
-      out = jl.office.excel.cf.ConditionalFormattingThresholdRangeType.ofJava(jObj);
+      out = jl.office.excel.condformat.ConditionalFormattingThresholdRangeType.ofJava(jObj);
     end
     
   end

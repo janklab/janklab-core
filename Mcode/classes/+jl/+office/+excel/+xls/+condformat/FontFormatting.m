@@ -1,4 +1,4 @@
-classdef FontFormatting < jl.office.excel.cf.FontFormatting
+classdef FontFormatting < jl.office.excel.condformat.FontFormatting
   %FONTFORMATTING XLS-specific font formatting
   
   properties (Dependent)

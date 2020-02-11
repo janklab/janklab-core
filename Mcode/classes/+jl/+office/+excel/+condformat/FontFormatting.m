@@ -31,11 +31,11 @@ classdef (Abstract) FontFormatting < handle
     end
     
     function out = get.escapementType(this)
-      out = jl.office.excel.cf.EscapementType.ofJava(this.j.getEscapementType);
+      out = jl.office.excel.condformat.EscapementType.ofJava(this.j.getEscapementType);
     end
 
     function set.escapementType(this, val)
-      mustBeA(val, 'jl.office.excel.cf.EscapementType');
+      mustBeA(val, 'jl.office.excel.condformat.EscapementType');
       this.j.setEscapementType(val.toJava);
     end
     
@@ -65,11 +65,11 @@ classdef (Abstract) FontFormatting < handle
     end
     
     function out = get.underlineType(this)
-      out = jl.office.excel.cf.UnderlineType.ofJava(this.j.getUnderlineType);
+      out = jl.office.excel.condformat.UnderlineType.ofJava(this.j.getUnderlineType);
     end
     
     function set.underlineType(this, val)
-      mustBeA(val, 'jl.office.excel.cf.UnderlineType');
+      mustBeA(val, 'jl.office.excel.condformat.UnderlineType');
       this.j.setUnderlineType(val.toJava);
     end
     

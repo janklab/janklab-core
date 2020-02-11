@@ -24,7 +24,23 @@ classdef ComparisonOperator
       if isempty(jVal)
         out = [];
       elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.BETWEEN
-        out = jl.office.excel.cf.ComparisonOperator.Between;
+        out = jl.office.excel.condformat.ComparisonOperator.Between;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.EQUAL
+        out = jl.office.excel.condformat.ComparisonOperator.Equal;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.GE
+        out = jl.office.excel.condformat.ComparisonOperator.GE;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.GT
+        out = jl.office.excel.condformat.ComparisonOperator.GT;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.LE
+        out = jl.office.excel.condformat.ComparisonOperator.LE;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.LT
+        out = jl.office.excel.condformat.ComparisonOperator.LT;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.NO_COMPARISON
+        out = jl.office.excel.condformat.ComparisonOperator.NoComparison;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.NOT_BETWEEN
+        out = jl.office.excel.condformat.ComparisonOperator.NotBetween;
+      elseif jVal == org.apache.poi.ss.usermodel.ComparisonOperator.NOT_EQUAL
+        out = jl.office.excel.condformat.ComparisonOperator.NotEqual;
       else
         BADSWITCH
       end
