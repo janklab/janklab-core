@@ -1,4 +1,4 @@
-classdef ChartLegend
+classdef ChartLegend < handle
   %CHARTLEGEND
   
   properties

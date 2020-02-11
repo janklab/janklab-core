@@ -1,7 +1,7 @@
 classdef (Abstract) Chart < handle
   %CHART
   
-  properties
+  properties (SetAccess = protected)
     j
   end
   

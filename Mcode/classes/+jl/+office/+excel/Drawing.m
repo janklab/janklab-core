@@ -1,7 +1,7 @@
 classdef (Abstract) Drawing < handle
   %DRAWING 
   
-  properties
+  properties (SetAccess = protected)
     % The underlying POI org.apache.poi.ss.usermodel.Drawing Java object
     j
     % The jl.office.excel.xlsx.Sheet this is attached to
