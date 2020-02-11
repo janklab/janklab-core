@@ -8,9 +8,9 @@ end
 
 boilerplate = sprintf(strjoin({
   'classdef %s < handle'
-  '%% %s'
+  '  %% %s'
   ''
-  '  properties'
+  '  properties (SetAccess = private)'
   '    %% The underlying POI %s Java object'
   '    j'
   '  end'

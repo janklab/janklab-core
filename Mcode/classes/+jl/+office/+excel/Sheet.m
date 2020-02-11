@@ -3,7 +3,6 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   
   % TODO: readTable()
   % TODO: PaneInformation
-  % TODO: removeArrayFormula/setArrayFormula
   % TODO: setAutoFilter
   % TODO: Format-specific stuff
   
@@ -53,6 +52,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     repeatingColumns
     repeatingRows
     sheetConditionalFormatting
+    printSetup
   end
   
   methods
@@ -528,6 +528,11 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
       this.j.setRepeatingColumns(val.j);
     end
     
+    function out = get.printSetup(this)
+      jObj = this.j.getPrintSetup;
+      out = this.wrapPrintSetupObject(jObj);
+    end
+    
     function shiftColumns(this, ixStart, ixEnd, n)
       this.j.shiftColumns(ixStart - 1, ixEnd - 1, n);
     end
@@ -569,6 +574,23 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
     function addValidationData(this, dataValidation)
       mustBeA(dataValidation, 'jl.office.excel.DataValidation');
       this.j.addValidationData(dataValidation.j);
+    end
+    
+    function out = setArrayFormula(this, formula, range)
+      mustBeA(range, 'jl.office.excel.CellRangeAddress')
+      jObj = this.j.setArrayFormula(formula, range);
+      out = jl.office.excel.CellRange(jObj);
+    end
+    
+    function out = removeArrayFormula(this, cell)
+      mustBeA(cell, 'jl.office.excel.Cell')
+      jObj = this.j.removeArrayFormula(cell.j);
+      out = jl.office.excel.CellRange(jObj);
+    end
+    
+    function out = getPaneInformation(this)
+      jObj = this.j.getPaneInformation;
+      out = jl.office.excel.PaneInformation(jObj);
     end
     
     function out = readRangeNumeric(this, rangeAddress)
@@ -842,6 +864,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   methods (Abstract, Access = protected)
     out = wrapRowObject(this, jObj)
     out = wrapCellStyleObject(this, jObj)
+    out = wrapPrintSetupObject(this, jObj)
   end
   
 end
