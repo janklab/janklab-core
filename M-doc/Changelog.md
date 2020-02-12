@@ -1,8 +1,11 @@
 Janklab Changelog
 =================
 
-0.2.2 (???)
+0.2.2 (2020-02-12)
 ------------------
+
+* Excel IO: Basic Conditional Formatting support
+* Excel IO: Charting, Print Setup, and a bunch of other classes added
 
 0.2.1 (2020-02-08)
 ------------------
