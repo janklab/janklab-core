@@ -2,9 +2,7 @@ classdef (Abstract) Sheet < jl.util.DisplayableHandle
   % A sheet (worksheet) in an Excel workbook
   
   % TODO: readTable()
-  % TODO: PaneInformation
   % TODO: setAutoFilter
-  % TODO: Format-specific stuff
   
   properties (SetAccess = protected)
     % The underlying POI XSSFSheet object
