@@ -35,7 +35,33 @@ Janklab is a personal project, not a community one. Bug reports and feature requ
 
 ## Installation and use
 
-To use Janklab, install it to your local system by cloning the Git repo.
+### Installing as a Matlab Toolbox
+
+You can install Janklab as a Matlab Toolbox by downloading the `.mltbx` file from one of the [releases](https://github.com/apjanke/janklab/releases) and opening that file in Matlab to install it.
+
+You can download the current release directly from: <https://github.com/apjanke/janklab/releases/download/v0.2.2/Janklab-0.2.2.mltbx>
+
+You must run `init_janklab` inside your Matlab session to initialize the library before using it.
+
+### Installing from a release
+
+You can also use Janklab without installing it as a Matlab Toolbox. Download the [source code archive](https://github.com/apjanke/janklab/archive/v0.2.2.zip) from one of the [releases](https://github.com/apjanke/janklab/releases) and extract it to somewhere on your computer’s hard drive.
+
+In your Matlab session, run the `init_janklab` function found under `dist/Mcode/toplevel` in the repo.
+
+```matlab
+% Example initialization script
+oldDir = pwd;
+
+cd /path/to/janklab/installation/janklab/Mcode/toplevel
+init_janklab
+
+cd(oldDir)
+```
+
+### Running from the repo
+
+If you want the current development version of Janklab, install it to your local system by cloning the Git repo.
 
 ```bash
 git clone https://github.com/apjanke/janklab
