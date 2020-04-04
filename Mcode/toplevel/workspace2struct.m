@@ -5,6 +5,8 @@ function out = workspace2struct()
 %
 % Captures all variables in the caller's workspace and stores them in fields of
 % a struct with corresponding names.
+%
+% Returns a scalar struct.
 
 varnames = evalin('caller', 'who');
 out = struct;
