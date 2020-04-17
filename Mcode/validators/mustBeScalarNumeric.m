@@ -1,5 +1,5 @@
 function mustBeScalarNumeric(x)
-%MUSTBESCALARLOGICAL Validate that value is a scalar logical
+%MUSTBESCALARNUMERIC Validate that value is a scalar logical
 %
 % mustBeScalarNumeric(x)
 %

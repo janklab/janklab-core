@@ -1,7 +1,7 @@
 function mustBeString(x)
 %MUSTBESTRING Validate that value is a string array
 %
-% muutBeString(x)
+% mustBeString(x)
 %
 % Errors if x is not a string, as determined by isstring().
 %

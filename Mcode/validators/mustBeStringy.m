@@ -1,7 +1,7 @@
 function mustBeStringy(x)
 %MUSTBESTRINGY Validate that value is a string array or charvec
 %
-% muutBeStringy(x)
+% mustBeStringy(x)
 %
 % Errors if x is not a string and is not a charvec and is not a cellstr
 %
