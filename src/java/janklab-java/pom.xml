@@ -31,7 +31,8 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.16</version>
-        </dependency>        <!-- Dependencies imposed by Matlab, as of R2018a -->
+        </dependency>        
+        <!-- Dependencies imposed by Matlab, as of R2018a -->
         <!-- This is not a complete set of Matlab's dependencies; just interesting ones. -->
         <dependency>
             <groupId>commons-io</groupId>
