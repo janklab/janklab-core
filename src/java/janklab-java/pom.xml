@@ -5,6 +5,7 @@
     <artifactId>janklab-java</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
+
     <dependencies>
         <!-- Dependencies added by Janklab itself -->
         <dependency>
@@ -31,7 +32,7 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.16</version>
-        </dependency>        
+        </dependency>
         <!-- Dependencies imposed by Matlab, as of R2018a -->
         <!-- This is not a complete set of Matlab's dependencies; just interesting ones. -->
         <dependency>
