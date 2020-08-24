@@ -95,3 +95,9 @@ Janklab makes extensive use of some features not supported by Octave. Parts usin
 * `table`
 * `datetime`
 * Handle object destructors
+
+## Author
+
+Janklab is made by [Andrew Janke](https://apjanke.net).
+
+The project home page is the [Janklab repo on GitHub](https://github.com/apjanke/janklab).
