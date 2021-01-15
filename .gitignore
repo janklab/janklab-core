@@ -16,3 +16,5 @@ Janklab.mltbx
 *.xlsx
 *.xls
 
+# IntelliJ IDEA
+.idea/
