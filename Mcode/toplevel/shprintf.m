@@ -9,7 +9,8 @@ function out = shprintf(fmt, varargin)
 % workspace.
 %
 % Only variable names may be used, not arbitrary Matlab expressions. It is an
-% error if <varname> is not a valid variable name.
+% error if <varname> is not a valid variable name. This is because shprintf is
+% parsing fmt using a simplistic regex that can't handle nested {...} brackets.
 %
 % Examples:
 %

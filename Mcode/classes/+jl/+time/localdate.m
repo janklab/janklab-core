@@ -1,4 +1,4 @@
-classdef localdate
+classdef localdate < jl.util.Displayable
 	%LOCALDATE A calendar date
 	%
 	% A calendar date without a time zone in the ISO-8601 calendar system.
@@ -97,22 +97,38 @@ classdef localdate
 			this.date = date;
 		end
 		
-		function disp(this)
-			%DISP Custom display.
-			if isscalar(this)
-				if isnat(this)
-					out = 'NaT';
-				elseif isinf(this.date)
-					out = num2str(this.date);
-				else
-					out = datestr(this, jl.time.localdate.defaultDateFormat);
-				end
-			else
-				out = sprintf('%s %s', size2str(size(this)), class(this));
-			end
-			disp(out);
-		end
+% 		function disp(this)
+% 			%DISP Custom display.
+% 			if isscalar(this)
+% 				if isnat(this)
+% 					out = 'NaT';
+% 				elseif isinf(this.date)
+% 					out = num2str(this.date);
+% 				else
+% 					out = datestr(this, jl.time.localdate.defaultDateFormat);
+% 				end
+% 			else
+% 				out = sprintf('%s %s', size2str(size(this)), class(this));
+% 			end
+% 			disp(out);
+% 		end
 		
+    function out = dispstrs(this)
+      out = string(cellstr(this));
+    end
+    
+    function out = dispstr(this)
+      if isscalar(this)
+        out = datestr(this);
+      else
+        out = sprintf('%s %s', size2str(size(this)), class(this));
+      end
+    end
+    
+    function disp(this)
+      this.dispMaybeMatrix;
+    end
+    
 		function this = set.date(this, newValue)
 			mustBeValidDateValue(newValue);
 			this.date = newValue;

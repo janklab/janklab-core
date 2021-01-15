@@ -23,7 +23,7 @@ classdef strings
                 else
                     out = jl.util.strings.strlen(cellstr(str));
                 end
-            elseif isstring(str, 'string')
+            elseif isstring(str)
                 out = strlength(str);
             elseif iscellstr(str)
                 out = cellfun('length', str);
