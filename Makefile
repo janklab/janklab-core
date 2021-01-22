@@ -14,5 +14,5 @@ dist:
 # it, so blow it away
 .PHONY: doc
 doc:
-	(cd doc; bundle exec jekyll build --destination ../M-doc)
+	(cd docs; bundle exec jekyll build --destination ../M-doc)
 	rm M-doc/feed.xml
