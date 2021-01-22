@@ -4,9 +4,9 @@ Janklab-core is a general-purpose library of functions, classes, and extensions 
 
 Janklab is informed by my background in quantitive analysis for finance, but should be useful in other application areas as well. It is designed for both interactive Matlab use and for building applications and production Matlab code.
 
-Janklab is not a standalone application. It requires Matlab or the Matlab Compiler Runtime.
+Janklab-core is not a standalone application. It requires Matlab or the Matlab Compiler Runtime.
 
-Janklab provides:
+Janklab-core provides:
 
 * Extended type system
 * Additional date/time classes
@@ -24,7 +24,7 @@ Apache 2.0, with other FOSS licenses for dependencies.
 
 Janklab is licensed under the liberal, business-friendly Apache 2.0 License. You should be able to use it in most any application or environment, as long as you include the information from `NOTICE.txt` in your source distribution and/or user interface.
 
-Janklab depends on and is redistributed with third-party libraries, some of which are covered under other FOSS licenses.
+Janklab-core depends on and is redistributed with third-party libraries, some of which are covered under other FOSS licenses.
 
 * FastUtil - Apache License
 * Apache Commons - Apache License
@@ -39,15 +39,15 @@ Janklab is a personal project, not a community one. Bug reports and feature requ
 
 ### Installing as a Matlab Toolbox
 
-You can install Janklab as a Matlab Toolbox by downloading the `.mltbx` file from one of the [releases](https://github.com/apjanke/janklab/releases) and opening that file in Matlab to install it.
+You can install Janklab-core as a Matlab Toolbox by downloading the `.mltbx` file from one of the [releases](https://github.com/janklab/janklab-core/releases) and opening that file in Matlab to install it.
 
-You can download the current release directly from: <https://github.com/apjanke/janklab/releases/download/v0.2.2/Janklab-0.2.2.mltbx>
+You can download the current release directly from: <https://github.com/janklab/janklab-core/releases/download/v0.2.2/Janklab-0.2.2.mltbx>
 
 You must run `init_janklab` inside your Matlab session to initialize the library before using it.
 
 ### Installing from a release
 
-You can also use Janklab without installing it as a Matlab Toolbox. Download the [source code archive](https://github.com/apjanke/janklab/archive/v0.2.2.zip) from one of the [releases](https://github.com/apjanke/janklab/releases) and extract it to somewhere on your computer’s hard drive.
+You can also use Janklab-core without installing it as a Matlab Toolbox. Download the [source code archive](https://github.com/janklab/janklab-core/archive/v0.2.2.zip) from one of the [releases](https://github.com/janklab/janklab-core/releases) and extract it to somewhere on your computer’s hard drive.
 
 In your Matlab session, run the `init_janklab` function found under `dist/Mcode/toplevel` in the repo.
 
@@ -55,7 +55,7 @@ In your Matlab session, run the `init_janklab` function found under `dist/Mcode/
 % Example initialization script
 oldDir = pwd;
 
-cd /path/to/janklab/installation/janklab/Mcode/toplevel
+cd /path/to/janklab/installation/janklab-core/Mcode/toplevel
 init_janklab
 
 cd(oldDir)
@@ -63,7 +63,7 @@ cd(oldDir)
 
 ### Running from the repo
 
-If you want the current development version of Janklab, install it to your local system by cloning the Git repo.
+If you want the current development version of Janklab-core, install it to your local system by cloning the Git repo.
 
 ```bash
 git clone https://github.com/apjanke/janklab
@@ -75,7 +75,7 @@ In your Matlab session, run the `init_janklab` function found under `dist/Mcode/
 % Example initialization script
 oldDir = pwd;
 
-cd /path/to/janklab/installation/janklab/Mcode/toplevel
+cd /path/to/janklab/installation/janklab-core/Mcode/toplevel
 init_janklab
 
 cd(oldDir)
@@ -103,3 +103,5 @@ Janklab makes extensive use of some features not supported by Octave. Parts usin
 Janklab is made by [Andrew Janke](https://apjanke.net).
 
 The project home page is the [Janklab repo on GitHub](https://github.com/apjanke/janklab).
+
+Thanks to [Polkadot Stingray](https://www.facebook.com/polkadotstingray/) for powering my coding.
