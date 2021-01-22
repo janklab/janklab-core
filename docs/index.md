@@ -2,7 +2,7 @@
 layout: home
 ---
 
-Janklab-core is a general-purpose library of functions, classes, and extensions for Matlab. It is the main "utility" library in the [Janklab](https://janklab.net) library suite.
+[Janklab-core](https://github.com/janklab/janklab-core) is a general-purpose library of functions, classes, and extensions for Matlab. It is the main "utility" library in the [Janklab](https://janklab.net) library suite.
 
 Janklab is informed by my background in quantitive analysis for finance, but should be useful in other application areas as well. It is designed for both interactive Matlab use and for building applications and production Matlab code.
 
