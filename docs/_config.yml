@@ -1,0 +1,47 @@
+title: Janklab
+email: andrew@apjanke.net
+description: >- 
+  Documentation for the Janklab-core Matlab Toolbox
+baseurl: "" 
+url: ""
+twitter_username: apjanke
+github_username:  janklab
+
+# Build settings
+theme: minima
+
+# Locked-down GitHub Pages configuration
+markdown: kramdown
+lsi: false
+safe: true
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
+exclude:
+  - Gemfile*
+
+keep_files:
+  - images
+
+plugins:
+  # Forced by GitHub Pages:
+  - jekyll-asciidoc
+  - jekyll-coffeescript
+  - jekyll-default-layout
+  - jekyll-gist
+  - jekyll-github-metadata
+  - jekyll-last-modified-at
+  - jekyll-optional-front-matter
+  - jekyll-paginate
+  - jekyll-readme-index
+  - jekyll-relative-links
+  - jekyll-titles-from-headings
+  # Supported by GitHub Pages, but optional:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-sitemap

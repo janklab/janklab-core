@@ -1,4 +1,6 @@
-# Janklab-core
+---
+layout: home
+---
 
 Janklab-core is a general-purpose library of functions, classes, and extensions for Matlab. It is the main "utility" library in the [Janklab](https://janklab.net) library suite.
 
@@ -16,7 +18,7 @@ Janklab provides:
 * More validators
 * A bunch of miscellaneous utilities
 
-See [Feature Areas](doc/Feature-Areas.md) for details.
+See [Feature Areas](Feature-Areas.html) for details.
 
 ## License
 
@@ -33,21 +35,21 @@ Janklab depends on and is redistributed with third-party libraries, some of whic
 
 ## Contributing
 
-Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
+Janklab is a personal project, not a community one. Bug reports and feature requests are welcome, but I will probably not accept major PRs. See [CONTRIBUTING](https://github.com/janklab/janklab-core/.github/CONTRIBUTING.md) for details.
 
 ## Installation and use
 
 ### Installing as a Matlab Toolbox
 
-You can install Janklab as a Matlab Toolbox by downloading the `.mltbx` file from one of the [releases](https://github.com/apjanke/janklab/releases) and opening that file in Matlab to install it.
+You can install Janklab as a Matlab Toolbox by downloading the `.mltbx` file from one of the [Releases on GitHub](https://github.com/janklab/janklab-core/releases) and opening that file in Matlab to install it.
 
-You can download the current release directly from: <https://github.com/apjanke/janklab/releases/download/v0.2.2/Janklab-0.2.2.mltbx>
+You can download the current release directly from: <https://github.com/janklab/janklab-core/releases/download/v0.2.2/Janklab-0.2.2.mltbx>
 
 You must run `init_janklab` inside your Matlab session to initialize the library before using it.
 
 ### Installing from a release
 
-You can also use Janklab without installing it as a Matlab Toolbox. Download the [source code archive](https://github.com/apjanke/janklab/archive/v0.2.2.zip) from one of the [releases](https://github.com/apjanke/janklab/releases) and extract it to somewhere on your computer’s hard drive.
+You can also use Janklab without installing it as a Matlab Toolbox. Download the [source code archive](https://github.com/janklab/janklab-core/archive/v0.2.2.zip) from one of the [releases](https://github.com/janklab/janklab-core/releases) and extract it to somewhere on your computer’s hard drive.
 
 In your Matlab session, run the `init_janklab` function found under `dist/Mcode/toplevel` in the repo.
 
@@ -66,7 +68,7 @@ cd(oldDir)
 If you want the current development version of Janklab, install it to your local system by cloning the Git repo.
 
 ```bash
-git clone https://github.com/apjanke/janklab
+git clone https://github.com/janklab/janklab-core
 ```
 
 In your Matlab session, run the `init_janklab` function found under `dist/Mcode/toplevel` in the repo.
@@ -75,7 +77,7 @@ In your Matlab session, run the `init_janklab` function found under `dist/Mcode/
 % Example initialization script
 oldDir = pwd;
 
-cd /path/to/janklab/installation/janklab/Mcode/toplevel
+cd /path/to/janklab/installation/janklab-core/Mcode/toplevel
 init_janklab
 
 cd(oldDir)
@@ -100,6 +102,8 @@ Janklab makes extensive use of some features not supported by Octave. Parts usin
 
 ## Author
 
-Janklab is made by [Andrew Janke](https://apjanke.net).
+Janklab-core is made by [Andrew Janke](https://apjanke.net).
 
-The project home page is the [Janklab repo on GitHub](https://github.com/apjanke/janklab).
+The project home page is the [Janklab-core repo on GitHub](https://github.com/janklab/janklab-core), and online doco is on [the Janklab-core website](https://janklab-core.janklab.net).
+
+Thanks to [Polkadot Stingray](https://www.facebook.com/polkadotstingray/) for powering my coding.
