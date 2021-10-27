@@ -1,18 +1,15 @@
-function out = workspace2struct()
-% Capture all variables in the workspace to a struct.
+function out = vars2struct()
+% Capture all variables in the current workspace to a struct.
 %
-% s = workspace2struct
+% s = vars2struct
 %
 % Captures all variables in the caller's workspace and stores them in fields of
-% a struct with corresponding names.
-%
-% This has been superseded by VARS2STRUCT, which has the same
-% functionality, but I like the name better.
+% a struct with corresponding names. This lets you package up a workspace
+% into a struct which can be passed around as a data structure.
 %
 % Returns a scalar struct.
 %
 % See also:
-% VARS2STRUCT
 % STRUCT2VARS
 
 varnames = evalin('caller', 'who');
