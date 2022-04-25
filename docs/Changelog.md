@@ -4,6 +4,9 @@ Janklab Changelog
 0.2.3 (???)
 ------------------
 
+* Add `totable()` function.
+* Add `todatetime()` function.
+
 0.2.2 (2020-02-12)
 ------------------
 
