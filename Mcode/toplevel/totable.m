@@ -112,9 +112,6 @@ function out = totable(varargin)
 % and security issue. Sanitize or validate the values you are passing in to
 % the variableTypes argument.
 %
-% Behavior for struct inputs is not defined yet, but will probably be added
-% soon, and will use STRUCT2TABLE in some form.
-%
 % Other combinations of input types may also work without raising an error,
 % but that is undocumented and undefined behavior due to quirks of
 % totable's argument handling logic. That behavior may change at any time,
