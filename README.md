@@ -16,7 +16,7 @@ Janklab-core provides:
 * More validators
 * A bunch of miscellaneous utilities
 
-See [Feature Areas](doc/Feature-Areas.md) for details.
+See [Feature Areas](docs/Feature-Areas.md) for details.
 
 ## License
 
